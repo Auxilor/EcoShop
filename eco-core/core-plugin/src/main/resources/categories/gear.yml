@@ -1,0 +1,288 @@
+item: iron_chestplate name:"&aGear"
+lore: [ ]
+
+gui:
+  rows: 5
+  title: Gear
+
+  forwards-arrow:
+    column: 6
+    item: arrow name:"&fNext Page"
+    row: 5
+  backwards-arrow:
+    column: 4
+    item: arrow name:"&fPrevious Page"
+    row: 5
+
+  pages:
+    - page: 1
+      mask:
+        pattern:
+          - '000000000'
+          - '000000000'
+          - '000000000'
+          - '000000000'
+          - '000000000'
+        items: []
+
+items:
+  - id: diamond_helmet
+    gui:
+      column: 1
+      row: 2
+      page: 1
+    item: diamond_helmet
+    buy:
+      type: coins
+      value: 7500
+      display: $%value%
+  - id: diamond_chestplate
+    gui:
+      column: 2
+      row: 2
+      page: 1
+    item: diamond_chestplate
+    buy:
+      type: coins
+      value: 12000
+      display: $%value%
+  - id: diamond_leggings
+    gui:
+      column: 3
+      row: 2
+      page: 1
+    item: diamond_leggings
+    buy:
+      type: coins
+      value: 10500
+      display: $%value%
+  - id: diamond_boots
+    gui:
+      column: 4
+      row: 2
+      page: 1
+    item: diamond_boots
+    buy:
+      type: coins
+      value: 6000
+      display: $%value%
+  - id: diamond_pickaxe
+    gui:
+      column: 5
+      row: 2
+      page: 1
+    item: diamond_pickaxe
+    buy:
+      type: coins
+      value: 4500
+      display: $%value%
+  - id: diamond_sword
+    gui:
+      column: 6
+      row: 2
+      page: 1
+    item: diamond_sword
+    buy:
+      type: coins
+      value: 3000
+      display: $%value%
+  - id: diamond_axe
+    gui:
+      column: 7
+      row: 2
+      page: 1
+    item: diamond_axe
+    buy:
+      type: coins
+      value: 4500
+      display: $%value%
+  - id: diamond_shovel
+    gui:
+      column: 8
+      row: 2
+      page: 1
+    item: diamond_shovel
+    buy:
+      type: coins
+      value: 1500
+      display: $%value%
+  - id: diamond_hoe
+    gui:
+      column: 9
+      row: 2
+      page: 1
+    item: diamond_hoe
+    buy:
+      type: coins
+      value: 3000
+      display: $%value%
+  - id: elytra
+    gui:
+      column: 1
+      row: 3
+      page: 1
+    item: elytra
+    buy:
+      type: coins
+      value: 17500
+      display: $%value%
+  - id: iron_helmet
+    gui:
+      column: 1
+      row: 1
+      page: 1
+    item: iron_helmet
+    buy:
+      type: coins
+      value: 250
+      display: $%value%
+  - id: iron_chestplate
+    gui:
+      column: 2
+      row: 1
+      page: 1
+    item: iron_chestplate
+    buy:
+      type: coins
+      value: 400
+      display: $%value%
+  - id: iron_leggings
+    gui:
+      column: 3
+      row: 1
+      page: 1
+    item: iron_leggings
+    buy:
+      type: coins
+      value: 350
+      display: $%value%
+  - id: iron_boots
+    gui:
+      column: 4
+      row: 1
+      page: 1
+    item: iron_boots
+    buy:
+      type: coins
+      value: 200
+      display: $%value%
+  - id: iron_pickaxe
+    gui:
+      column: 5
+      row: 1
+      page: 1
+    item: iron_pickaxe
+    buy:
+      type: coins
+      value: 150
+      display: $%value%
+  - id: iron_sword
+    gui:
+      column: 6
+      row: 1
+      page: 1
+    item: iron_sword
+    buy:
+      type: coins
+      value: 100
+      display: $%value%
+  - id: iron_axe
+    gui:
+      column: 7
+      row: 1
+      page: 1
+    item: iron_axe
+    buy:
+      type: coins
+      value: 150
+      display: $%value%
+  - id: iron_shovel
+    gui:
+      column: 8
+      row: 1
+      page: 1
+    item: iron_shovel
+    buy:
+      type: coins
+      value: 50
+      display: $%value%
+  - id: iron_hoe
+    gui:
+      column: 9
+      row: 1
+      page: 1
+    item: iron_hoe
+    buy:
+      type: coins
+      value: 100
+      display: $%value%
+  - id: bow
+    gui:
+      column: 2
+      row: 3
+      page: 1
+    item: bow
+    buy:
+      type: coins
+      value: 150
+      display: $%value%
+  - id: trident
+    gui:
+      column: 3
+      row: 3
+      page: 1
+    item: trident
+    buy:
+      type: coins
+      value: 20000
+      display: $%value%
+  - id: crossbow
+    gui:
+      column: 4
+      row: 3
+      page: 1
+    item: crossbow
+    buy:
+      type: coins
+      value: 300
+      display: $%value%
+  - id: firework_rocket
+    gui:
+      column: 5
+      row: 3
+      page: 1
+    item: firework_rocket
+    buy:
+      type: coins
+      value: 25
+      display: $%value%
+  - id: shield
+    gui:
+      column: 6
+      row: 3
+      page: 1
+    item: shield
+    buy:
+      type: coins
+      value: 75
+      display: $%value%
+  - id: name_tag
+    gui:
+      column: 7
+      row: 3
+      page: 1
+    item: name_tag
+    buy:
+      type: coins
+      value: 2500
+      display: $%value%
+  - id: saddle
+    gui:
+      column: 8
+      row: 3
+      page: 1
+    item: saddle
+    buy:
+      type: coins
+      value: 2500
+      display: $%value%

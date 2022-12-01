@@ -1,0 +1,71 @@
+messages:
+  prefix: "&#76b852&lEcoShop&r &8» &r"
+  no-permission: "&cYou don't have permission to do this!"
+  not-player: "&cThis command must be run by a player"
+  invalid-command: "&cUnknown subcommand!"
+  reloaded: "Reloaded! Took %time%ms"
+
+  must-specify-player: "&cYou must specify a player!"
+  invalid-player: "&cInvalid player!"
+  must-specify-item: "&cYou must specify an item!"
+  invalid-item: "&cInvalid item!"
+  reset-buys: "&fReset how many times &r%player%&r&f bought &r%item%&f!"
+
+  sell-status:
+    cannot-sell: "&cThis item can't be sold!"
+    no-permission: "&cYou don't have permission to sell this item!"
+    missing-requirements: "&cYou can't sell this item!"
+    dont-have-item: "&cYou don't have any of this item!"
+    dont-have-enough: "&cYou don't have enough of this item!"
+
+  buy-status:
+    cannot-buy: "&cThis item can't be bought!"
+    bought-too-many: "&cYou can't buy this item again!"
+    no-permission: "&cYou don't have permission to buy this item!"
+    missing-requirements: "&cYou can't buy this item!"
+    cannot-afford: "&cYou need &a%price%&r&c to buy this!"
+
+  bought-item: "&fYou bought %item%&r&f for %price%&r&f!"
+  bought-item-multiple: "&fYou bought %amount%x&r %item%&r&f for %price%&r&f!"
+  sold-item: "&fYou sold %amount%x&r %item%&r&f for %price%&r&f!"
+
+  must-specify-sell-type: "&cYou must specify sell type! (hand/all/handall)"
+  invalid-sell-type: "&cInvalid sell type! (hand/all/handall)"
+
+  not-sellable: "&cYou can't sell this item!"
+  no-sellable: "&cThere are no sellable items in your inventory!"
+
+  invalid-shop-config: "&cYour config for shop %shop% is invalid! Check that your direct-category points to a category that exists."
+
+lore:
+  missing-requirements:
+    - "&cYou can't buy this item!"
+  no-permission:
+    - "&cYou don't have permission to buy this item!"
+
+one-buy-price:
+  - "&fPrice: &a%price%"
+dual-buy-price:
+  - "&fPrice: &a%price%&r&f or &a%alt_price%"
+cant-buy-again:
+  - "&cYou can't buy this item again!"
+
+buy-price:
+  - "&fBuy Price: &a%price%&r&f each"
+sell-price:
+  - "&fSell Price: &c%price%&r&f each"
+
+confirm-buy-price:
+  - "&fBuy Price: &a%price%"
+confirm-sell-price:
+  - "&fSell Price: &c%price%"
+
+quick-buy:
+  - "&8&oQuick-buy %amount% by shift left-clicking"
+quick-sell:
+  - "&8&oQuick-sell all by shift right-clicking"
+
+quick-buy-alt-present:
+  - "&8&oQuick-buy %amount% for %price%&r&8&o by shift left-clicking"
+quick-buy-alt:
+  - "&8&oQuick-buy %amount% for %price%&r&8&o by shift right-clicking"

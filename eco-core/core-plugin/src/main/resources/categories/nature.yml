@@ -1,0 +1,745 @@
+item: allium name:"&aNature"
+lore: [ ]
+
+gui:
+  rows: 6
+  title: Nature
+
+  forwards-arrow:
+    column: 6
+    item: arrow name:"&fNext Page"
+    row: 6
+  backwards-arrow:
+    column: 4
+    item: arrow name:"&fPrevious Page"
+    row: 6
+
+  pages:
+    - page: 1
+      mask:
+        pattern:
+          - '000000000'
+          - '000000000'
+          - '000000000'
+          - '000000000'
+          - '000000000'
+          - '000000000'
+        items: []
+    - page: 2
+      mask:
+        pattern:
+          - '000000000'
+          - '000000000'
+          - '000000000'
+          - '000000000'
+          - '000000000'
+          - '000000000'
+        items: []
+
+items:
+  - id: melon_slice
+    gui:
+      column: 1
+      row: 2
+      page: 1
+    item: melon_slice
+    buy:
+      type: coins
+      value: 50
+      display: $%value%
+    sell:
+      type: coins
+      value: 2
+      display: $%value%
+  - id: carrot
+    gui:
+      column: 2
+      row: 1
+      page: 1
+    item: carrot
+    buy:
+      type: coins
+      value: 60
+      display: $%value%
+    sell:
+      type: coins
+      value: 4
+      display: $%value%
+  - id: vine
+    gui:
+      column: 7
+      row: 2
+      page: 2
+    item: vine
+    buy:
+      type: coins
+      value: 50
+      display: $%value%
+  - id: lily_pad
+    gui:
+      column: 8
+      row: 2
+      page: 2
+    item: lily_pad
+    buy:
+      type: coins
+      value: 50
+      display: $%value%
+  - id: cactus
+    gui:
+      column: 1
+      row: 4
+      page: 1
+    item: cactus
+    buy:
+      type: coins
+      value: 50
+      display: $%value%
+  - id: grass
+    gui:
+      column: 2
+      row: 4
+      page: 1
+    item: grass
+    buy:
+      type: coins
+      value: 50
+      display: $%value%
+  - id: melon_seeds
+    gui:
+      column: 2
+      row: 2
+      page: 1
+    item: melon_seeds
+    buy:
+      type: coins
+      value: 40
+      display: $%value%
+    sell:
+      type: coins
+      value: 2
+      display: $%value%
+  - id: fern
+    gui:
+      column: 3
+      row: 4
+      page: 1
+    item: fern
+    buy:
+      type: coins
+      value: 50
+      display: $%value%
+  - id: dead_bush
+    gui:
+      column: 4
+      row: 4
+      page: 1
+    item: dead_bush
+    buy:
+      type: coins
+      value: 50
+      display: $%value%
+  - id: seagrass
+    gui:
+      column: 5
+      row: 4
+      page: 1
+    item: seagrass
+    buy:
+      type: coins
+      value: 50
+      display: $%value%
+  - id: potato
+    gui:
+      column: 3
+      row: 1
+      page: 1
+    item: potato
+    buy:
+      type: coins
+      value: 60
+      display: $%value%
+    sell:
+      type: coins
+      value: 4
+      display: $%value%
+  - id: birch_sapling
+    gui:
+      column: 4
+      row: 3
+      page: 1
+    item: birch_sapling
+    buy:
+      type: coins
+      value: 600
+      display: $%value%
+  - id: spruce_sapling
+    gui:
+      column: 3
+      row: 3
+      page: 1
+    item: spruce_sapling
+    buy:
+      type: coins
+      value: 600
+      display: $%value%
+  - id: oak_sapling
+    gui:
+      column: 2
+      row: 3
+      page: 1
+    item: oak_sapling
+    buy:
+      type: coins
+      value: 600
+      display: $%value%
+  - id: azalea
+    gui:
+      column: 8
+      row: 3
+      page: 1
+    item: azalea
+    buy:
+      type: coins
+      value: 600
+      display: $%value%
+  - id: dark_oak_sapling
+    gui:
+      column: 7
+      row: 3
+      page: 1
+    item: dark_oak_sapling
+    buy:
+      type: coins
+      value: 600
+      display: $%value%
+  - id: acacia_sapling
+    gui:
+      column: 6
+      row: 3
+      page: 1
+    item: acacia_sapling
+    buy:
+      type: coins
+      value: 600
+      display: $%value%
+  - id: jungle_sapling
+    gui:
+      column: 5
+      row: 3
+      page: 1
+    item: jungle_sapling
+    buy:
+      type: coins
+      value: 600
+      display: $%value%
+  - id: sea_pickle
+    gui:
+      column: 6
+      row: 4
+      page: 1
+    item: sea_pickle
+    buy:
+      type: coins
+      value: 50
+      display: $%value%
+  - id: poppy
+    gui:
+      column: 7
+      row: 4
+      page: 1
+    item: poppy
+    buy:
+      type: coins
+      value: 50
+      display: $%value%
+  - id: dandelion
+    gui:
+      column: 8
+      row: 4
+      page: 1
+    item: dandelion
+    buy:
+      type: coins
+      value: 50
+      display: $%value%
+  - id: blue_orchid
+    gui:
+      column: 9
+      row: 4
+      page: 1
+    item: blue_orchid
+    buy:
+      type: coins
+      value: 50
+      display: $%value%
+  - id: allium
+    gui:
+      column: 1
+      row: 1
+      page: 2
+    item: allium
+    buy:
+      type: coins
+      value: 50
+      display: $%value%
+  - id: azure_bluet
+    gui:
+      column: 7
+      row: 4
+      page: 1
+    item: azure_bluet
+    buy:
+      type: coins
+      value: 50
+      display: $%value%
+  - id: red_tulip
+    gui:
+      column: 2
+      row: 1
+      page: 2
+    item: red_tulip
+    buy:
+      type: coins
+      value: 50
+      display: $%value%
+  - id: orange_tulip
+    gui:
+      column: 3
+      row: 1
+      page: 2
+    item: orange_tulip
+    buy:
+      type: coins
+      value: 50
+      display: $%value%
+  - id: white_tulip
+    gui:
+      column: 4
+      row: 1
+      page: 2
+    item: white_tulip
+    buy:
+      type: coins
+      value: 50
+      display: $%value%
+  - id: pink_tulip
+    gui:
+      column: 5
+      row: 1
+      page: 2
+    item: pink_tulip
+    buy:
+      type: coins
+      value: 50
+      display: $%value%
+  - id: beetroot
+    gui:
+      column: 4
+      row: 1
+      page: 1
+    item: beetroot
+    buy:
+      type: coins
+      value: 60
+      display: $%value%
+    sell:
+      type: coins
+      value: 4
+      display: $%value%
+  - id: oxeye_daisy
+    gui:
+      column: 6
+      row: 1
+      page: 2
+    item: oxeye_daisy
+    buy:
+      type: coins
+      value: 50
+      display: $%value%
+  - id: cornflower
+    gui:
+      column: 7
+      row: 1
+      page: 2
+    item: cornflower
+    buy:
+      type: coins
+      value: 50
+      display: $%value%
+  - id: lily_of_the_valley
+    gui:
+      column: 8
+      row: 1
+      page: 2
+    item: lily_of_the_valley
+    buy:
+      type: coins
+      value: 50
+      display: $%value%
+  - id: wither_rose
+    gui:
+      column: 9
+      row: 1
+      page: 2
+    item: wither_rose
+    buy:
+      type: coins
+      value: 1000
+      display: $%value%
+  - id: sunflower
+    gui:
+      column: 1
+      row: 2
+      page: 2
+    item: sunflower
+    buy:
+      type: coins
+      value: 50
+      display: $%value%
+  - id: lilac
+    gui:
+      column: 2
+      row: 2
+      page: 2
+    item: lilac
+    buy:
+      type: coins
+      value: 50
+      display: $%value%
+  - id: rose_bush
+    gui:
+      column: 3
+      row: 2
+      page: 2
+    item: rose_bush
+    buy:
+      type: coins
+      value: 50
+      display: $%value%
+  - id: peony
+    gui:
+      column: 4
+      row: 2
+      page: 2
+    item: peony
+    buy:
+      type: coins
+      value: 50
+      display: $%value%
+  - id: tall_grass
+    gui:
+      column: 5
+      row: 2
+      page: 2
+    item: tall_grass
+    buy:
+      type: coins
+      value: 50
+      display: $%value%
+  - id: large_fern
+    gui:
+      column: 6
+      row: 2
+      page: 2
+    item: large_fern
+    buy:
+      type: coins
+      value: 50
+      display: $%value%
+  - id: apple
+    gui:
+      column: 5
+      row: 1
+      page: 1
+    item: apple
+    buy:
+      type: coins
+      value: 300
+      display: $%value%
+    sell:
+      type: coins
+      value: 20
+      display: $%value%
+  - id: sugar_cane
+    gui:
+      column: 9
+      row: 2
+      page: 2
+    item: sugar_cane
+    buy:
+      type: coins
+      value: 60
+      display: $%value%
+    sell:
+      type: coins
+      value: 4
+      display: $%value%
+  - id: melon
+    gui:
+      column: 1
+      row: 3
+      page: 2
+    item: melon
+    buy:
+      type: coins
+      value: 400
+      display: $%value%
+    sell:
+      type: coins
+      value: 6
+      display: $%value%
+  - id: pumpkin
+    gui:
+      column: 2
+      row: 3
+      page: 2
+    item: pumpkin
+    buy:
+      type: coins
+      value: 300
+      display: $%value%
+    sell:
+      type: coins
+      value: 4
+      display: $%value%
+  - id: kelp
+    gui:
+      column: 3
+      row: 3
+      page: 2
+    item: kelp
+    buy:
+      type: coins
+      value: 300
+      display: $%value%
+    sell:
+      type: coins
+      value: 2
+      display: $%value%
+  - id: bamboo
+    gui:
+      column: 4
+      row: 3
+      page: 2
+    item: bamboo
+    buy:
+      type: coins
+      value: 200
+      display: $%value%
+    sell:
+      type: coins
+      value: 1
+      display: $%value%
+  - id: red_mushroom
+    gui:
+      column: 5
+      row: 3
+      page: 2
+    item: red_mushroom
+    buy:
+      type: coins
+      value: 200
+      display: $%value%
+    sell:
+      type: coins
+      value: 5
+      display: $%value%
+  - id: brown_mushroom
+    gui:
+      column: 6
+      row: 3
+      page: 2
+    item: brown_mushroom
+    buy:
+      type: coins
+      value: 200
+      display: $%value%
+    sell:
+      type: coins
+      value: 5
+      display: $%value%
+  - id: glow_lichen
+    gui:
+      column: 7
+      row: 3
+      page: 2
+    item: glow_lichen
+    buy:
+      type: coins
+      value: 50
+      display: $%value%
+  - id: nether_wart
+    gui:
+      column: 8
+      row: 3
+      page: 2
+    item: nether_wart
+    buy:
+      type: coins
+      value: 60
+      display: $%value%
+    sell:
+      type: coins
+      value: 6
+      display: $%value%
+  - id: porkchop
+    gui:
+      column: 7
+      row: 1
+      page: 1
+    item: porkchop
+    buy:
+      type: coins
+      value: 200
+      display: $%value%
+    sell:
+      type: coins
+      value: 15
+      display: $%value%
+  - id: beef
+    gui:
+      column: 8
+      row: 1
+      page: 1
+    item: beef
+    buy:
+      type: coins
+      value: 200
+      display: $%value%
+    sell:
+      type: coins
+      value: 15
+      display: $%value%
+  - id: oak_leaves
+    gui:
+      column: 3
+      row: 2
+      page: 1
+    item: oak_leaves
+    buy:
+      type: coins
+      value: 4
+      display: $%value%
+  - id: spruce_leaves
+    gui:
+      column: 4
+      row: 2
+      page: 1
+    item: spruce_leaves
+    buy:
+      type: coins
+      value: 4
+      display: $%value%
+  - id: birch_leaves
+    gui:
+      column: 5
+      row: 2
+      page: 1
+    item: birch_leaves
+    buy:
+      type: coins
+      value: 4
+      display: $%value%
+  - id: azalea_leaves
+    gui:
+      column: 1
+      row: 3
+      page: 1
+    item: azalea_leaves
+    buy:
+      type: coins
+      value: 4
+      display: $%value%
+  - id: wheat_seeds
+    gui:
+      column: 6
+      row: 1
+      page: 1
+    item: wheat_seeds
+    buy:
+      type: coins
+      value: 40
+      display: $%value%
+    sell:
+      type: coins
+      value: 2
+      display: $%value%
+  - id: flowering_azalea
+    gui:
+      column: 9
+      row: 3
+      page: 1
+    item: flowering_azalea
+    buy:
+      type: coins
+      value: 600
+      display: $%value%
+  - id: jungle_leaves
+    gui:
+      column: 6
+      row: 2
+      page: 1
+    item: jungle_leaves
+    buy:
+      type: coins
+      value: 4
+      display: $%value%
+  - id: acacia_leaves
+    gui:
+      column: 7
+      row: 2
+      page: 1
+    item: acacia_leaves
+    buy:
+      type: coins
+      value: 4
+      display: $%value%
+  - id: dark_oak_leaves
+    gui:
+      column: 8
+      row: 2
+      page: 1
+    item: dark_oak_leaves
+    buy:
+      type: coins
+      value: 4
+      display: $%value%
+  - id: azalea_leaves
+    gui:
+      column: 9
+      row: 2
+      page: 1
+    item: azalea_leaves
+    buy:
+      type: coins
+      value: 4
+      display: $%value%
+  - id: chicken
+    gui:
+      column: 9
+      row: 1
+      page: 1
+    item: chicken
+    buy:
+      type: coins
+      value: 100
+      display: $%value%
+    sell:
+      type: coins
+      value: 6
+      display: $%value%
+  - id: wheat
+    gui:
+      column: 1
+      row: 1
+      page: 1
+    item: wheat
+    buy:
+      type: coins
+      value: 60
+      display: $%value%
+    sell:
+      type: coins
+      value: 4
+      display: $%value%

@@ -1,0 +1,83 @@
+title: Shop
+command: shop
+
+forwards-arrow:
+  item: arrow name:"&fNext Page"
+  row: 3
+  column: 6
+
+backwards-arrow:
+  item: arrow name:"&fPrevious Page"
+  row: 3
+  column: 4
+
+buy-broadcasts:
+  enabled: false
+  message: ""
+
+click-sound:
+  sound: block_stone_button_click_on
+  pitch: 1
+  volume: 1
+
+buy-sound:
+  sound: entity_player_levelup
+  pitch: 2
+  volume: 1
+
+sell-sound:
+  sound: block_amethyst_block_place
+  pitch: 1.5
+  volume: 1
+
+rows: 3
+pages:
+  - page: 1
+    mask:
+      items:
+        - lime_stained_glass_pane
+        - black_stained_glass_pane
+      pattern:
+        - "221111122"
+        - "000000000"
+        - "221111122"
+
+    categories:
+      - id: dyes
+        row: 2
+        column: 1
+
+      - id: mob_drops
+        row: 2
+        column: 2
+
+      - id: blocks
+        row: 2
+        column: 3
+
+      - id: colored_blocks
+        row: 2
+        column: 4
+
+      - id: minerals
+        row: 2
+        column: 5
+
+      - id: nature
+        row: 2
+        column: 6
+
+      - id: redstone
+        row: 2
+        column: 7
+
+      - id: food
+        row: 2
+        column: 8
+
+      - id: gear
+        row: 2
+        column: 9
+
+    # Custom GUI slots; see here for a how-to: https://plugins.auxilor.io/all-plugins/custom-gui-slots
+    custom-slots: [ ]

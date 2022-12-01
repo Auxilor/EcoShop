@@ -1,0 +1,729 @@
+item: grass_block name:"&aBlocks"
+lore: [ ]
+
+gui:
+  rows: 6
+  title: Blocks
+
+  forwards-arrow:
+    item: arrow name:"&fNext Page"
+    column: 6
+    row: 6
+
+  backwards-arrow:
+    item: arrow name:"&fPrevious Page"
+    column: 4
+    row: 6
+
+  pages:
+    - page: 1
+      mask:
+        pattern:
+          - '000000000'
+          - '000000000'
+          - '000000000'
+          - '000000000'
+          - '000000000'
+          - '000000000'
+        items: []
+
+    - page: 2
+      mask:
+        pattern:
+          - '000000000'
+          - '000000000'
+          - '000000000'
+          - '000000000'
+          - '000000000'
+          - '000000000'
+        items: []
+
+items:
+  - id: sand
+    item: sand
+
+    buy:
+      type: coins
+      value: 4
+      display: $%value%
+
+    gui:
+      column: 1
+      row: 2
+      page: 1
+
+  - id: glass
+    item: glass
+
+    buy:
+      type: coins
+      value: 6
+      display: $%value%
+
+    gui:
+      column: 2
+      row: 2
+      page: 1
+
+  - id: red_sand
+    item: red_sand
+
+    buy:
+      type: coins
+      value: 4
+      display: $%value%
+
+    gui:
+      column: 3
+      row: 2
+      page: 1
+
+  - id: oak_log
+    item: oak_log
+
+    buy:
+      type: coins
+      value: 5
+      display: $%value%
+
+    gui:
+      column: 4
+      row: 2
+      page: 1
+
+  - id: spruce_log
+    item: spruce_log
+
+    buy:
+      type: coins
+      value: 5
+      display: $%value%
+
+    gui:
+      column: 5
+      row: 2
+      page: 1
+
+  - id: birch_log
+    item: birch_log
+
+    buy:
+      type: coins
+      value: 5
+      display: $%value%
+
+    gui:
+      column: 6
+      row: 2
+      page: 1
+
+  - id: jungle_log
+    item: jungle_log
+
+    buy:
+      type: coins
+      value: 5
+      display: $%value%
+
+    gui:
+      column: 7
+      row: 2
+      page: 1
+
+  - id: acacia_log
+    item: acacia_log
+
+    buy:
+      type: coins
+      value: 5
+      display: $%value%
+
+    gui:
+      column: 8
+      row: 2
+      page: 1
+
+  - id: dark_oak_log
+    item: dark_oak_log
+
+    buy:
+      type: coins
+      value: 5
+      display: $%value%
+
+    gui:
+      column: 9
+      row: 2
+      page: 1
+
+  - id: stone_bricks
+    item: stone_bricks
+    buy:
+      type: coins
+      value: 6
+      display: $%value%
+
+    gui:
+      column: 1
+      row: 3
+      page: 1
+
+  - id: stone
+    item: stone
+
+    buy:
+      type: coins
+      value: 4
+      display: $%value%
+
+    sell:
+      type: coins
+      value: 0.5
+      display: $%value%
+
+    gui:
+      column: 1
+      row: 1
+      page: 1
+
+  - id: granite
+    item: granite
+
+    buy:
+      type: coins
+      value: 5
+      display: $%value%
+
+    sell:
+      type: coins
+      value: 0.5
+      display: $%value%
+
+    gui:
+      column: 2
+      row: 1
+      page: 1
+
+  - id: diorite
+    item: diorite
+
+    buy:
+      type: coins
+      value: 5
+      display: $%value%
+
+    sell:
+      type: coins
+      value: 0.5
+      display: $%value%
+
+    gui:
+      column: 3
+      row: 1
+      page: 1
+
+  - id: andesite
+    item: andesite
+
+    buy:
+      type: coins
+      value: 5
+      display: $%value%
+
+    sell:
+      type: coins
+      value: 0.5
+      display: $%value%
+
+    gui:
+      column: 4
+      row: 1
+      page: 1
+
+  - id: grass_block
+    item: grass_block
+
+    buy:
+      type: coins
+      value: 6
+      display: $%value%
+
+    gui:
+      column: 5
+      row: 1
+      page: 1
+
+  - id: dirt
+    item: dirt
+
+    buy:
+      type: coins
+      value: 2
+      display: $%value%
+
+    gui:
+      column: 6
+      row: 1
+      page: 1
+
+  - id: podzol
+    item: podzol
+
+    buy:
+      type: coins
+      value: 8
+      display: $%value%
+
+    gui:
+      column: 7
+      row: 1
+      page: 1
+
+  - id: mycelium
+    item: mycelium
+
+    buy:
+      type: coins
+      value: 10
+      display: $%value%
+
+    gui:
+      column: 8
+      row: 1
+      page: 1
+
+  - id: coarse_dirt
+    item: coarse_dirt
+
+    buy:
+      type: coins
+      value: 8
+      display: $%value%
+
+    gui:
+      column: 9
+      row: 1
+      page: 1
+
+  - id: mossy_stone_bricks
+    item: mossy_stone_bricks
+
+    buy:
+      type: coins
+      value: 8
+      display: $%value%
+
+    gui:
+      column: 2
+      row: 3
+      page: 1
+
+  - id: quartz_block
+    item: quartz_block
+
+    buy:
+      type: coins
+      value: 35
+      display: $%value%
+
+    gui:
+      column: 3
+      row: 3
+      page: 1
+
+  - id: glowstone
+    item: glowstone
+
+    buy:
+      type: coins
+      value: 20
+      display: $%value%
+
+    gui:
+      column: 4
+      row: 3
+      page: 1
+
+  - id: prismarine
+    item: prismarine
+
+    buy:
+      type: coins
+      value: 20
+      display: $%value%
+
+    gui:
+      column: 5
+      row: 3
+      page: 1
+
+  - id: prismarine_bricks
+    item: prismarine_bricks
+
+    buy:
+      type: coins
+      value: 20
+      display: $%value%
+
+    gui:
+      column: 6
+      row: 3
+      page: 1
+
+  - id: dark_prismarine
+    item: dark_prismarine
+
+    buy:
+      type: coins
+      value: 20
+      display: $%value%
+
+    gui:
+      column: 7
+      row: 3
+      page: 1
+
+  - id: sea_lantern
+    item: sea_lantern
+
+    buy:
+      type: coins
+      value: 40
+      display: $%value%
+
+    gui:
+      column: 8
+      row: 3
+      page: 1
+
+  - id: purpur_block
+    item: purpur_block
+
+    buy:
+      type: coins
+      value: 80
+      display: $%value%
+
+    gui:
+      column: 9
+      row: 3
+      page: 1
+
+  - id: ice
+    item: ice
+
+    buy:
+      type: coins
+      value: 20
+      display: $%value%
+
+    gui:
+      column: 1
+      row: 4
+      page: 1
+
+  - id: netherrack
+    item: netherrack
+
+    buy:
+      type: coins
+      value: 8
+      display: $%value%
+
+    gui:
+      column: 2
+      row: 4
+      page: 1
+
+  - id: soul_sand
+    item: soul_sand
+
+    buy:
+      type: coins
+      value: 20
+      display: $%value%
+
+    gui:
+      column: 3
+      row: 4
+      page: 1
+
+  - id: nether_bricks
+    item: nether_bricks
+
+    buy:
+      type: coins
+      value: 15
+      display: $%value%
+
+    gui:
+      column: 4
+      row: 4
+      page: 1
+
+  - id: red_nether_bricks
+    item: red_nether_bricks
+
+    buy:
+      type: coins
+      value: 18
+      display: $%value%
+
+    gui:
+      column: 5
+      row: 4
+      page: 1
+
+  - id: end_stone
+    item: end_stone
+
+    buy:
+      type: coins
+      value: 10
+      display: $%value%
+
+    gui:
+      column: 6
+      row: 4
+      page: 1
+
+  - id: end_stone_bricks
+    item: end_stone_bricks
+
+    buy:
+      type: coins
+      value: 12
+      display: $%value%
+
+    gui:
+      column: 7
+      row: 4
+      page: 1
+
+  - id: obsidian
+    item: obsidian
+
+    buy:
+      type: coins
+      value: 200
+      display: $%value%
+
+    gui:
+      column: 8
+      row: 4
+      page: 1
+
+  - id: bricks
+    item: bricks
+
+    buy:
+      type: coins
+      value: 12
+      display: $%value%
+
+    gui:
+      column: 9
+      row: 4
+      page: 1
+
+  - id: clay
+    item: clay
+
+    buy:
+      type: coins
+      value: 8
+      display: $%value%
+
+    gui:
+      column: 1
+      row: 1
+      page: 2
+
+  - id: gravel
+    item: gravel
+
+    buy:
+      type: coins
+      value: 8
+      display: $%value%
+
+    gui:
+      column: 2
+      row: 1
+      page: 2
+
+  - id: end_rod
+    item: end_rod
+
+    buy:
+      type: coins
+      value: 250
+      display: $%value%
+
+    gui:
+      column: 3
+      row: 1
+      page: 2
+
+  - id: cobblestone
+    item: cobblestone
+
+    buy:
+      type: coins
+      value: 4
+      display: $%value%
+
+    sell:
+      type: coins
+      value: 0.5
+      display: $%value%
+
+    gui:
+      column: 4
+      row: 1
+      page: 2
+
+  - id: smooth_stone
+    item: smooth_stone
+
+    buy:
+      type: coins
+      value: 5
+      display: $%value%
+
+    gui:
+      column: 5
+      row: 1
+      page: 2
+
+  - id: sandstone
+    item: sandstone
+
+    buy:
+      type: coins
+      value: 4
+      display: $%value%
+
+    gui:
+      column: 6
+      row: 1
+      page: 2
+
+  - id: crimson_stem
+    item: crimson_stem
+
+    buy:
+      type: coins
+      value: 5
+      display: $%value%
+
+    gui:
+      column: 7
+      row: 1
+      page: 2
+
+  - id: warped_stem
+    item: warped_stem
+
+    buy:
+      type: coins
+      value: 5
+      display: $%value%
+
+    gui:
+      column: 8
+      row: 1
+      page: 2
+
+  - id: shroomlight
+    item: shroomlight
+
+    buy:
+      type: coins
+      value: 20
+      display: $%value%
+
+    gui:
+      column: 9
+      row: 1
+      page: 2
+
+  - id: deepslate
+    item: deepslate
+
+    buy:
+      type: coins
+      value: 10
+      display: $%value%
+
+    sell:
+      type: coins
+      value: 1
+      display: $%value%
+
+    gui:
+      column: 1
+      row: 2
+      page: 2
+
+  - id: cobbled_deepslate
+    item: cobbled_deepslate
+
+    buy:
+      type: coins
+      value: 10
+      display: $%value%
+
+    sell:
+      type: coins
+      value: 1
+      display: $%value%
+
+    gui:
+      column: 2
+      row: 2
+      page: 2
+
+  - id: dripstone_block
+    item: dripstone_block
+
+    buy:
+      type: coins
+      value: 10
+      display: $%value%
+
+    sell:
+      type: coins
+      value: 1
+      display: $%value%
+
+    gui:
+      column: 3
+      row: 2
+      page: 2
+
+  - id: crying_obsidian
+    item: crying_obsidian
+
+    buy:
+      type: coins
+      value: 400
+      display: $%value%
+
+    gui:
+      column: 4
+      row: 2
+      page: 2
+
+  - id: moss_block
+    item: moss_block
+
+    buy:
+      type: coins
+      value: 100
+      display: $%value%
+
+    gui:
+      column: 5
+      row: 2
+      page: 2

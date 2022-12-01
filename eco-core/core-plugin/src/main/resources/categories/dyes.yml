@@ -1,0 +1,330 @@
+item: lime_dye name:"&aDyes"
+lore: [ ]
+
+gui:
+  rows: 4
+  title: "Dyes"
+
+  forwards-arrow:
+    item: arrow name:"&fNext Page"
+    row: 4
+    column: 6
+  backwards-arrow:
+    item: arrow name:"&fPrevious Page"
+    row: 4
+    column: 4
+
+  pages:
+    - page: 1
+      mask:
+        items: []
+        pattern:
+          - "000000000"
+          - "000000000"
+          - "000000000"
+          - "000000000"
+
+items:
+  - id: black_dye
+
+    buy:
+      value: 25
+      type: coins
+      display: "$%value%"
+
+    sell:
+      value: 2
+      type: coins
+      display: "$%value%"
+
+    item: black_dye
+
+    gui:
+      column: 1
+      row: 1
+      page: 1
+
+  - id: blue_dye
+
+    buy:
+      value: 25
+      type: coins
+      display: "$%value%"
+
+    sell:
+      value: 2
+      type: coins
+      display: "$%value%"
+
+    item: blue_dye
+
+    gui:
+      column: 2
+      row: 1
+      page: 1
+
+  - id: orange_dye
+
+    buy:
+      value: 25
+      type: coins
+      display: "$%value%"
+
+    sell:
+      value: 2
+      type: coins
+      display: "$%value%"
+
+    item: orange_dye
+
+    gui:
+      column: 3
+      row: 1
+      page: 1
+
+  - id: magenta_dye
+
+    buy:
+      value: 25
+      type: coins
+      display: "$%value%"
+
+    sell:
+      value: 2
+      type: coins
+      display: "$%value%"
+
+    item: magenta_dye
+
+    gui:
+      column: 4
+      row: 1
+      page: 1
+
+  - id: light_blue_dye
+
+    buy:
+      value: 25
+      type: coins
+      display: "$%value%"
+
+    sell:
+      value: 2
+      type: coins
+      display: "$%value%"
+
+    item: light_blue_dye
+
+    gui:
+      column: 5
+      row: 1
+      page: 1
+
+  - id: yellow_dye
+
+    buy:
+      value: 25
+      type: coins
+      display: "$%value%"
+
+    sell:
+      value: 2
+      type: coins
+      display: "$%value%"
+
+    item: yellow_dye
+
+    gui:
+      column: 6
+      row: 1
+      page: 1
+
+  - id: lime_dye
+
+    buy:
+      value: 25
+      type: coins
+      display: "$%value%"
+
+    sell:
+      value: 2
+      type: coins
+      display: "$%value%"
+
+    item: lime_dye
+
+    gui:
+      column: 7
+      row: 1
+      page: 1
+
+  - id: pink_dye
+
+    buy:
+      value: 25
+      type: coins
+      display: "$%value%"
+
+    sell:
+      value: 2
+      type: coins
+      display: "$%value%"
+
+    item: pink_dye
+
+    gui:
+      column: 8
+      row: 1
+      page: 1
+
+  - id: gray_dye
+
+    buy:
+      value: 25
+      type: coins
+      display: "$%value%"
+
+    sell:
+      value: 2
+      type: coins
+      display: "$%value%"
+
+    item: gray_dye
+
+    gui:
+      column: 9
+      row: 1
+      page: 1
+
+  - id: light_gray_dye
+
+    buy:
+      value: 25
+      type: coins
+      display: "$%value%"
+
+    sell:
+      value: 2
+      type: coins
+      display: "$%value%"
+
+    item: light_gray_dye
+
+    gui:
+      column: 1
+      row: 2
+      page: 1
+
+  - id: cyan_dye
+
+    buy:
+      value: 25
+      type: coins
+      display: "$%value%"
+
+    sell:
+      value: 2
+      type: coins
+      display: "$%value%"
+
+    item: cyan_dye
+
+    gui:
+      column: 2
+      row: 2
+      page: 1
+
+  - id: purple_dye
+
+    buy:
+      value: 25
+      type: coins
+      display: "$%value%"
+
+    sell:
+      value: 2
+      type: coins
+      display: "$%value%"
+
+    item: purple_dye
+
+    gui:
+      column: 3
+      row: 2
+      page: 1
+
+  - id: brown_dye
+
+    buy:
+      value: 25
+      type: coins
+      display: "$%value%"
+
+    sell:
+      value: 2
+      type: coins
+      display: "$%value%"
+
+    item: brown_dye
+
+    gui:
+      column: 4
+      row: 2
+      page: 1
+
+  - id: green_dye
+
+    buy:
+      value: 25
+      type: coins
+      display: "$%value%"
+
+    sell:
+      value: 2
+      type: coins
+      display: "$%value%"
+
+    item: green_dye
+
+    gui:
+      column: 5
+      row: 2
+      page: 1
+
+  - id: red_dye
+
+    buy:
+      value: 25
+      type: coins
+      display: "$%value%"
+
+    sell:
+      value: 2
+      type: coins
+      display: "$%value%"
+
+    item: red_dye
+
+    gui:
+      column: 6
+      row: 2
+      page: 1
+
+  - id: white_dye
+
+    buy:
+      value: 25
+      type: coins
+      display: "$%value%"
+
+    sell:
+      value: 2
+      type: coins
+      display: "$%value%"
+
+    item: white_dye
+
+    gui:
+      column: 7
+      row: 2
+      page: 1

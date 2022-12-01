@@ -1,0 +1,279 @@
+item: diamond name:"&aMinerals"
+lore: [ ]
+
+gui:
+  rows: 4
+  title: Minerals
+
+  forwards-arrow:
+    column: 6
+    item: arrow name:"&fNext Page"
+    row: 4
+  backwards-arrow:
+    column: 4
+    item: arrow name:"&fPrevious Page"
+    row: 4
+
+  pages:
+    - page: 1
+      mask:
+        pattern:
+          - '000000000'
+          - '000000000'
+          - '000000000'
+          - '000000000'
+        items: []
+
+items:
+  - id: iron_block
+    gui:
+      column: 2
+      row: 2
+      page: 1
+    item: iron_block
+    buy:
+      type: coins
+      value: 1800
+      display: $%value%
+    sell:
+      type: coins
+      value: 180
+      display: $%value%
+  - id: gold_block
+    gui:
+      column: 3
+      row: 2
+      page: 1
+    item: gold_block
+    buy:
+      type: coins
+      value: 2250
+      display: $%value%
+    sell:
+      type: coins
+      value: 225
+      display: $%value%
+  - id: lapis_block
+    gui:
+      column: 4
+      row: 2
+      page: 1
+    item: lapis_block
+    buy:
+      type: coins
+      value: 270
+      display: $%value%
+    sell:
+      type: coins
+      value: 27
+      display: $%value%
+  - id: amethyst_block
+    gui:
+      column: 5
+      row: 2
+      page: 1
+    item: amethyst_block
+    buy:
+      type: coins
+      value: 200
+      display: $%value%
+    sell:
+      type: coins
+      value: 20
+      display: $%value%
+  - id: netherite_ingot
+    gui:
+      column: 9
+      row: 1
+      page: 1
+    item: netherite_ingot
+    buy:
+      type: coins
+      value: 15000
+      display: $%value%
+    sell:
+      type: coins
+      value: 1500
+      display: $%value%
+  - id: emerald_block
+    gui:
+      column: 6
+      row: 2
+      page: 1
+    item: emerald_block
+    buy:
+      type: coins
+      value: 4950
+      display: $%value%
+    sell:
+      type: coins
+      value: 495
+      display: $%value%
+  - id: diamond_block
+    gui:
+      column: 7
+      row: 2
+      page: 1
+    item: diamond_block
+    buy:
+      type: coins
+      value: 24750
+      display: $%value%
+    sell:
+      type: coins
+      value: 2475
+      display: $%value%
+  - id: copper_block
+    gui:
+      column: 8
+      row: 2
+      page: 1
+    item: copper_block
+    buy:
+      type: coins
+      value: 1800
+      display: $%value%
+    sell:
+      type: coins
+      value: 180
+      display: $%value%
+  - id: netherite_block
+    gui:
+      column: 9
+      row: 2
+      page: 1
+    item: netherite_block
+    buy:
+      type: coins
+      value: 135000
+      display: $%value%
+    sell:
+      type: coins
+      value: 13500
+      display: $%value%
+  - id: coal
+    gui:
+      column: 1
+      row: 1
+      page: 1
+    item: coal
+    buy:
+      type: coins
+      value: 100
+      display: $%value%
+    sell:
+      type: coins
+      value: 10
+      display: $%value%
+  - id: iron_ingot
+    gui:
+      column: 2
+      row: 1
+      page: 1
+    item: iron_ingot
+    buy:
+      type: coins
+      value: 200
+      display: $%value%
+    sell:
+      type: coins
+      value: 20
+      display: $%value%
+  - id: gold_ingot
+    gui:
+      column: 3
+      row: 1
+      page: 1
+    item: gold_ingot
+    buy:
+      type: coins
+      value: 250
+      display: $%value%
+    sell:
+      type: coins
+      value: 25
+      display: $%value%
+  - id: lapis_lazuli
+    gui:
+      column: 4
+      row: 1
+      page: 1
+    item: lapis_lazuli
+    buy:
+      type: coins
+      value: 30
+      display: $%value%
+    sell:
+      type: coins
+      value: 3
+      display: $%value%
+  - id: amethyst_shard
+    gui:
+      column: 5
+      row: 1
+      page: 1
+    item: amethyst_shard
+    buy:
+      type: coins
+      value: 50
+      display: $%value%
+    sell:
+      type: coins
+      value: 5
+      display: $%value%
+  - id: emerald
+    gui:
+      column: 6
+      row: 1
+      page: 1
+    item: emerald
+    buy:
+      type: coins
+      value: 550
+      display: $%value%
+    sell:
+      type: coins
+      value: 55
+      display: $%value%
+  - id: diamond
+    gui:
+      column: 7
+      row: 1
+      page: 1
+    item: diamond
+    buy:
+      type: coins
+      value: 2750
+      display: $%value%
+    sell:
+      type: coins
+      value: 275
+      display: $%value%
+  - id: copper_ingot
+    gui:
+      column: 8
+      row: 1
+      page: 1
+    item: copper_ingot
+    buy:
+      type: coins
+      value: 200
+      display: $%value%
+    sell:
+      type: coins
+      value: 20
+      display: $%value%
+  - id: coal_block
+    gui:
+      column: 1
+      row: 2
+      page: 1
+    item: coal_block
+    buy:
+      type: coins
+      value: 900
+      display: $%value%
+    sell:
+      type: coins
+      value: 90
+      display: $%value%

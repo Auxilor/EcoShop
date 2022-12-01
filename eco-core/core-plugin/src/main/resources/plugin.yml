@@ -1,0 +1,59 @@
+name: EcoShop
+version: ${projectVersion}
+main: com.willfp.ecoshop.EcoShopPlugin
+api-version: 1.17
+authors: [ Auxilor ]
+website: willfp.com
+load: STARTUP
+depend:
+  - eco
+  - ProtocolLib
+softdepend: []
+
+commands:
+  ecoshop:
+    description: Base plugin command
+    permission: ecoshop.command.ecoshop
+  sell:
+    description: Sells items
+    permission: ecoshop.command.sell
+
+permissions:
+  ecoshop.command.sell.*:
+    description: All sell permissions
+    default: true
+    children:
+      ecoshop.command.sell: true
+      ecoshop.command.sell.hand: true
+      ecoshop.command.sell.all: true
+      ecoshop.command.sell.handall: true
+  ecoshop.*:
+    description: All ecoshop permissions
+    default: op
+    children:
+      ecoshop.command.reload: true
+      ecoshop.command.resetbuys: true
+      ecoshop.command.ecoshop: true
+      ecoshop.command.sell.*: true
+
+  ecoshop.command.ecoshop:
+    description: Allows the use of /ecoshop (base command)
+    default: true
+  ecoshop.command.reload:
+    description: Allows reloading the config
+    default: op
+  ecoshop.command.resetbuys:
+    description: Allows resetting buys (for testing)
+    default: op
+  ecoshop.command.sell:
+    description: Allows the use of /sell and the /sell GUI
+    default: true
+  ecoshop.command.sell.hand:
+    description: Allows the use of /sell hand
+    default: true
+  ecoshop.command.sell.all:
+    description: Allows the use of /sell all
+    default: true
+  ecoshop.command.sell.handall:
+    description: Allows the use of /sell handall
+    default: true

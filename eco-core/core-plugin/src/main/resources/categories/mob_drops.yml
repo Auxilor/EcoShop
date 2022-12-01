@@ -1,0 +1,423 @@
+item: rotten_flesh name:"&aMob Drops"
+lore: [ ]
+
+gui:
+  rows: 5
+  title: "Mob Drops"
+
+  forwards-arrow:
+    item: arrow name:"&fNext Page"
+    row: 5
+    column: 6
+  backwards-arrow:
+    item: arrow name:"&fPrevious Page"
+    row: 5
+    column: 4
+
+  pages:
+    - page: 1
+      mask:
+        items: []
+        pattern:
+          - "000000000"
+          - "000000000"
+          - "000000000"
+          - "000000000"
+          - "000000000"
+
+items:
+  - id: ender_pearl
+
+    sell:
+      value: 5
+      type: coins
+      display: "$%value%"
+
+    item: ender_pearl
+
+    gui:
+      column: 1
+      row: 1
+      page: 1
+
+  - id: string
+
+    buy:
+      value: 30
+      type: coins
+      display: "$%value%"
+
+    sell:
+      value: 3
+      type: coins
+      display: "$%value%"
+
+    item: string
+
+    gui:
+      column: 2
+      row: 1
+      page: 1
+
+  - id: rotten_flesh
+
+    sell:
+      value: 5
+      type: coins
+      display: "$%value%"
+
+    item: rotten_flesh
+
+    gui:
+      column: 3
+      row: 1
+      page: 1
+
+  - id: gunpowder
+
+    sell:
+      value: 15
+      type: coins
+      display: "$%value%"
+
+    item: gunpowder
+
+    gui:
+      column: 4
+      row: 1
+      page: 1
+
+  - id: arrow
+
+    buy:
+      value: 20
+      type: coins
+      display: "$%value%"
+
+    sell:
+      value: 3
+      type: coins
+      display: "$%value%"
+
+    item: arrow
+
+    gui:
+      column: 5
+      row: 1
+      page: 1
+
+  - id: magma_cream
+
+    buy:
+      value: 120
+      type: coins
+      display: "$%value%"
+
+    sell:
+      value: 12
+      type: coins
+      display: "$%value%"
+
+    item: magma_cream
+
+    gui:
+      column: 6
+      row: 1
+      page: 1
+
+  - id: lead
+
+    sell:
+      value: 50
+      type: coins
+      display: "$%value%"
+
+    item: lead
+
+    gui:
+      column: 7
+      row: 1
+      page: 1
+
+  - id: glistering_melon_slice
+
+    sell:
+      value: 15
+      type: coins
+      display: "$%value%"
+
+    item: glistering_melon_slice
+
+    gui:
+      column: 8
+      row: 1
+      page: 1
+
+  - id: blaze_rod
+
+    buy:
+      value: 50
+      type: coins
+      display: "$%value%"
+
+    sell:
+      value: 8
+      type: coins
+      display: "$%value%"
+
+    item: blaze_rod
+
+    gui:
+      column: 9
+      row: 1
+      page: 1
+
+  - id: slime_ball
+
+    buy:
+      value: 40
+      type: coins
+      display: "$%value%"
+
+    sell:
+      value: 4
+      type: coins
+      display: "$%value%"
+
+    item: slime_ball
+
+    gui:
+      column: 1
+      row: 2
+      page: 1
+
+  - id: ink_sac
+
+    sell:
+      value: 15
+      type: coins
+      display: "$%value%"
+
+    item: ink_sac
+
+    gui:
+      column: 2
+      row: 2
+      page: 1
+
+  - id: glow_ink_sac
+
+    sell:
+      value: 15
+      type: coins
+      display: "$%value%"
+
+    item: glow_ink_sac
+
+    gui:
+      column: 3
+      row: 2
+      page: 1
+
+  - id: feather
+
+    buy:
+      value: 150
+      type: coins
+      display: "$%value%"
+
+    sell:
+      value: 15
+      type: coins
+      display: "$%value%"
+
+    item: feather
+
+    gui:
+      column: 4
+      row: 2
+      page: 1
+
+  - id: leather
+
+    buy:
+      value: 90
+      type: coins
+      display: "$%value%"
+
+    sell:
+      value: 15
+      type: coins
+      display: "$%value%"
+
+    item: leather
+
+    gui:
+      column: 5
+      row: 2
+      page: 1
+
+  - id: bone
+
+    sell:
+      value: 15
+      type: coins
+      display: "$%value%"
+
+    item: bone
+
+    gui:
+      column: 6
+      row: 2
+      page: 1
+
+  - id: shulker_shell
+
+    buy:
+      value: 7500
+      type: coins
+      display: "$%value%"
+
+    sell:
+      value: 125
+      type: coins
+      display: "$%value%"
+
+    item: shulker_shell
+
+    gui:
+      column: 7
+      row: 2
+      page: 1
+
+  - id: ghast_tear
+
+    buy:
+      value: 500
+      type: coins
+      display: "$%value%"
+
+    sell:
+      value: 50
+      type: coins
+      display: "$%value%"
+
+    item: ghast_tear
+
+    gui:
+      column: 8
+      row: 2
+      page: 1
+
+  - id: spider_eye
+
+    sell:
+      value: 5
+      type: coins
+      display: "$%value%"
+
+    item: spider_eye
+
+    gui:
+      column: 9
+      row: 2
+      page: 1
+
+  - id: nether_star
+
+    sell:
+      value: 17500
+      type: coins
+      display: "$%value%"
+
+    item: nether_star
+
+    gui:
+      column: 1
+      row: 3
+      page: 1
+
+  - id: nautilus_shell
+
+    sell:
+      value: 50
+      type: coins
+      display: "$%value%"
+
+    item: nautilus_shell
+
+    gui:
+      column: 2
+      row: 3
+      page: 1
+
+  - id: wither_skeleton_skull
+
+    buy:
+      value: 50000
+      type: coins
+      display: "$%value%"
+
+    item: wither_skeleton_skull
+
+    gui:
+      column: 3
+      row: 3
+      page: 1
+
+  - id: honey_bottle
+
+    buy:
+      value: 850
+      type: coins
+      display: "$%value%"
+
+    sell:
+      value: 135
+      type: coins
+      display: "$%value%"
+
+    item: honey_bottle
+
+    gui:
+      column: 4
+      row: 3
+      page: 1
+
+  - id: honey_block
+
+    buy:
+      value: 3400
+      type: coins
+      display: "$%value%"
+
+    sell:
+      value: 540
+      type: coins
+      display: "$%value%"
+
+    item: honey_block
+
+    gui:
+      column: 5
+      row: 3
+      page: 1
+
+  - id: prismarine_shard
+
+    buy:
+      value: 200
+      type: coins
+      display: "$%value%"
+
+    sell:
+      value: 20
+      type: coins
+      display: "$%value%"
+
+    item: honey_block
+
+    gui:
+      column: 6
+      row: 3
+      page: 1

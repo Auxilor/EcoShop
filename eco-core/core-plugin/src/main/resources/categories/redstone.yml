@@ -1,0 +1,185 @@
+item: hopper name:"&aRedstone"
+lore: [ ]
+
+gui:
+  rows: 4
+  title: Redstone
+
+  forwards-arrow:
+    column: 6
+    item: arrow name:"&fNext Page"
+    row: 4
+  backwards-arrow:
+    column: 4
+    item: arrow name:"&fPrevious Page"
+    row: 4
+
+  pages:
+    - page: 1
+      mask:
+        pattern:
+          - '000000000'
+          - '000000000'
+          - '000000000'
+          - '000000000'
+        items: []
+
+items:
+  - id: redstone
+    gui:
+      column: 1
+      row: 2
+      page: 1
+    item: redstone
+    buy:
+      type: coins
+      value: 20
+      display: $%value%
+    sell:
+      type: coins
+      value: 10
+      display: $%value%
+  - id: hopper
+    gui:
+      column: 2
+      row: 2
+      page: 1
+    item: hopper
+    buy:
+      type: coins
+      value: 280
+      display: $%value%
+  - id: dropper
+    gui:
+      column: 3
+      row: 2
+      page: 1
+    item: dropper
+    buy:
+      type: coins
+      value: 40
+      display: $%value%
+  - id: observer
+    gui:
+      column: 4
+      row: 2
+      page: 1
+    item: observer
+    buy:
+      type: coins
+      value: 135
+      display: $%value%
+  - id: repeater
+    gui:
+      column: 5
+      row: 2
+      page: 1
+    item: repeater
+    buy:
+      type: coins
+      value: 100
+      display: $%value%
+  - id: comparator
+    gui:
+      column: 6
+      row: 2
+      page: 1
+    item: comparator
+    buy:
+      type: coins
+      value: 180
+      display: $%value%
+  - id: dispenser
+    gui:
+      column: 1
+      row: 1
+      page: 1
+    item: dispenser
+    buy:
+      type: coins
+      value: 450
+      display: $%value%
+  - id: sticky_piston
+    gui:
+      column: 2
+      row: 1
+      page: 1
+    item: sticky_piston
+    buy:
+      type: coins
+      value: 400
+      display: $%value%
+  - id: piston
+    gui:
+      column: 3
+      row: 1
+      page: 1
+    item: piston
+    buy:
+      type: coins
+      value: 350
+      display: $%value%
+  - id: lever
+    gui:
+      column: 4
+      row: 1
+      page: 1
+    item: lever
+    buy:
+      type: coins
+      value: 10
+      display: $%value%
+  - id: redstone_torch
+    gui:
+      column: 5
+      row: 1
+      page: 1
+    item: redstone_torch
+    buy:
+      type: coins
+      value: 30
+      display: $%value%
+  - id: redstone_lamp
+    gui:
+      column: 6
+      row: 1
+      page: 1
+    item: redstone_lamp
+    buy:
+      type: coins
+      value: 180
+      display: $%value%
+  - id: tripwire_hook
+    gui:
+      column: 7
+      row: 1
+      page: 1
+    item: tripwire_hook
+    buy:
+      type: coins
+      value: 75
+      display: $%value%
+  - id: daylight_detector
+    gui:
+      column: 8
+      row: 1
+      page: 1
+    item: daylight_detector
+    buy:
+      type: coins
+      value: 150
+      display: $%value%
+  - id: redstone_block
+    gui:
+      column: 9
+      row: 1
+      page: 1
+    item: redstone_block
+    buy:
+      type: coins
+      value: 180
+      display: $%value%
+    sell:
+      type: coins
+      value: 90
+      display: $%value%

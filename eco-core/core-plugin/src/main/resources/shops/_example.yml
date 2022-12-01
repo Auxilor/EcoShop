@@ -1,0 +1,75 @@
+# The ID of the shop is the name of the .yml file,
+# for example donator.yml has the ID of donator
+# You can place shops anywhere in this folder,
+# including in subfolders if you want to organize your shop configs
+# _example.yml is not loaded.
+
+title: Demo Shop # The GUI title.
+command: demoshop # The command to open the shop.
+
+forwards-arrow: # The arrow for switching between pages. If on the last page, this will not show up.
+  item: arrow name:"&fNext Page"
+  row: 6
+  column: 6
+
+backwards-arrow: # The arrow for switching between pages. If on the first page, this will not show up.
+  item: arrow name:"&fPrevious Page"
+  row: 6
+  column: 4
+
+buy-broadcasts: # Options for buy broadcasts
+  enabled: true # If purchases in this shop should be broadcast to the server, good for /buy menus.
+  message: "&b&lCrystal Shop&r &8»&r %player%&r&f has bought &r%item%&r&ffrom the &bCrystal Shop ❖&f!" # Use %player%, %item%, and %amount%
+  sound: # Broadcast sound, remove this section if you don't want a sound.
+    sound: ui_toast_challenge_complete
+    pitch: 1.5
+    volume: 2
+
+click-sound: # A sound to be played when clicking an icon in this shop, remove this section if you don't want a sound.
+  sound: block_stone_button_click_on # The sound https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Sound.html
+  pitch: 1 # The pitch (0.5 - 2)
+  volume: 1
+
+buy-sound: # A sound to be played when buying something in this shop, remove this section if you don't want a sound.
+  sound: entity_player_levelup
+  pitch: 2
+  volume: 1
+
+sell-sound: # A sound to be played when selling something in this shop, remove this section if you don't want a sound.
+  sound: block_amethyst_block_place
+  pitch: 1.5
+  volume: 1
+
+# Shops can work in two ways.
+
+# You can either have a shop contain a list of categories, or you can make a shop be one
+# category that you're instantly sent to (for single page shops, e.g. a boss spawn egg shop)
+
+# If you want a single-page shop, use direct-category to link it straight to a category
+# direct-category: example_category
+
+# If you want a regular shop that contains multiple categories, use these options here
+rows: 3
+pages: # All the pages in the preview GUI. You can add as many pages as you want.
+  - page: 1
+    mask: # Filler items for decoration
+      items: # Add as many items as you want
+        - gray_stained_glass_pane # Item 1
+        - black_stained_glass_pane # Item 2
+      pattern:
+        - "222222222"
+        - "211111112"
+        - "211000112"
+        - "211000112"
+        - "211111112"
+        - "222222222"
+    categories: # Where to put categories in the GUI
+      - id: example # The category ID
+        row: 3 # The row
+        column: 3 # The column
+      - id: example_2
+        row: 4
+        column: 6
+
+    # Custom GUI slots; see here for a how-to: https://plugins.auxilor.io/all-plugins/custom-gui-slots
+    custom-slots: [ ]

@@ -1,0 +1,1022 @@
+item: lime_concrete name:"&aColored Blocks"
+lore: [ ]
+
+gui:
+  rows: 6
+  title: Colored Blocks
+
+  forwards-arrow:
+    column: 6
+    item: arrow name:"&fNext Page"
+    row: 6
+  backwards-arrow:
+    column: 4
+    item: arrow name:"&fPrevious Page"
+    row: 6
+
+  pages:
+    - page: 1
+      mask:
+        pattern:
+          - '000000000'
+          - '000000000'
+          - '000000000'
+          - '000000000'
+          - '000000000'
+          - '000000000'
+        items: []
+    - page: 2
+      mask:
+        pattern:
+          - '000000000'
+          - '000000000'
+          - '000000000'
+          - '000000000'
+          - '000000000'
+          - '000000000'
+        items: []
+    - page: 3
+      mask:
+        pattern:
+          - '000000000'
+          - '000000000'
+          - '000000000'
+          - '000000000'
+          - '000000000'
+          - '000000000'
+        items: []
+    - page: 4
+      mask:
+        pattern:
+          - '000000000'
+          - '000000000'
+          - '000000000'
+          - '000000000'
+          - '000000000'
+          - '000000000'
+        items: []
+
+items:
+  - id: brown_wool
+    item: brown_wool
+
+    buy:
+      type: coins
+      value: 6
+      display: $%value%
+
+    gui:
+      column: 2
+      row: 1
+      page: 4
+
+  - id: brown_terracotta
+    gui:
+      column: 3
+      row: 1
+      page: 4
+    item: brown_terracotta
+    buy:
+      type: coins
+      value: 10
+      display: $%value%
+  - id: brown_stained_glass
+    gui:
+      column: 4
+      row: 1
+      page: 4
+    item: brown_stained_glass
+    buy:
+      type: coins
+      value: 5
+      display: $%value%
+  - id: brown_concrete
+    gui:
+      column: 6
+      row: 1
+      page: 4
+    item: brown_concrete
+    buy:
+      type: coins
+      value: 12
+      display: $%value%
+  - id: brown_concrete_powder
+    gui:
+      column: 7
+      row: 1
+      page: 4
+    item: brown_concrete_powder
+    buy:
+      type: coins
+      value: 8
+      display: $%value%
+  - id: brown_glazed_terracotta
+    gui:
+      column: 8
+      row: 1
+      page: 4
+    item: brown_glazed_terracotta
+    buy:
+      type: coins
+      value: 13
+      display: $%value%
+  - id: magenta_wool
+    gui:
+      column: 2
+      row: 3
+      page: 1
+    item: magenta_wool
+    buy:
+      type: coins
+      value: 6
+      display: $%value%
+  - id: magenta_terracotta
+    gui:
+      column: 3
+      row: 3
+      page: 1
+    item: magenta_terracotta
+    buy:
+      type: coins
+      value: 10
+      display: $%value%
+  - id: magenta_stained_glass
+    gui:
+      column: 4
+      row: 3
+      page: 1
+    item: magenta_stained_glass
+    buy:
+      type: coins
+      value: 5
+      display: $%value%
+  - id: magenta_concrete
+    gui:
+      column: 6
+      row: 3
+      page: 1
+    item: magenta_concrete
+    buy:
+      type: coins
+      value: 12
+      display: $%value%
+  - id: magenta_concrete_powder
+    gui:
+      column: 7
+      row: 3
+      page: 1
+    item: magenta_concrete_powder
+    buy:
+      type: coins
+      value: 8
+      display: $%value%
+  - id: magenta_glazed_terracotta
+    gui:
+      column: 8
+      row: 3
+      page: 1
+    item: magenta_glazed_terracotta
+    buy:
+      type: coins
+      value: 13
+      display: $%value%
+  - id: green_wool
+    gui:
+      column: 2
+      row: 2
+      page: 4
+    item: green_wool
+    buy:
+      type: coins
+      value: 6
+      display: $%value%
+  - id: green_terracotta
+    gui:
+      column: 3
+      row: 2
+      page: 4
+    item: green_terracotta
+    buy:
+      type: coins
+      value: 10
+      display: $%value%
+  - id: green_stained_glass
+    gui:
+      column: 4
+      row: 2
+      page: 4
+    item: green_stained_glass
+    buy:
+      type: coins
+      value: 5
+      display: $%value%
+  - id: orange_wool
+    gui:
+      column: 2
+      row: 2
+      page: 1
+    item: orange_wool
+    buy:
+      type: coins
+      value: 6
+      display: $%value%
+  - id: green_concrete
+    gui:
+      column: 6
+      row: 2
+      page: 4
+    item: green_concrete
+    buy:
+      type: coins
+      value: 12
+      display: $%value%
+  - id: orange_terracotta
+    gui:
+      column: 3
+      row: 2
+      page: 1
+    item: orange_terracotta
+    buy:
+      type: coins
+      value: 10
+      display: $%value%
+  - id: green_concrete_powder
+    gui:
+      column: 7
+      row: 2
+      page: 4
+    item: green_concrete_powder
+    buy:
+      type: coins
+      value: 8
+      display: $%value%
+  - id: orange_stained_glass
+    gui:
+      column: 4
+      row: 2
+      page: 1
+    item: orange_stained_glass
+    buy:
+      type: coins
+      value: 5
+      display: $%value%
+  - id: green_glazed_terracotta
+    gui:
+      column: 8
+      row: 2
+      page: 4
+    item: green_glazed_terracotta
+    buy:
+      type: coins
+      value: 13
+      display: $%value%
+  - id: orange_concrete
+    gui:
+      column: 6
+      row: 2
+      page: 1
+    item: orange_concrete
+    buy:
+      type: coins
+      value: 12
+      display: $%value%
+  - id: orange_concrete_powder
+    gui:
+      column: 7
+      row: 2
+      page: 1
+    item: orange_concrete_powder
+    buy:
+      type: coins
+      value: 8
+      display: $%value%
+  - id: orange_glazed_terracotta
+    gui:
+      column: 8
+      row: 2
+      page: 1
+    item: orange_glazed_terracotta
+    buy:
+      type: coins
+      value: 13
+      display: $%value%
+  - id: light_blue_wool
+    gui:
+      column: 2
+      row: 4
+      page: 1
+    item: light_blue_wool
+    buy:
+      type: coins
+      value: 6
+      display: $%value%
+  - id: light_blue_terracotta
+    gui:
+      column: 3
+      row: 4
+      page: 1
+    item: light_blue_terracotta
+    buy:
+      type: coins
+      value: 10
+      display: $%value%
+  - id: light_blue_stained_glass
+    gui:
+      column: 4
+      row: 4
+      page: 1
+    item: light_blue_stained_glass
+    buy:
+      type: coins
+      value: 5
+      display: $%value%
+  - id: light_blue_concrete
+    gui:
+      column: 6
+      row: 4
+      page: 1
+    item: light_blue_concrete
+    buy:
+      type: coins
+      value: 12
+      display: $%value%
+  - id: light_blue_concrete_powder
+    gui:
+      column: 7
+      row: 4
+      page: 1
+    item: light_blue_concrete_powder
+    buy:
+      type: coins
+      value: 8
+      display: $%value%
+  - id: light_blue_glazed_terracotta
+    gui:
+      column: 8
+      row: 4
+      page: 1
+    item: light_blue_glazed_terracotta
+    buy:
+      type: coins
+      value: 13
+      display: $%value%
+  - id: red_wool
+    gui:
+      column: 2
+      row: 3
+      page: 4
+    item: red_wool
+    buy:
+      type: coins
+      value: 6
+      display: $%value%
+  - id: red_terracotta
+    gui:
+      column: 3
+      row: 3
+      page: 4
+    item: red_terracotta
+    buy:
+      type: coins
+      value: 10
+      display: $%value%
+  - id: red_stained_glass
+    gui:
+      column: 4
+      row: 3
+      page: 4
+    item: red_stained_glass
+    buy:
+      type: coins
+      value: 5
+      display: $%value%
+  - id: red_concrete
+    gui:
+      column: 6
+      row: 3
+      page: 4
+    item: red_concrete
+    buy:
+      type: coins
+      value: 12
+      display: $%value%
+  - id: red_concrete_powder
+    gui:
+      column: 7
+      row: 3
+      page: 4
+    item: red_concrete_powder
+    buy:
+      type: coins
+      value: 8
+      display: $%value%
+  - id: red_glazed_terracotta
+    gui:
+      column: 8
+      row: 3
+      page: 4
+    item: red_glazed_terracotta
+    buy:
+      type: coins
+      value: 13
+      display: $%value%
+  - id: yellow_wool
+    gui:
+      column: 2
+      row: 1
+      page: 2
+    item: yellow_wool
+    buy:
+      type: coins
+      value: 6
+      display: $%value%
+  - id: yellow_terracotta
+    gui:
+      column: 3
+      row: 1
+      page: 2
+    item: yellow_terracotta
+    buy:
+      type: coins
+      value: 10
+      display: $%value%
+  - id: yellow_stained_glass
+    gui:
+      column: 4
+      row: 1
+      page: 2
+    item: yellow_stained_glass
+    buy:
+      type: coins
+      value: 5
+      display: $%value%
+  - id: yellow_concrete
+    gui:
+      column: 6
+      row: 1
+      page: 2
+    item: yellow_concrete
+    buy:
+      type: coins
+      value: 12
+      display: $%value%
+  - id: yellow_concrete_powder
+    gui:
+      column: 7
+      row: 1
+      page: 2
+    item: yellow_concrete_powder
+    buy:
+      type: coins
+      value: 8
+      display: $%value%
+  - id: yellow_glazed_terracotta
+    gui:
+      column: 8
+      row: 1
+      page: 2
+    item: yellow_glazed_terracotta
+    buy:
+      type: coins
+      value: 13
+      display: $%value%
+  - id: black_wool
+    gui:
+      column: 2
+      row: 4
+      page: 4
+    item: black_wool
+    buy:
+      type: coins
+      value: 6
+      display: $%value%
+  - id: black_terracotta
+    gui:
+      column: 3
+      row: 4
+      page: 4
+    item: black_terracotta
+    buy:
+      type: coins
+      value: 10
+      display: $%value%
+  - id: black_stained_glass
+    gui:
+      column: 4
+      row: 4
+      page: 4
+    item: black_stained_glass
+    buy:
+      type: coins
+      value: 5
+      display: $%value%
+  - id: black_concrete
+    gui:
+      column: 6
+      row: 4
+      page: 4
+    item: black_concrete
+    buy:
+      type: coins
+      value: 12
+      display: $%value%
+  - id: black_concrete_powder
+    gui:
+      column: 7
+      row: 4
+      page: 4
+    item: black_concrete_powder
+    buy:
+      type: coins
+      value: 8
+      display: $%value%
+  - id: black_glazed_terracotta
+    gui:
+      column: 8
+      row: 4
+      page: 4
+    item: black_glazed_terracotta
+    buy:
+      type: coins
+      value: 13
+      display: $%value%
+  - id: lime_wool
+    gui:
+      column: 2
+      row: 2
+      page: 2
+    item: lime_wool
+    buy:
+      type: coins
+      value: 6
+      display: $%value%
+  - id: lime_terracotta
+    gui:
+      column: 3
+      row: 2
+      page: 2
+    item: lime_terracotta
+    buy:
+      type: coins
+      value: 10
+      display: $%value%
+  - id: lime_stained_glass
+    gui:
+      column: 4
+      row: 2
+      page: 2
+    item: lime_stained_glass
+    buy:
+      type: coins
+      value: 5
+      display: $%value%
+  - id: lime_concrete
+    gui:
+      column: 6
+      row: 2
+      page: 2
+    item: lime_concrete
+    buy:
+      type: coins
+      value: 12
+      display: $%value%
+  - id: lime_concrete_powder
+    gui:
+      column: 7
+      row: 2
+      page: 2
+    item: lime_concrete_powder
+    buy:
+      type: coins
+      value: 8
+      display: $%value%
+  - id: lime_glazed_terracotta
+    gui:
+      column: 8
+      row: 2
+      page: 2
+    item: lime_glazed_terracotta
+    buy:
+      type: coins
+      value: 13
+      display: $%value%
+  - id: white_wool
+    gui:
+      column: 2
+      row: 1
+      page: 1
+    item: white_wool
+    buy:
+      type: coins
+      value: 6
+      display: $%value%
+  - id: white_terracotta
+    gui:
+      column: 3
+      row: 1
+      page: 1
+    item: white_terracotta
+    buy:
+      type: coins
+      value: 10
+      display: $%value%
+  - id: white_stained_glass
+    gui:
+      column: 4
+      row: 1
+      page: 1
+    item: white_stained_glass
+    buy:
+      type: coins
+      value: 5
+      display: $%value%
+  - id: white_concrete
+    gui:
+      column: 6
+      row: 1
+      page: 1
+    item: white_concrete
+    buy:
+      type: coins
+      value: 12
+      display: $%value%
+  - id: white_concrete_powder
+    gui:
+      column: 7
+      row: 1
+      page: 1
+    item: white_concrete_powder
+    buy:
+      type: coins
+      value: 8
+      display: $%value%
+  - id: white_glazed_terracotta
+    gui:
+      column: 8
+      row: 1
+      page: 1
+    item: white_glazed_terracotta
+    buy:
+      type: coins
+      value: 13
+      display: $%value%
+  - id: pink_wool
+    gui:
+      column: 2
+      row: 3
+      page: 2
+    item: pink_wool
+    buy:
+      type: coins
+      value: 6
+      display: $%value%
+  - id: pink_terracotta
+    gui:
+      column: 3
+      row: 3
+      page: 2
+    item: pink_terracotta
+    buy:
+      type: coins
+      value: 10
+      display: $%value%
+  - id: pink_stained_glass
+    gui:
+      column: 4
+      row: 3
+      page: 2
+    item: pink_stained_glass
+    buy:
+      type: coins
+      value: 5
+      display: $%value%
+  - id: pink_concrete
+    gui:
+      column: 6
+      row: 3
+      page: 2
+    item: pink_concrete
+    buy:
+      type: coins
+      value: 12
+      display: $%value%
+  - id: pink_concrete_powder
+    gui:
+      column: 7
+      row: 3
+      page: 2
+    item: pink_concrete_powder
+    buy:
+      type: coins
+      value: 8
+      display: $%value%
+  - id: pink_glazed_terracotta
+    gui:
+      column: 8
+      row: 3
+      page: 2
+    item: pink_glazed_terracotta
+    buy:
+      type: coins
+      value: 13
+      display: $%value%
+  - id: gray_wool
+    gui:
+      column: 2
+      row: 4
+      page: 2
+    item: gray_wool
+    buy:
+      type: coins
+      value: 6
+      display: $%value%
+  - id: gray_terracotta
+    gui:
+      column: 3
+      row: 4
+      page: 2
+    item: gray_terracotta
+    buy:
+      type: coins
+      value: 10
+      display: $%value%
+  - id: gray_stained_glass
+    gui:
+      column: 4
+      row: 4
+      page: 2
+    item: gray_stained_glass
+    buy:
+      type: coins
+      value: 5
+      display: $%value%
+  - id: gray_concrete
+    gui:
+      column: 6
+      row: 4
+      page: 2
+    item: gray_concrete
+    buy:
+      type: coins
+      value: 12
+      display: $%value%
+  - id: gray_concrete_powder
+    gui:
+      column: 7
+      row: 4
+      page: 2
+    item: gray_concrete_powder
+    buy:
+      type: coins
+      value: 8
+      display: $%value%
+  - id: gray_glazed_terracotta
+    gui:
+      column: 8
+      row: 4
+      page: 2
+    item: gray_glazed_terracotta
+    buy:
+      type: coins
+      value: 13
+      display: $%value%
+  - id: light_gray_wool
+    gui:
+      column: 2
+      row: 1
+      page: 3
+    item: light_gray_wool
+    buy:
+      type: coins
+      value: 6
+      display: $%value%
+  - id: light_gray_terracotta
+    gui:
+      column: 3
+      row: 1
+      page: 3
+    item: light_gray_terracotta
+    buy:
+      type: coins
+      value: 10
+      display: $%value%
+  - id: light_gray_stained_glass
+    gui:
+      column: 4
+      row: 1
+      page: 3
+    item: light_gray_stained_glass
+    buy:
+      type: coins
+      value: 5
+      display: $%value%
+  - id: light_gray_concrete
+    gui:
+      column: 6
+      row: 1
+      page: 3
+    item: light_gray_concrete
+    buy:
+      type: coins
+      value: 12
+      display: $%value%
+  - id: light_gray_concrete_powder
+    gui:
+      column: 7
+      row: 1
+      page: 3
+    item: light_gray_concrete_powder
+    buy:
+      type: coins
+      value: 8
+      display: $%value%
+  - id: light_gray_glazed_terracotta
+    gui:
+      column: 8
+      row: 1
+      page: 3
+    item: light_gray_glazed_terracotta
+    buy:
+      type: coins
+      value: 13
+      display: $%value%
+  - id: cyan_wool
+    gui:
+      column: 2
+      row: 2
+      page: 3
+    item: cyan_wool
+    buy:
+      type: coins
+      value: 6
+      display: $%value%
+  - id: cyan_terracotta
+    gui:
+      column: 3
+      row: 2
+      page: 3
+    item: cyan_terracotta
+    buy:
+      type: coins
+      value: 10
+      display: $%value%
+  - id: cyan_stained_glass
+    gui:
+      column: 4
+      row: 2
+      page: 3
+    item: cyan_stained_glass
+    buy:
+      type: coins
+      value: 5
+      display: $%value%
+  - id: cyan_concrete
+    gui:
+      column: 6
+      row: 2
+      page: 3
+    item: cyan_concrete
+    buy:
+      type: coins
+      value: 12
+      display: $%value%
+  - id: cyan_concrete_powder
+    gui:
+      column: 7
+      row: 2
+      page: 3
+    item: cyan_concrete_powder
+    buy:
+      type: coins
+      value: 8
+      display: $%value%
+  - id: cyan_glazed_terracotta
+    gui:
+      column: 8
+      row: 2
+      page: 3
+    item: cyan_glazed_terracotta
+    buy:
+      type: coins
+      value: 13
+      display: $%value%
+  - id: purple_wool
+    gui:
+      column: 2
+      row: 3
+      page: 3
+    item: purple_wool
+    buy:
+      type: coins
+      value: 6
+      display: $%value%
+  - id: purple_terracotta
+    gui:
+      column: 3
+      row: 3
+      page: 3
+    item: purple_terracotta
+    buy:
+      type: coins
+      value: 10
+      display: $%value%
+  - id: purple_stained_glass
+    gui:
+      column: 4
+      row: 3
+      page: 3
+    item: purple_stained_glass
+    buy:
+      type: coins
+      value: 5
+      display: $%value%
+  - id: purple_concrete
+    gui:
+      column: 6
+      row: 3
+      page: 3
+    item: purple_concrete
+    buy:
+      type: coins
+      value: 12
+      display: $%value%
+  - id: purple_concrete_powder
+    gui:
+      column: 7
+      row: 3
+      page: 3
+    item: purple_concrete_powder
+    buy:
+      type: coins
+      value: 8
+      display: $%value%
+  - id: purple_glazed_terracotta
+    gui:
+      column: 8
+      row: 3
+      page: 3
+    item: purple_glazed_terracotta
+    buy:
+      type: coins
+      value: 13
+      display: $%value%
+  - id: blue_wool
+    gui:
+      column: 2
+      row: 4
+      page: 3
+    item: blue_wool
+    buy:
+      type: coins
+      value: 6
+      display: $%value%
+  - id: blue_terracotta
+    gui:
+      column: 3
+      row: 4
+      page: 3
+    item: blue_terracotta
+    buy:
+      type: coins
+      value: 10
+      display: $%value%
+  - id: blue_stained_glass
+    gui:
+      column: 4
+      row: 4
+      page: 3
+    item: blue_stained_glass
+    buy:
+      type: coins
+      value: 5
+      display: $%value%
+  - id: blue_concrete
+    gui:
+      column: 6
+      row: 4
+      page: 3
+    item: blue_concrete
+    buy:
+      type: coins
+      value: 12
+      display: $%value%
+  - id: blue_concrete_powder
+    gui:
+      column: 7
+      row: 4
+      page: 3
+    item: blue_concrete_powder
+    buy:
+      type: coins
+      value: 8
+      display: $%value%
+  - id: blue_glazed_terracotta
+    gui:
+      column: 8
+      row: 4
+      page: 3
+    item: blue_glazed_terracotta
+    buy:
+      type: coins
+      value: 13
+      display: $%value%

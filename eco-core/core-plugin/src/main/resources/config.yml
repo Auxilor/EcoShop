@@ -1,0 +1,286 @@
+#
+# EcoShop
+# by Auxilor
+#
+
+shop-items:
+  global-bottom-lore: # Options for global lore to be shown on all shop icons, disabled by default.
+    buy: [ ] # Shown under buyable items.
+    # - "&e&oLeft Click to buy"
+    sell: [ ] # Shown under sellable items.
+    # - "&e&oRight Click to sell"
+    always: [ ] # Always shown.
+
+buy-menu:
+  rows: 6 # How many rows for the GUI
+
+  title: "Buying %item%"
+
+  mask: # The background material
+    items:
+      - black_stained_glass_pane
+      - gray_stained_glass_pane
+    pattern: # 1 for the first item, 2 for the second item, etc
+      - "111111111"
+      - "122202221"
+      - "122222221"
+      - "122222221"
+      - "122020221"
+      - "111101111"
+
+  item:
+    row: 2
+    column: 5
+
+  buy-more:
+    row: 6
+    column: 5
+    item: emerald 64 unbreaking:1 hide_enchants name:"&aBuy More"
+
+  cancel:
+    row: 5
+    column: 4
+    item: barrier name:"&cCancel"
+
+  confirm:
+    row: 5
+    column: 6
+    item: diamond unbreaking:1 hide_enchants name:"&aConfirm"
+
+  add-buttons:
+    - add: 1
+      row: 4
+      column: 6
+      item: lime_concrete 1 name:"&a+1"
+
+    - add: 10
+      row: 4
+      column: 7
+      item: lime_concrete 10 name:"&a+10"
+
+    - add: -1
+      row: 4
+      column: 4
+      item: red_concrete 1 name:"&c-1"
+
+    - add: -10
+      row: 4
+      column: 3
+      item: red_concrete 10 name:"&c-10"
+
+  set-buttons:
+    - set: 1
+      row: 4
+      column: 2
+      item: red_concrete 1 name:"&cSet to one"
+
+    - set: 64
+      row: 4
+      column: 8
+      item: lime_concrete 64 name:"&aSet to full stack"
+
+  # Custom GUI slots; see here for a how-to: https://plugins.auxilor.io/all-plugins/custom-gui-slots
+  custom-slots: [ ]
+
+buy-more:
+  rows: 2
+
+  title: "Buying more %item%"
+
+  mask: # The background material
+    items:
+      - black_stained_glass_pane
+    pattern: # 1 for the first item, 2 for the second item, etc
+      - "000000000"
+      - "111101111"
+
+  item-name: "&fBuy &a%stacks%&f stacks"
+
+  amounts:
+    - stacks: 1
+      row: 1
+      column: 1
+
+    - stacks: 2
+      row: 1
+      column: 2
+
+    - stacks: 3
+      row: 1
+      column: 3
+
+    - stacks: 4
+      row: 1
+      column: 4
+
+    - stacks: 5
+      row: 1
+      column: 5
+
+    - stacks: 6
+      row: 1
+      column: 6
+
+    - stacks: 7
+      row: 1
+      column: 7
+
+    - stacks: 8
+      row: 1
+      column: 8
+
+    - stacks: 9
+      row: 1
+      column: 9
+
+  back:
+    row: 2
+    column: 5
+    item: arrow 1 name:"&cGo Back"
+
+  # Custom GUI slots; see here for a how-to: https://plugins.auxilor.io/all-plugins/custom-gui-slots
+  custom-slots: [ ]
+
+sell-menu:
+  rows: 6 # How many rows for the GUI
+
+  title: "Selling %item%"
+
+  mask: # The background material
+    items:
+      - black_stained_glass_pane
+      - gray_stained_glass_pane
+    pattern: # 1 for the first item, 2 for the second item, etc
+      - "111111111"
+      - "122202221"
+      - "122222221"
+      - "122222221"
+      - "122020221"
+      - "111101111"
+
+  item:
+    row: 2
+    column: 5
+
+  sell-more:
+    row: 6
+    column: 5
+    item: emerald 64 unbreaking:1 hide_enchants name:"&aSell More"
+
+  cancel:
+    row: 5
+    column: 4
+    item: barrier name:"&cCancel"
+
+  confirm:
+    row: 5
+    column: 6
+    item: diamond unbreaking:1 hide_enchants name:"&aConfirm"
+
+  add-buttons:
+    - add: 1
+      row: 4
+      column: 6
+      item: red_concrete 1 name:"&c+1"
+
+    - add: 10
+      row: 4
+      column: 7
+      item: red_concrete 10 name:"&c+10"
+
+    - add: -1
+      row: 4
+      column: 4
+      item: lime_concrete 1 name:"&a-1"
+
+    - add: -10
+      row: 4
+      column: 3
+      item: lime_concrete 10 name:"&a-10"
+
+  set-buttons:
+    - set: 1
+      row: 4
+      column: 2
+      item: lime_concrete 1 name:"&aSet to one"
+
+    - set: 64
+      row: 4
+      column: 8
+      item: red_concrete 64 name:"&cSet to full stack"
+
+  # Custom GUI slots; see here for a how-to: https://plugins.auxilor.io/all-plugins/custom-gui-slots
+  custom-slots: [ ]
+
+sell-more:
+  rows: 2
+
+  title: "Selling more %item%"
+
+  mask: # The background material
+    items:
+      - black_stained_glass_pane
+    pattern: # 1 for the first item, 2 for the second item, etc
+      - "000000000"
+      - "111101111"
+
+  item-name: "&fSell &a%stacks%&f stacks"
+
+  amounts:
+    - stacks: 1
+      row: 1
+      column: 1
+
+    - stacks: 2
+      row: 1
+      column: 2
+
+    - stacks: 3
+      row: 1
+      column: 3
+
+    - stacks: 4
+      row: 1
+      column: 4
+
+    - stacks: 5
+      row: 1
+      column: 5
+
+    - stacks: 6
+      row: 1
+      column: 6
+
+    - stacks: 7
+      row: 1
+      column: 7
+
+    - stacks: 8
+      row: 1
+      column: 8
+
+    - stacks: 9
+      row: 1
+      column: 9
+
+  back:
+    row: 2
+    column: 5
+    item: arrow 1 name:"&cGo Back"
+
+  # Custom GUI slots; see here for a how-to: https://plugins.auxilor.io/all-plugins/custom-gui-slots
+  custom-slots: [ ]
+
+# Options for the mass-sell gui (/sell)
+sell-gui:
+  rows: 6
+  title: Sell Items
+
+  # Custom GUI slots; see here for a how-to: https://plugins.auxilor.io/all-plugins/custom-gui-slots
+  custom-slots:
+    - row: 6
+      column: 9
+      item: paper 1 unbreaking:1 hide_enchants name:"&aDrop items in here to sell them!"
+      lore:
+        - "&fWhen you close this menu, all"
+        - "&fitems inside it will be sold!"

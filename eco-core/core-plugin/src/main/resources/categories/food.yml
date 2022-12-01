@@ -1,0 +1,108 @@
+item: cooked_beef name:"&aFood"
+lore: [ ]
+
+gui:
+  rows: 3
+  title: Food
+
+  forwards-arrow:
+    column: 6
+    item: arrow name:"&fNext Page"
+    row: 3
+  backwards-arrow:
+    column: 4
+    item: arrow name:"&fPrevious Page"
+    row: 3
+
+  pages:
+    - page: 1
+      mask:
+        pattern:
+          - '000000000'
+          - '000000000'
+          - '000000000'
+        items: []
+
+items:
+  - id: cooked_chicken
+    gui:
+      column: 2
+      row: 1
+      page: 1
+    item: cooked_chicken
+    buy:
+      type: coins
+      value: 20
+      display: $%value%
+      amount: 32
+
+  - id: baked_potato
+    gui:
+      column: 3
+      row: 1
+      page: 1
+    item: baked_potato
+    buy:
+      type: coins
+      value: 15
+      display: $%value%
+      amount: 32
+
+  - id: cooked_mutton
+    gui:
+      column: 4
+      row: 1
+      page: 1
+    item: cooked_mutton
+    buy:
+      type: coins
+      value: 20
+      display: $%value%
+      amount: 32
+
+  - id: cooked_porkchop
+    gui:
+      column: 5
+      row: 1
+      page: 1
+    item: cooked_porkchop
+    buy:
+      type: coins
+      value: 30
+      display: $%value%
+      amount: 32
+
+  - id: cooked_beef
+    gui:
+      column: 6
+      row: 1
+      page: 1
+    item: cooked_beef
+    buy:
+      type: coins
+      value: 30
+      display: $%value%
+      amount: 32
+
+  - id: golden_carrot
+    gui:
+      column: 7
+      row: 1
+      page: 1
+    item: golden_carrot
+    buy:
+      type: coins
+      value: 60
+      display: $%value%
+      amount: 32
+
+  - id: golden_apple
+    gui:
+      column: 8
+      row: 1
+      page: 1
+    item: golden_apple
+    buy:
+      type: coins
+      value: 550
+      display: $%value%
