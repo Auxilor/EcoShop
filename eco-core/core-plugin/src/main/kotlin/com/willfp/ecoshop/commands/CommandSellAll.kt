@@ -29,7 +29,7 @@ class CommandSellAll(plugin: EcoPlugin) : PluginCommand(
 
         val sold = items.values.sell(player)
         if (sold.size == items.size) {
-            player.sendMessage("no-sellable")
+            player.sendMessage(plugin.langYml.getMessage("no-sellable"))
         } else {
             for (i in items.keys) {
                 player.inventory.clear(i)
