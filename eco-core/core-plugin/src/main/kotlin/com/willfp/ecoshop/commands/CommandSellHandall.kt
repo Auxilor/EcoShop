@@ -5,6 +5,7 @@ import com.willfp.eco.core.command.impl.PluginCommand
 import com.willfp.ecoshop.shop.sell
 import com.willfp.ecoshop.shop.shopItem
 import org.bukkit.entity.Player
+import org.bukkit.inventory.ItemStack
 
 class CommandSellHandall(plugin: EcoPlugin) : PluginCommand(
     plugin,
@@ -20,6 +21,8 @@ class CommandSellHandall(plugin: EcoPlugin) : PluginCommand(
             return
         }
 
+        val items = mutableMapOf<Int, ItemStack>()
+
         for (i in 0..35) {
             val itemStack = player.inventory.getItem(i)
 
@@ -27,10 +30,14 @@ class CommandSellHandall(plugin: EcoPlugin) : PluginCommand(
                 continue
             }
 
-            if (!itemStack.sell(player)) {
-                player.sendMessage("not-sellable")
-                return
-            } else {
+            items[i] = itemStack
+        }
+
+        val sold = items.values.sell(player)
+        if (sold.size == items.size) {
+            player.sendMessage("not-sellable")
+        } else {
+            for (i in items.keys) {
                 player.inventory.clear(i)
             }
         }
