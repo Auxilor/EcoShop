@@ -28,6 +28,7 @@ messages:
   bought-item: "&fYou bought %item%&r&f for %price%&r&f!"
   bought-item-multiple: "&fYou bought %amount%x&r %item%&r&f for %price%&r&f!"
   sold-item: "&fYou sold %amount%x&r %item%&r&f for %price%&r&f!"
+  sold-multiple: "&fYou sold %amount% items for %price%&r&f!"
 
   must-specify-sell-type: "&cYou must specify sell type! (hand/all/handall)"
   invalid-sell-type: "&cInvalid sell type! (hand/all/handall)"
@@ -69,3 +70,10 @@ quick-buy-alt-present:
   - "&8&oQuick-buy %amount% for %price%&r&8&o by shift left-clicking"
 quick-buy-alt:
   - "&8&oQuick-buy %amount% for %price%&r&8&o by shift right-clicking"
+
+multiple-format:
+  1: "$0"
+  2: "$0&r&f and &r$1"
+  3: "$0&r&f, &r$1&r&f, and &r$2"
+  4: "$0&r&f, &r$1&r&f, &r$2&r&f, and &r$3"
+  5: "$0&r&f, &r$1&r&f, &r$2&r&f, &r$3&r&f, and &r$4"

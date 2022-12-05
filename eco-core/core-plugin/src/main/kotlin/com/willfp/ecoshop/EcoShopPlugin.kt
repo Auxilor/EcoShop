@@ -85,7 +85,7 @@ class EcoShopPlugin : EcoPlugin() {
     }
 
     override fun getMinimumEcoVersion(): String {
-        return "6.47.0"
+        return "6.48.0"
     }
 
     companion object {

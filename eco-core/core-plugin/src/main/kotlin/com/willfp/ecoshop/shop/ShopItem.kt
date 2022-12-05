@@ -12,7 +12,9 @@ import com.willfp.eco.core.fast.fast
 import com.willfp.eco.core.items.HashedItem
 import com.willfp.eco.core.items.Items
 import com.willfp.eco.core.items.builder.ItemStackBuilder
+import com.willfp.eco.core.price.CombinedDisplayPrice
 import com.willfp.eco.core.price.ConfiguredPrice
+import com.willfp.eco.util.formatEco
 import com.willfp.ecoshop.EcoShopPlugin
 import com.willfp.ecoshop.event.EcoShopSellEvent
 import com.willfp.ecoshop.shop.gui.BuyMenu
@@ -477,4 +479,69 @@ fun ItemStack.sell(
     this.type = Material.AIR
 
     return true
+}
+
+fun Collection<String>.formatMultiple(): String {
+    val langYml = EcoShopPlugin.instance.langYml
+
+    return if (langYml.has("multiple-format.${this.size}")) {
+        var base = langYml.getString("multiple-format.${this.size}")
+        for ((i, element) in this.withIndex()) {
+            base = base.replace("\$$i", element)
+        }
+
+        base
+    } else {
+        this.joinToString("&r&f, &r")
+    }
+}
+
+/**
+ * Sell a group of items as a [player] and return all the unsold items.
+ */
+fun Collection<ItemStack>.sell(
+    player: Player,
+    shop: Shop? = null
+): Collection<ItemStack> {
+    val unsold = mutableListOf<ItemStack>()
+    var amountSold = 0
+    val displayBuilder = CombinedDisplayPrice.builder(player)
+
+    for (itemStack in this) {
+        if (!itemStack.isSellable(player)) {
+            unsold += itemStack
+        }
+
+        val price = itemStack.getUnitSellValue(player)
+        val item = itemStack.shopItem!!
+
+        val event = EcoShopSellEvent(player, item, item.sellPrice!!, itemStack)
+        Bukkit.getPluginManager().callEvent(event)
+
+        price.giveTo(player, itemStack.amount.toDouble() * event.multiplier)
+
+        displayBuilder.add(
+            price,
+            itemStack.amount.toDouble() * event.multiplier
+        )
+
+        amountSold += itemStack.amount
+        itemStack.amount = 0
+        itemStack.type = Material.AIR
+    }
+
+    // If none sold.
+    if (unsold.size == this.size) {
+        return unsold
+    }
+
+    shop?.sellSound?.playTo(player)
+
+    player.sendMessage(
+        EcoShopPlugin.instance.langYml.getMessage("sold-multiple")
+            .replace("%amount%", amountSold.toString())
+            .replace("%price%", displayBuilder.build().displayStrings.toList().formatMultiple().formatEco(player))
+    )
+
+    return unsold
 }

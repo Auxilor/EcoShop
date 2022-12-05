@@ -48,15 +48,12 @@ object SellGUI {
 
                 val items = menu.getCaptiveItems(player)
 
-                for (item in items) {
-                    if (!item.sell(player)) {
-                        // Extra safety check
-                        DropQueue(player)
-                            .addItem(item)
-                            .forceTelekinesis()
-                            .push()
-                    }
-                }
+                val unsold = items.sell(player)
+
+                DropQueue(player)
+                    .addItems(unsold)
+                    .forceTelekinesis()
+                    .push()
             }
 
             for (config in plugin.configYml.getSubsections("sell-gui.custom-slots")) {
