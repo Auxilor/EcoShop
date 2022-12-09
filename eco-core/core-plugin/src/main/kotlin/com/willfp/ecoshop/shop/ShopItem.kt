@@ -328,6 +328,7 @@ class ShopItem(
         val amountSold = amount.coerceAtMost(getAmountInPlayerInventory(player))
 
         val priceMultipliers = deductItems(player, amountSold)
+
         for ((multiplier, times) in priceMultipliers) {
             sellPrice.giveTo(player, multiplier * times)
         }
@@ -379,19 +380,23 @@ class ShopItem(
             }
 
 
-            val event = EcoShopSellEvent(player, this, this.sellPrice!!, itemStack)
-            Bukkit.getPluginManager().callEvent(event)
 
-            multipliers[event.multiplier] = (multipliers[event.multiplier] ?: 1) + 1
-
+            var times = 0
 
             if (itemStack.amount <= left) {
                 left -= itemStack.amount
+                times += itemStack.amount
                 player.inventory.clear(i)
             } else {
                 itemStack.amount -= left
+                times += left
                 left = 0
             }
+
+            val event = EcoShopSellEvent(player, this, this.sellPrice!!, itemStack)
+            Bukkit.getPluginManager().callEvent(event)
+
+            multipliers[event.multiplier] = (multipliers[event.multiplier] ?: 0) + times
 
             if (left == 0) {
                 break
