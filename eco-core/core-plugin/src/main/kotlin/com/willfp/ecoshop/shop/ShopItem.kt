@@ -126,54 +126,56 @@ class ShopItem(
             }
         }
 
-        if (Bukkit.getPluginManager().getPermission("ecoshop.buy.$id") == null) {
-            val permission = Permission(
-                "ecoshop.buy.$id",
-                "Allows buying $id",
-                PermissionDefault.TRUE
-            )
-
-            if (Bukkit.getPluginManager().getPermission("ecoshop.buy.*") == null) {
-                Bukkit.getPluginManager().addPermission(
-                    Permission(
-                        "ecoshop.buy.*",
-                        "Allows buying all items from shops",
-                        PermissionDefault.TRUE
-                    )
+        if (plugin.configYml.getBool("shop-items.register-permissions")) {
+            if (Bukkit.getPluginManager().getPermission("ecoshop.buy.$id") == null) {
+                val permission = Permission(
+                    "ecoshop.buy.$id",
+                    "Allows buying $id",
+                    PermissionDefault.TRUE
                 )
+
+                if (Bukkit.getPluginManager().getPermission("ecoshop.buy.*") == null) {
+                    Bukkit.getPluginManager().addPermission(
+                        Permission(
+                            "ecoshop.buy.*",
+                            "Allows buying all items from shops",
+                            PermissionDefault.TRUE
+                        )
+                    )
+                }
+
+                permission.addParent(
+                    Bukkit.getPluginManager().getPermission("ecoshop.buy.*")!!,
+                    true
+                )
+
+                Bukkit.getPluginManager().addPermission(permission)
             }
 
-            permission.addParent(
-                Bukkit.getPluginManager().getPermission("ecoshop.buy.*")!!,
-                true
-            )
-
-            Bukkit.getPluginManager().addPermission(permission)
-        }
-
-        if (Bukkit.getPluginManager().getPermission("ecoshop.sell.$id") == null) {
-            val permission = Permission(
-                "ecoshop.sell.$id",
-                "Allows selling $id",
-                PermissionDefault.TRUE
-            )
-
-            if (Bukkit.getPluginManager().getPermission("ecoshop.sell.*") == null) {
-                Bukkit.getPluginManager().addPermission(
-                    Permission(
-                        "ecoshop.sell.*",
-                        "Allows selling all items to shops",
-                        PermissionDefault.TRUE
-                    )
+            if (Bukkit.getPluginManager().getPermission("ecoshop.sell.$id") == null) {
+                val permission = Permission(
+                    "ecoshop.sell.$id",
+                    "Allows selling $id",
+                    PermissionDefault.TRUE
                 )
+
+                if (Bukkit.getPluginManager().getPermission("ecoshop.sell.*") == null) {
+                    Bukkit.getPluginManager().addPermission(
+                        Permission(
+                            "ecoshop.sell.*",
+                            "Allows selling all items to shops",
+                            PermissionDefault.TRUE
+                        )
+                    )
+                }
+
+                permission.addParent(
+                    Bukkit.getPluginManager().getPermission("ecoshop.sell.*")!!,
+                    true
+                )
+
+                Bukkit.getPluginManager().addPermission(permission)
             }
-
-            permission.addParent(
-                Bukkit.getPluginManager().getPermission("ecoshop.sell.*")!!,
-                true
-            )
-
-            Bukkit.getPluginManager().addPermission(permission)
         }
     }
 
@@ -378,7 +380,6 @@ class ShopItem(
             if (!item.matches(itemStack) || itemStack == null) {
                 continue
             }
-
 
 
             var times = 0

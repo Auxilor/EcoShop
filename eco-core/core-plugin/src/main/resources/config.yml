@@ -4,6 +4,8 @@
 #
 
 shop-items:
+  register-permissions: false # Registering permissions will show them in permission plugins, but leads to long reload times.
+
   global-bottom-lore: # Options for global lore to be shown on all shop icons, disabled by default.
     buy: [ ] # Shown under buyable items.
     # - "&e&oLeft Click to buy"
