@@ -14,6 +14,7 @@ import com.willfp.eco.core.gui.slot.MaskItems
 import com.willfp.eco.core.gui.slot.Slot
 import com.willfp.eco.core.items.Items
 import com.willfp.eco.core.items.builder.modify
+import com.willfp.eco.util.formatEco
 import com.willfp.ecomponent.components.pageChangerWithDefault
 import com.willfp.ecomponent.menuStateVar
 import com.willfp.ecoshop.EcoShopPlugin
@@ -43,8 +44,10 @@ class ShopCategory(
         }
     }
 
-    val slot: Slot = slot(Items.lookup(config.getString("item")).modify {
-        addLoreLines(config.getStrings("lore"))
+    val slot: Slot = slot({ player, _ ->
+        Items.lookup(config.getString("item")).modify {
+            addLoreLines(config.getStrings("lore").formatEco(player, true))
+        }
     }) {
         onLeftClick { player, _, _, previousMenu ->
             // Previous for category should be shop
