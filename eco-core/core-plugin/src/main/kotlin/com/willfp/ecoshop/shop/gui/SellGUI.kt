@@ -18,7 +18,6 @@ object SellGUI {
     private lateinit var menu: Menu
 
     @JvmStatic
-    @ConfigUpdater
     fun update(plugin: EcoShopPlugin) {
         val rows = plugin.configYml.getInt("sell-gui.rows")
 

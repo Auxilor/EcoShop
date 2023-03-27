@@ -30,7 +30,6 @@ object Shops {
         return ImmutableList.copyOf(BY_ID.values)
     }
 
-    @ConfigUpdater
     @JvmStatic
     fun update(plugin: EcoShopPlugin) {
         ShopCategories.update(plugin)
