@@ -91,10 +91,6 @@ class ShopItemSlot(
                     addLoreLines(
                         plugin.langYml.getStrings("quick-sell")
                     )
-
-                    addLoreLines(
-                        plugin.configYml.getStrings("shop-items.global-bottom-lore.sell").formatEco(player)
-                    )
                 }
             }
 
