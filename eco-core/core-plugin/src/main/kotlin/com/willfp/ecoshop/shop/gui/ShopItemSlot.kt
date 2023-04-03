@@ -66,6 +66,14 @@ class ShopItemSlot(
                 )
             }
 
+            addLoreLines(
+                item.bottomLore.formatEco(player)
+            )
+
+            if (item.isBuyable) {
+                addLoreLines(plugin.configYml.getStrings("shop-items.global-bottom-lore.buy").formatEco(player))
+            }
+
             if (item.isShowingQuickBuySell) {
                 if (item.isBuyable && item.getMaxBuysAtOnce(player) > item.buyAmount) {
                     if (item.hasAltBuy) {
@@ -86,24 +94,18 @@ class ShopItemSlot(
                         )
                     }
                 }
+            }
 
+            if (item.isSellable) {
+                addLoreLines(plugin.configYml.getStrings("shop-items.global-bottom-lore.sell").formatEco(player))
+            }
+
+            if (item.isShowingQuickBuySell) {
                 if (item.isSellable) {
                     addLoreLines(
                         plugin.langYml.getStrings("quick-sell")
                     )
                 }
-            }
-
-            addLoreLines(
-                item.bottomLore.formatEco(player)
-            )
-
-            if (item.isBuyable) {
-                addLoreLines(plugin.configYml.getStrings("shop-items.global-bottom-lore.buy").formatEco(player))
-            }
-
-            if (item.isSellable) {
-                addLoreLines(plugin.configYml.getStrings("shop-items.global-bottom-lore.sell").formatEco(player))
             }
 
             addLoreLines(plugin.configYml.getStrings("shop-items.global-bottom-lore.always").formatEco(player))
