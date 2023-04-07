@@ -86,7 +86,7 @@ items:
       sell-command: # (Optional) Enter commands that should be executed when a player sells items. You can use %player% and %amount% placeholders
         - "give %player% stone %amount%"
       sell-message: # (Optional) Enter messages to send to the player when the player sells this specific items. It will still send the 'sold-item/sold-multiple' from lang.yml
-        - "&"
+        - "&7Thanks for selling the item!"
     gui:
       column: 4 # How far left to right (1-9).
       row: 3 # How far up or down (1-6).
