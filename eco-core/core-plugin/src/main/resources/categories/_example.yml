@@ -74,6 +74,9 @@ items:
       amount: 8 # (Optional) The quick buy / default buy amount. Defaults to 1 if not specified.
       max-at-once: 16 # (Optional) The maximum amount that can be bought at once. Defaults to infinity if not specified.
 
+      buy-message: # (Optional) Enter messages to send to the player when the player buys this specific items. It will still send the 'bought-item/bought-multiple' from lang.yml
+        - "&6Thanks for buying this specific item"
+
     # Options for selling the item, see here:
     # https://plugins.auxilor.io/all-plugins/prices
     sell:
@@ -86,7 +89,7 @@ items:
       sell-command: # (Optional) Enter commands that should be executed when a player sells items. You can use %player% and %amount% placeholders
         - "give %player% stone %amount%"
       sell-message: # (Optional) Enter messages to send to the player when the player sells this specific items. It will still send the 'sold-item/sold-multiple' from lang.yml
-        - "&7Thanks for selling the item!"
+        - "&6Thanks for selling this specific item"
     gui:
       column: 4 # How far left to right (1-9).
       row: 3 # How far up or down (1-6).
