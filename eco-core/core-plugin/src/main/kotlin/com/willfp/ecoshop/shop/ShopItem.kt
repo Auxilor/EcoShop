@@ -48,6 +48,8 @@ class ShopItem(
 
     val sellItemMessage = config.getStringsOrNull("sell.sell-message")
 
+    val buyItemMessage = config.getStringsOrNull("buy.buy-message")
+
     val item = if (config.has("item")) Items.lookup(config.getString("item")) else null
 
     val buyAmount = config.getIntOrNull("buy.amount") ?: 1
@@ -260,7 +262,15 @@ class ShopItem(
                 )
             }
         }
-
+        if (buyItemMessage != null) {
+            for (message in buyItemMessage) {
+                player.sendMessage(
+                    message.formatEco()
+                        .replace("%player%", player.name)
+                        .replace("%amount%", amount.toString())
+                )
+            }
+        }
 
         player.profile.write(timesBoughtKey, player.profile.read(timesBoughtKey) + 1)
 
