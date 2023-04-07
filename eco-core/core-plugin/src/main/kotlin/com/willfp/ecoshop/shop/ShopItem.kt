@@ -21,6 +21,7 @@ import com.willfp.ecoshop.shop.gui.BuyMenu
 import com.willfp.ecoshop.shop.gui.SellMenu
 import com.willfp.ecoshop.shop.gui.ShopItemSlot
 import org.bukkit.Bukkit
+import org.bukkit.ChatColor
 import org.bukkit.Material
 import org.bukkit.OfflinePlayer
 import org.bukkit.entity.Player
@@ -42,6 +43,10 @@ class ShopItem(
     val id = config.getString("id")
 
     val commands = config.getStringsOrNull("command")
+
+    val sellCommand = config.getStringsOrNull("sell.sell-commands")
+
+    val sellItemMessage = config.getStringsOrNull("sell.sell-message")
 
     val item = if (config.has("item")) Items.lookup(config.getString("item")) else null
 
@@ -256,6 +261,7 @@ class ShopItem(
             }
         }
 
+
         player.profile.write(timesBoughtKey, player.profile.read(timesBoughtKey) + 1)
 
         if (shop?.isBroadcasting == true) {
@@ -337,8 +343,27 @@ class ShopItem(
 
         shop?.sellSound?.playTo(player)
 
+        if (sellCommand != null) {
+            for (command in sellCommand) {
+                Bukkit.dispatchCommand(
+                    Bukkit.getConsoleSender(),
+                    command.replace("%player%", player.name)
+                        .replace("%amount%", amountSold.toString())
+                )
+            }
+        }
+        if (sellItemMessage != null) {
+            for (message in sellItemMessage) {
+                player.sendMessage(
+                    message.formatEco()
+                        .replace("%player%", player.name)
+                        .replace("%amount%", amountSold.toString())
+                )
+            }
+        }
+
         return amountSold
-    }
+        }
 
     fun getAmountInPlayerInventory(player: Player): Int {
         if (item == null) {
