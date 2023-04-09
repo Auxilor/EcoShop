@@ -4,6 +4,10 @@ messages:
   not-player: "&cThis command must be run by a player"
   invalid-command: "&cUnknown subcommand!"
   reloaded: "Reloaded! Took %time%ms"
+  all-player-search-phrase: "@everyone"
+
+  broadcast-all-players-reset-buys: "&3Mobcoins Shop Has been RESET!"
+  command-all-players-reset-buys: "&3Purchases limits have been reset for all players"
 
   must-specify-player: "&cYou must specify a player!"
   invalid-player: "&cInvalid player!"
