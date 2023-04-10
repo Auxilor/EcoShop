@@ -33,6 +33,9 @@ class ShopCategory(
     val id: String,
     val config: Config
 ) {
+
+    private val permission = config.getStringOrNull("permission")
+
     val items = config.getSubsections("items").mapNotNull {
         try {
             val item = ShopItem(plugin, it)
@@ -51,6 +54,11 @@ class ShopCategory(
     }) {
         onLeftClick { player, _, _, previousMenu ->
             // Previous for category should be shop
+
+            if (permission != null && !player.hasPermission(permission)) {
+                player.sendMessage(plugin.langYml.getMessage("no-permission"))
+                return@onLeftClick
+            }
 
             val parent = previousMenu.parentShop[player]
 
@@ -130,6 +138,10 @@ class ShopCategory(
     }
 
     fun openDirect(player: Player, shop: Shop) {
+        if (permission != null && !player.hasPermission(permission)) {
+            player.sendMessage(plugin.langYml.getMessage("no-permission"))
+            return
+        }
         menu.open(player)
         menu.parentShop[player] = shop
     }
