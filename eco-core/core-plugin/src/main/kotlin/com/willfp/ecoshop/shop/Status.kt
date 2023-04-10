@@ -4,6 +4,7 @@ package com.willfp.ecoshop.shop
 enum class BuyStatus {
     CANNOT_BUY,
     BOUGHT_TOO_MANY,
+    GLOBAL_BOUGHT_TOO_MANY,
     NO_PERMISSION,
     MISSING_REQUIREMENTS,
     CANNOT_AFFORD,
