@@ -41,7 +41,7 @@ class ShopItem(
 ) {
     val id = config.getString("id")
 
-    val commands = config.getStringsOrNull("command")
+    val commands = config.getStrings("command") + config.getStrings("commands")
 
     val item = if (config.has("item")) Items.lookup(config.getString("item")) else null
 
@@ -246,14 +246,12 @@ class ShopItem(
             queue.push()
         }
 
-        if (commands != null) {
-            for (command in commands) {
-                Bukkit.dispatchCommand(
-                    Bukkit.getConsoleSender(),
-                    command.replace("%player%", player.name)
-                        .replace("%amount%", amount.toString())
-                )
-            }
+        for (command in commands) {
+            Bukkit.dispatchCommand(
+                Bukkit.getConsoleSender(),
+                command.replace("%player%", player.name)
+                    .replace("%amount%", amount.toString())
+            )
         }
 
         player.profile.write(timesBoughtKey, player.profile.read(timesBoughtKey) + 1)
