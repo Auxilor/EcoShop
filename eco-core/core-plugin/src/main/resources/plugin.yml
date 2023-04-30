@@ -6,6 +6,13 @@ authors: [ Auxilor ]
 website: willfp.com
 depend:
   - eco
+softdepend:
+  - EcoEnchants
+  - EcoBosses
+  - Talismans
+  - StatTrackers
+  - EcoItems
+  - Reforges
 
 commands:
   ecoshop:

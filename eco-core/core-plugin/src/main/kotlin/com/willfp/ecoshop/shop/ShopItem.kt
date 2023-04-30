@@ -43,12 +43,6 @@ class ShopItem(
 
     val commands = config.getStrings("command") + config.getStrings("commands")
 
-    val sellCommand = config.getStringsOrNull("sell.sell-commands")
-
-    val sellItemMessage = config.getStringsOrNull("sell.sell-message")
-
-    val buyItemMessage = config.getStringsOrNull("buy.buy-message")
-
     val item = if (config.has("item")) Items.lookup(config.getString("item")) else null
 
     val buyAmount = config.getIntOrNull("buy.amount") ?: 1
@@ -110,6 +104,12 @@ class ShopItem(
         PersistentDataKeyType.INT,
         0
     )
+
+    private val sellCommands: List<String>? = config.getStringsOrNull("sell.sell-commands")
+
+    private val sellItemMessage: List<String>? = config.getStringsOrNull("sell.sell-message")
+
+    private val buyItemMessage: List<String>? = config.getStringsOrNull("buy.buy-message")
 
     init {
         if (this.item != null && this.item.item.amount != 1) {
@@ -367,8 +367,8 @@ class ShopItem(
 
         shop?.sellSound?.playTo(player)
 
-        if (sellCommand != null) {
-            for (command in sellCommand) {
+        if (sellCommands != null) {
+            for (command in sellCommands) {
                 Bukkit.dispatchCommand(
                     Bukkit.getConsoleSender(),
                     command.replace("%player%", player.name)
