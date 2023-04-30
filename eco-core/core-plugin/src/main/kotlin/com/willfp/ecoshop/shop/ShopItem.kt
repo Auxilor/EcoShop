@@ -41,7 +41,13 @@ class ShopItem(
 ) {
     val id = config.getString("id")
 
-    val commands = config.getStringsOrNull("command")
+    val commands = config.getStrings("command") + config.getStrings("commands")
+
+    val sellCommand = config.getStringsOrNull("sell.sell-commands")
+
+    val sellItemMessage = config.getStringsOrNull("sell.sell-message")
+
+    val buyItemMessage = config.getStringsOrNull("buy.buy-message")
 
     val item = if (config.has("item")) Items.lookup(config.getString("item")) else null
 
@@ -262,11 +268,18 @@ class ShopItem(
             queue.push()
         }
 
-        if (commands != null) {
-            for (command in commands) {
-                Bukkit.dispatchCommand(
-                    Bukkit.getConsoleSender(),
-                    command.replace("%player%", player.name)
+        for (command in commands) {
+            Bukkit.dispatchCommand(
+                Bukkit.getConsoleSender(),
+                command.replace("%player%", player.name)
+                    .replace("%amount%", amount.toString())
+            )
+        }
+        if (buyItemMessage != null) {
+            for (message in buyItemMessage) {
+                player.sendMessage(
+                    message.formatEco()
+                        .replace("%player%", player.name)
                         .replace("%amount%", amount.toString())
                 )
             }
@@ -354,8 +367,27 @@ class ShopItem(
 
         shop?.sellSound?.playTo(player)
 
+        if (sellCommand != null) {
+            for (command in sellCommand) {
+                Bukkit.dispatchCommand(
+                    Bukkit.getConsoleSender(),
+                    command.replace("%player%", player.name)
+                        .replace("%amount%", amountSold.toString())
+                )
+            }
+        }
+        if (sellItemMessage != null) {
+            for (message in sellItemMessage) {
+                player.sendMessage(
+                    message.formatEco()
+                        .replace("%player%", player.name)
+                        .replace("%amount%", amountSold.toString())
+                )
+            }
+        }
+
         return amountSold
-    }
+        }
 
     fun getAmountInPlayerInventory(player: Player): Int {
         if (item == null) {

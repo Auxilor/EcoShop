@@ -10,6 +10,8 @@ import com.willfp.ecoshop.commands.CommandEcoShop
 import com.willfp.ecoshop.commands.CommandSell
 import com.willfp.ecoshop.config.UsermadeConfig
 import com.willfp.ecoshop.integration.EcoShopAdapter
+import com.willfp.ecoshop.shop.Shops
+import com.willfp.ecoshop.shop.gui.SellGUI
 import org.bukkit.event.Listener
 import java.io.File
 import java.util.zip.ZipFile
@@ -24,6 +26,13 @@ class EcoShopPlugin : EcoPlugin() {
     override fun handleEnable() {
         copyConfigs("categories")
         copyConfigs("shops")
+        Shops.update(this)
+        SellGUI.update(this)
+    }
+
+    override fun handleReload() {
+        Shops.update(this)
+        SellGUI.update(this)
     }
 
     private fun copyConfigs(directory: String) {
