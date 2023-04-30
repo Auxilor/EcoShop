@@ -99,7 +99,9 @@ class ShopItem(
 
     val sellMenu = SellMenu(this, plugin)
 
-    private val limit = config.getIntOrNull("buy.limit") ?: Int.MAX_VALUE
+    val limit = config.getIntOrNull("buy.limit") ?: Int.MAX_VALUE
+
+    val globalLimit = config.getIntOrNull("buy.global-limit") ?: Int.MAX_VALUE
 
     private val maxAtOnce = config.getIntOrNull("buy.max-at-once") ?: Int.MAX_VALUE
 
@@ -191,8 +193,18 @@ class ShopItem(
     }
 
     /** Get the max amount of times this player can buy this item again. */
-    fun getBuysLeft(player: Player): Int {
-        return limit - player.profile.read(timesBoughtKey)
+    fun getBuysLeft(player: OfflinePlayer): Int {
+        return limit - getTotalBuys(player)
+    }
+
+    /** Get the total amount of times a player has bought this item. */
+    fun getTotalBuys(player: OfflinePlayer): Int {
+        return player.profile.read(timesBoughtKey)
+    }
+
+    /** Get the total amount of times a server has bought this item. */
+    fun getTotalGlobalBuys(): Int {
+        return Bukkit.getServer().profile.read(timesBoughtKey)
     }
 
     /** If a [player] is allowed to purchase this item. */
@@ -204,6 +216,10 @@ class ShopItem(
 
         if (player.profile.read(timesBoughtKey) + amount > limit) {
             return BuyStatus.BOUGHT_TOO_MANY
+        }
+
+        if (Bukkit.getServer().profile.read(timesBoughtKey) + amount > globalLimit) {
+            return BuyStatus.GLOBAL_BOUGHT_TOO_MANY
         }
 
         if (!player.hasPermission("ecoshop.buy.$id")) {
@@ -269,7 +285,8 @@ class ShopItem(
             }
         }
 
-        player.profile.write(timesBoughtKey, player.profile.read(timesBoughtKey) + 1)
+        player.profile.write(timesBoughtKey, getTotalBuys(player) + 1)
+        Bukkit.getServer().profile.write(timesBoughtKey, getTotalGlobalBuys() + 1)
 
         if (shop?.isBroadcasting == true) {
             shop.broadcastPurchase(player, this, amount)
@@ -440,6 +457,8 @@ class ShopItem(
     }
 
     fun resetTimesBought(player: OfflinePlayer) {
+        val totalBuysForPlayer = getTotalBuys(player)
+        Bukkit.getServer().profile.write(timesBoughtKey, getTotalGlobalBuys() - totalBuysForPlayer)
         player.profile.write(timesBoughtKey, 0)
     }
 

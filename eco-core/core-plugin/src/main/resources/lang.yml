@@ -24,6 +24,7 @@ messages:
     no-permission: "&cYou don't have permission to buy this item!"
     missing-requirements: "&cYou can't buy this item!"
     cannot-afford: "&cYou need &a%price%&r&c to buy this!"
+    global-bought-too-many: "&cThe server has no more stock!"
 
   bought-item: "&fYou bought %item%&r&f for %price%&r&f!"
   bought-item-multiple: "&fYou bought %amount%x&r %item%&r&f for %price%&r&f!"

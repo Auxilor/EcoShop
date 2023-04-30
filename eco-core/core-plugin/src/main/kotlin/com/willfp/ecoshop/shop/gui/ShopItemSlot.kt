@@ -19,6 +19,7 @@ import com.willfp.ecoshop.shop.configKey
 import com.willfp.ecoshop.shop.getDisplay
 import com.willfp.ecoshop.shop.parentShop
 import org.bukkit.entity.Player
+import org.bukkit.inventory.ItemStack
 
 fun Collection<String>.replaceIn(token: String, replacement: Any?) =
     this.map { it.replace(token, replacement.toNiceString()) }
@@ -27,90 +28,7 @@ class ShopItemSlot(
     item: ShopItem,
     plugin: EcoPlugin
 ) : CustomSlot() {
-    private val slot = slot({ player, _ ->
-        item.displayItem.modify {
-            if (item.isBuyable) {
-                addLoreLines(
-                    /*
-                    Big ugly tree.
-                    This code sucks and I should probably refactor it.
-                     */
-                    when (val status = item.getBuyStatus(player, 1, BuyType.NORMAL)) {
-                        BuyStatus.MISSING_REQUIREMENTS,
-                        BuyStatus.NO_PERMISSION,
-                        -> plugin.langYml.getStrings("lore.${status.configKey}")
-
-                        else -> when (item.getBuysLeft(player)) {
-                            0 -> plugin.langYml.getStrings("cant-buy-again")
-
-                            1 -> if (item.hasAltBuy) plugin.langYml.getStrings("dual-buy-price")
-                                .replaceIn("%price%", item.buyPrice?.getDisplay(player) ?: "")
-                                .replaceIn("%alt_price%", item.altBuyPrice?.getDisplay(player) ?: "")
-                            else plugin.langYml.getStrings("one-buy-price")
-                                .replaceIn("%price%", item.buyPrice?.getDisplay(player) ?: "")
-
-                            else -> if (item.hasAltBuy) plugin.langYml.getStrings("dual-buy-price")
-                                .replaceIn("%price%", item.buyPrice?.getDisplay(player) ?: "")
-                                .replaceIn("%alt_price%", item.altBuyPrice?.getDisplay(player) ?: "")
-                            else plugin.langYml.getStrings("buy-price")
-                                .replaceIn("%price%", item.buyPrice?.getDisplay(player) ?: "")
-                        }
-                    }
-                )
-            }
-
-            if (item.isSellable) {
-                addLoreLines(
-                    plugin.langYml.getStrings("sell-price")
-                        .replaceIn("%price%", item.sellPrice?.getDisplay(player) ?: "")
-                )
-            }
-
-            addLoreLines(
-                item.bottomLore.formatEco(player)
-            )
-
-            if (item.isBuyable) {
-                addLoreLines(plugin.configYml.getStrings("shop-items.global-bottom-lore.buy").formatEco(player))
-            }
-
-            if (item.isShowingQuickBuySell) {
-                if (item.isBuyable && item.getMaxBuysAtOnce(player) > item.buyAmount) {
-                    if (item.hasAltBuy) {
-                        addLoreLines(
-                            plugin.langYml.getStrings("quick-buy-alt-present")
-                                .replaceIn("%price%", item.buyPrice.getDisplay(player, item.buyAmount))
-                                .replaceIn("%amount%", item.buyAmount.toString())
-                        )
-                        addLoreLines(
-                            plugin.langYml.getStrings("quick-buy-alt")
-                                .replaceIn("%price%", item.altBuyPrice.getDisplay(player, item.buyAmount))
-                                .replaceIn("%amount%", item.buyAmount.toString())
-                        )
-                    } else {
-                        addLoreLines(
-                            plugin.langYml.getStrings("quick-buy")
-                                .replaceIn("%amount%", item.buyAmount.toString())
-                        )
-                    }
-                }
-            }
-
-            if (item.isSellable) {
-                addLoreLines(plugin.configYml.getStrings("shop-items.global-bottom-lore.sell").formatEco(player))
-            }
-
-            if (item.isShowingQuickBuySell) {
-                if (item.isSellable) {
-                    addLoreLines(
-                        plugin.langYml.getStrings("quick-sell")
-                    )
-                }
-            }
-
-            addLoreLines(plugin.configYml.getStrings("shop-items.global-bottom-lore.always").formatEco(player))
-        }
-    }) {
+    private val slot = slot(extractItemStack(item, plugin)) {
         fun handleMainBuyClick(player: Player, menu: Menu, buyType: BuyType) {
             val status = item.getBuyStatus(player, 1, buyType)
 
@@ -213,7 +131,107 @@ class ShopItemSlot(
         }
     }
 
+    private fun extractItemStack(item: ShopItem, plugin: EcoPlugin): (Player, Menu) -> ItemStack {
+        return { player: Player, _: Menu ->
+            val playerBuysLeft = item.getBuysLeft(player)
+            val zeroBuysLeftMessage = plugin.langYml.getStrings("cant-buy-again")
+            val fallbackPriceMessage = if (playerBuysLeft == 1) {
+                "one-buy-price"
+            } else {
+                "buy-price"
+            }
+            val altBuyMessage = plugin.langYml.getStrings("dual-buy-price")
+                .replaceIn("%price%", item.buyPrice?.getDisplay(player) ?: "")
+                .replaceIn("%alt_price%", item.altBuyPrice?.getDisplay(player) ?: "")
+            val status = item.getBuyStatus(player, 1, BuyType.NORMAL)
+            val itemStack = item.displayItem.modify {
+                if (item.isBuyable) {
+                    addLoreLines(
+                        if (status == BuyStatus.MISSING_REQUIREMENTS || status == BuyStatus.NO_PERMISSION) {
+                            plugin.langYml.getStrings("lore.${status.configKey}")
+                        } else {
+                            if (playerBuysLeft == 0) {
+                                zeroBuysLeftMessage
+                            } else {
+                                if (item.hasAltBuy) {
+                                    altBuyMessage
+                                } else {
+                                    plugin.langYml.getStrings(fallbackPriceMessage)
+                                        .replaceIn("%price%", item.buyPrice?.getDisplay(player) ?: "")
+                                }
+                            }
+                        }
+                    )
+                }
+
+                if (item.isSellable) {
+                    addLoreLines(
+                        plugin.langYml.getStrings("sell-price")
+                            .replaceIn("%price%", item.sellPrice?.getDisplay(player) ?: "")
+                    )
+                }
+
+                if (item.isShowingQuickBuySell) {
+                    if (item.isBuyable && item.getMaxBuysAtOnce(player) > item.buyAmount) {
+                        if (item.hasAltBuy) {
+                            addLoreLines(
+                                plugin.langYml.getStrings("quick-buy-alt-present")
+                                    .replaceIn("%price%", item.buyPrice.getDisplay(player, item.buyAmount))
+                                    .replaceIn("%amount%", item.buyAmount.toString())
+                            )
+                            addLoreLines(
+                                plugin.langYml.getStrings("quick-buy-alt")
+                                    .replaceIn("%price%", item.altBuyPrice.getDisplay(player, item.buyAmount))
+                                    .replaceIn("%amount%", item.buyAmount.toString())
+                            )
+                        } else {
+                            addLoreLines(
+                                plugin.langYml.getStrings("quick-buy")
+                                    .replaceIn("%amount%", item.buyAmount.toString())
+                            )
+                        }
+                    }
+
+                    if (item.isSellable) {
+                        addLoreLines(
+                            plugin.langYml.getStrings("quick-sell")
+                        )
+
+                        addLoreLines(
+                            plugin.configYml.getStrings("shop-items.global-bottom-lore.sell").formatEco(player)
+                        )
+                    }
+                }
+
+                addLoreLines(
+                    item.bottomLore.formatEco(player)
+                )
+
+                if (item.isBuyable) {
+                    addLoreLines(plugin.configYml.getStrings("shop-items.global-bottom-lore.buy").formatEco(player))
+                }
+
+                if (item.isSellable) {
+                    addLoreLines(plugin.configYml.getStrings("shop-items.global-bottom-lore.sell").formatEco(player))
+                }
+
+                addLoreLines(plugin.configYml.getStrings("shop-items.global-bottom-lore.always").formatEco(player))
+            }
+
+            val meta = itemStack.itemMeta
+            val lore = (meta?.lore ?: emptyList())
+                .replaceIn("%playerbuys%", item.getTotalBuys(player))
+                .replaceIn("%playerlimit%", item.limit)
+                .replaceIn("%globalbuys%", item.getTotalGlobalBuys())
+                .replaceIn("%globallimit%", item.globalLimit)
+            meta?.lore = lore
+            itemStack.itemMeta = meta
+            itemStack
+        }
+    }
+
     init {
         init(slot)
     }
+
 }
