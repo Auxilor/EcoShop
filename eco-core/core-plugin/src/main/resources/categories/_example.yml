@@ -6,6 +6,7 @@
 
 item: diamond_sword name:"&fExample Category" # The item shown in the shop.
 lore: [ ] # The lore of the item shown in the shop.
+permission: [ ] # The permission required to access/use the category.
 
 # Options for the category GUI.
 gui:
