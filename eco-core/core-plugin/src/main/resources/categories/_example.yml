@@ -109,6 +109,9 @@ items:
       require: "%ecomc_iron_price% >= 0" # (Optional) This expression must hold true in order to be allowed to buy the item.
 
       limit: 1 # (Optional) The max amount of times each player can buy this item, defaults to infinite.
+               ## Placeholders: %playerlimit% (Displays player purchase limit) %playerbuys% (Displays amount bought by player).
+      global-limit: 10 # (Optional) The max amount of this item that can be bought by all players, defaults to infinite.
+                       ## Placeholders: %globallimit% (Displays global purchase limit) %globalbuys% (Displays amount bought globally).
 
     gui:
       display: # This item is shown in the GUI. If you're selling an item, this defaults to the item itself.
