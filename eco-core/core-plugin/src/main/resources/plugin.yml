@@ -21,6 +21,9 @@ commands:
   sell:
     description: Sells items
     permission: ecoshop.command.sell
+  buy:
+    description: Buys items
+    permission: ecoshop.command.buy
 
 permissions:
   ecoshop.command.sell.*:
