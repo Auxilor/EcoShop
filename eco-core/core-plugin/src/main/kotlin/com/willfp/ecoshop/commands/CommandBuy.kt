@@ -16,8 +16,6 @@ class CommandBuy(plugin: EcoPlugin) : PluginCommand(
 ) {
     private fun getMaxPurchaseAmount() = EcoShopPlugin.instance.configYml.getInt("max-purchase-amount")
 
-    private val maxPurchaseAmount = EcoShopPlugin.instance.configYml.getInt("max-purchase-amount")
-
     override fun onExecute(player: Player, args: List<String>) {
         if (args.isEmpty()) {
             player.sendMessage(EcoShopPlugin.instance.langYml.getMessage("must-specify-item"))
