@@ -10,6 +10,8 @@ messages:
   must-specify-item: "&cYou must specify an item!"
   invalid-item: "&cInvalid item!"
   reset-buys: "&fReset how many times &r%player%&r&f bought &r%item%&f!"
+  invalid-amount: "&cInvalid amount!"
+  max-purchase-amount-exceeded: "&cYou can't buy more than %maxAmount% of an item at once!"
 
   sell-status:
     cannot-sell: "&cThis item can't be sold!"

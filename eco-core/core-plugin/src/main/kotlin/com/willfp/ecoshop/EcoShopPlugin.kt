@@ -6,6 +6,7 @@ import com.willfp.eco.core.config.ConfigType
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.config.readConfig
 import com.willfp.eco.core.integrations.shop.ShopManager
+import com.willfp.ecoshop.commands.CommandBuy
 import com.willfp.ecoshop.commands.CommandEcoShop
 import com.willfp.ecoshop.commands.CommandSell
 import com.willfp.ecoshop.config.UsermadeConfig
@@ -89,7 +90,8 @@ class EcoShopPlugin : EcoPlugin() {
     override fun loadPluginCommands(): List<PluginCommand> {
         return listOf(
             CommandEcoShop(this),
-            CommandSell(this)
+            CommandSell(this),
+            CommandBuy(this)
         )
     }
 
