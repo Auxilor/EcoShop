@@ -286,5 +286,3 @@ sell-gui:
       lore:
         - "&fWhen you close this menu, all"
         - "&fitems inside it will be sold!"
-
-max-purchase-amount: 64 # The maximum amount of items a player can buy at once via the /buy command
