@@ -14,11 +14,11 @@ class CommandBuy(plugin: EcoPlugin) : PluginCommand(
     "ecoshop.command.buy",
     true
 ) {
-    private fun getMaxPurchaseAmount() = EcoShopPlugin.instance.configYml.getInt("max-purchase-amount")
+    private fun getMaxPurchaseAmount() = plugin.configYml.getInt("max-purchase-amount")
 
     override fun onExecute(player: Player, args: List<String>) {
         if (args.isEmpty()) {
-            player.sendMessage(EcoShopPlugin.instance.langYml.getMessage("must-specify-item"))
+            player.sendMessage(plugin.langYml.getMessage("must-specify-item"))
             return
         }
 
@@ -26,7 +26,7 @@ class CommandBuy(plugin: EcoPlugin) : PluginCommand(
         val shopItem = ShopItems.getByID(itemId)
 
         if (shopItem == null) {
-            player.sendMessage(EcoShopPlugin.instance.langYml.getMessage("invalid-item"))
+            player.sendMessage(plugin.langYml.getMessage("invalid-item"))
             return
         }
 
@@ -38,7 +38,7 @@ class CommandBuy(plugin: EcoPlugin) : PluginCommand(
                     if (it <= 0) throw NumberFormatException()
                 }
             } catch (e: NumberFormatException) {
-                player.sendMessage(EcoShopPlugin.instance.langYml.getMessage("invalid-amount"))
+                player.sendMessage(plugin.langYml.getMessage("invalid-amount"))
                 return
             }
         } else {
@@ -47,14 +47,14 @@ class CommandBuy(plugin: EcoPlugin) : PluginCommand(
 
         // Check if the amount exceeds the maximum limit
         if (amount > maxPurchaseAmount) {
-            player.sendMessage(EcoShopPlugin.instance.langYml.getMessage("max-purchase-amount-exceeded").replace("%maxAmount%", maxPurchaseAmount.toString()))
+            player.sendMessage(plugin.langYml.getMessage("max-purchase-amount-exceeded").replace("%maxAmount%", maxPurchaseAmount.toString()))
             return
         }
 
         val buyStatus = shopItem.getBuyStatus(player, amount, buyType)
         if (buyStatus != BuyStatus.ALLOW) {
             player.sendMessage(
-                EcoShopPlugin.instance.langYml.getMessage("buy-status.${buyStatus.configKey}")
+                plugin.langYml.getMessage("buy-status.${buyStatus.configKey}")
                     .replace("%price%", shopItem.getBuyPrice(buyType).getDisplay(player, amount))
             )
             return
@@ -63,14 +63,14 @@ class CommandBuy(plugin: EcoPlugin) : PluginCommand(
         shopItem.buy(player, amount, buyType)
         if (amount > 1) {
             player.sendMessage(
-                EcoShopPlugin.instance.langYml.getMessage("bought-item-multiple")
+                plugin.langYml.getMessage("bought-item-multiple")
                     .replace("%amount%", amount.toString())
                     .replace("%item%", shopItem.displayName)
                     .replace("%price%", shopItem.getBuyPrice(buyType).getDisplay(player, amount))
             )
         } else {
             player.sendMessage(
-                EcoShopPlugin.instance.langYml.getMessage("bought-item")
+                plugin.langYml.getMessage("bought-item")
                     .replace("%item%", shopItem.displayName)
                     .replace("%price%", shopItem.getBuyPrice(buyType).getDisplay(player, amount))
             )
