@@ -47,6 +47,8 @@ class ShopItem(
 
     val buyAmount = config.getIntOrNull("buy.amount") ?: 1
 
+    val buyMoreEnabled = config.getBoolOrNull("gui.buy-more-button") ?: true
+
     private val _displayItem = ItemStackBuilder(
         if (config.has("gui.display.item")) {
             Items.lookup(config.getString("gui.display.item")).item
