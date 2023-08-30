@@ -3,6 +3,11 @@
 # by Auxilor
 #
 
+# Even if eco is set up to use a database, you can
+# force EcoShop to save to local storage to disable
+# cross-server sync.
+use-local-storage: false
+
 shop-items:
   register-permissions: false # Registering permissions will show them in permission plugins, but leads to long reload times.
 
