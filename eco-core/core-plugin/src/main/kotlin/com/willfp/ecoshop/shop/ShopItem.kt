@@ -16,6 +16,7 @@ import com.willfp.eco.core.price.CombinedDisplayPrice
 import com.willfp.eco.core.price.ConfiguredPrice
 import com.willfp.eco.util.formatEco
 import com.willfp.ecoshop.EcoShopPlugin
+import com.willfp.ecoshop.event.EcoShopBuyEvent
 import com.willfp.ecoshop.event.EcoShopSellEvent
 import com.willfp.ecoshop.shop.gui.BuyMenu
 import com.willfp.ecoshop.shop.gui.SellMenu
@@ -252,10 +253,15 @@ class ShopItem(
     ) {
         require(amount in 1..getMaxBuysAtOnce(player))
 
-        when (buyType) {
-            BuyType.NORMAL -> buyPrice?.pay(player, amount.toDouble())
-            BuyType.ALT -> altBuyPrice?.pay(player, amount.toDouble())
-        }
+        val basePrice = when (buyType) {
+            BuyType.NORMAL -> buyPrice
+            BuyType.ALT -> altBuyPrice
+        }!!
+
+        val event = EcoShopBuyEvent(player, this, basePrice.price, buyType)
+        Bukkit.getPluginManager().callEvent(event)
+
+        event.price.pay(player, amount.toDouble())
 
         if (item != null) {
             val queue = DropQueue(player)
@@ -275,6 +281,7 @@ class ShopItem(
                     .replace("%amount%", amount.toString())
             )
         }
+
         if (buyItemMessage != null) {
             for (message in buyItemMessage) {
                 player.sendMessage(
@@ -376,6 +383,7 @@ class ShopItem(
                 )
             }
         }
+
         if (sellItemMessage != null) {
             for (message in sellItemMessage) {
                 player.sendMessage(
@@ -387,7 +395,7 @@ class ShopItem(
         }
 
         return amountSold
-        }
+    }
 
     fun getAmountInPlayerInventory(player: Player): Int {
         if (item == null) {

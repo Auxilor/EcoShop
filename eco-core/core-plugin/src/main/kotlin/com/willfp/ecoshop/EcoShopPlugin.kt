@@ -5,11 +5,13 @@ import com.willfp.eco.core.command.impl.PluginCommand
 import com.willfp.eco.core.config.ConfigType
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.config.readConfig
+import com.willfp.eco.core.integrations.IntegrationLoader
 import com.willfp.eco.core.integrations.shop.ShopManager
 import com.willfp.ecoshop.commands.CommandEcoShop
 import com.willfp.ecoshop.commands.CommandSell
 import com.willfp.ecoshop.config.UsermadeConfig
 import com.willfp.ecoshop.integration.EcoShopAdapter
+import com.willfp.ecoshop.integration.libreforge.LibreforgeIntegration
 import com.willfp.ecoshop.shop.Shops
 import com.willfp.ecoshop.shop.gui.SellGUI
 import org.bukkit.event.Listener
@@ -90,6 +92,12 @@ class EcoShopPlugin : EcoPlugin() {
         return listOf(
             CommandEcoShop(this),
             CommandSell(this)
+        )
+    }
+
+    override fun loadIntegrationLoaders(): List<IntegrationLoader> {
+        return listOf(
+            IntegrationLoader("libreforge") { LibreforgeIntegration.load() }
         )
     }
 

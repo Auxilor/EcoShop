@@ -13,6 +13,7 @@ softdepend:
   - StatTrackers
   - EcoItems
   - Reforges
+  - libreforge
 
 commands:
   ecoshop:

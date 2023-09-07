@@ -1,18 +1,17 @@
 package com.willfp.ecoshop.event
 
 import com.willfp.eco.core.price.Price
+import com.willfp.ecoshop.shop.BuyType
 import com.willfp.ecoshop.shop.ShopItem
 import org.bukkit.entity.Player
 import org.bukkit.event.HandlerList
 import org.bukkit.event.player.PlayerEvent
-import org.bukkit.inventory.ItemStack
 
-class EcoShopSellEvent @JvmOverloads constructor(
+class EcoShopBuyEvent(
     who: Player,
     override val shopItem: ShopItem,
     override var price: Price,
-    val item: ItemStack,
-    var multiplier: Double = 1.0
+    val buyType: BuyType
 ) : PlayerEvent(who), ShopEvent {
 
     // Below here is bukkit boilerplate
