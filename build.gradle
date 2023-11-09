@@ -47,7 +47,7 @@ allprojects {
 
         compileOnly 'org.jetbrains:annotations:23.0.0'
         compileOnly 'org.jetbrains.kotlin:kotlin-stdlib:1.7.10'
-        compileOnly 'com.willfp:libreforge:4.33.0'
+        compileOnly 'com.willfp:libreforge:4.40.0'
     }
 
     tasks.withType(JavaCompile) {
