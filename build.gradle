@@ -30,6 +30,7 @@ allprojects {
         mavenLocal()
         maven { url 'https://jitpack.io' }
         maven { url 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/' }
+        maven { url 'https://repo.auxilor.io/repository/maven-public/' }
     }
 
     jar {
