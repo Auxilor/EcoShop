@@ -87,6 +87,10 @@ items:
 
       require: "%player_rank% > 1" # (Optional) This expression must hold true to be allowed to sell this item.
 
+      # The conditions that must be met in order to sell this item.
+      # Read here: https://plugins.auxilor.io/effects/configuring-a-condition
+      conditions: [ ]
+
       sell-command: # (Optional) Enter commands that should be executed when a player sells items. You can use %player% and %amount% placeholders
         - "give %player% stone %amount%"
       sell-message: # (Optional) Enter messages to send to the player when the player sells this specific items. It will still send the 'sold-item/sold-multiple' from lang.yml
@@ -132,6 +136,10 @@ items:
       type: crystals
       display: "&b%value% Crystals ❖"
 
+      # The conditions that must be met in order to buy this item.
+      # Read here: https://plugins.auxilor.io/effects/configuring-a-condition
+      conditions: [ ]
+
     gui:
       display:
         item: nether_star
@@ -150,8 +158,6 @@ items:
       type: coins
       display: "&a$%value%"
 
-      require: "%actions_allow_bosses_is_met%" # You can use actions to use conditions here! (https://plugins.auxilor.io/actions/placeholderapi)
-
       max-at-once: 1 # If you want to skip the amount selection GUI, set max at once to 1 so clicking will instant-buy.
 
     # Instead of having the item be buyable and sellable, you can have
@@ -161,6 +167,10 @@ items:
       value: 65
       type: crystals
       display: "&b%value%❖"
+
+      # The conditions that must be met in order to buy this item.
+      # Read here: https://plugins.auxilor.io/effects/configuring-a-condition
+      conditions: [ ]
 
     gui:
       display:

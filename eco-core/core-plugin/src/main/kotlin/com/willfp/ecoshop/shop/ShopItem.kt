@@ -22,7 +22,10 @@ import com.willfp.ecoshop.event.EcoShopSellEvent
 import com.willfp.ecoshop.shop.gui.BuyMenu
 import com.willfp.ecoshop.shop.gui.SellMenu
 import com.willfp.ecoshop.shop.gui.ShopItemSlot
+import com.willfp.libreforge.BlankHolder.conditions
+import com.willfp.libreforge.EmptyProvidedHolder
 import com.willfp.libreforge.ViolationContext
+import com.willfp.libreforge.conditions.Conditions
 import com.willfp.libreforge.effects.Effects
 import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.triggers.TriggerData
@@ -47,13 +50,15 @@ class ShopItem(
 ) : KRegistrable {
     override val id = config.getString("id")
 
+    private val context = ViolationContext(plugin, "shop item $id")
+
     val commands = config.getStrings("command") + config.getStrings("commands")
 
     val item = if (config.has("item")) Items.lookup(config.getString("item")) else null
 
     val effects = Effects.compileChain(
         config.getSubsections("effects"),
-        ViolationContext(plugin, "shop item $id")
+        context.with("effects")
     )
 
     val buyAmount = config.getIntOrNull("buy.amount") ?: 1
@@ -95,6 +100,21 @@ class ShopItem(
     val altBuyPrice = ConfiguredPrice.create(config.getSubsection("alt-buy"))
 
     val sellPrice = ConfiguredPrice.create(config.getSubsection("sell"))
+
+    val buyConditions = Conditions.compile(
+        config.getSubsections("buy.conditions"),
+        context.with("buy conditions")
+    )
+
+    val altBuyConditions = Conditions.compile(
+        config.getSubsections("alt-buy.conditions"),
+        context.with("alt buy conditions")
+    )
+
+    val sellConditions = Conditions.compile(
+        config.getSubsections("sell.conditions"),
+        context.with("sell conditions")
+    )
 
     val slot = ShopItemSlot(this, plugin)
 
@@ -243,6 +263,20 @@ class ShopItem(
             }
         }
 
+        val conditions = if (buyType == BuyType.ALT) altBuyConditions else buyConditions
+        if (!conditions.areMet(player.toDispatcher(), EmptyProvidedHolder)) {
+            // Only run not met effects if player can afford to buy
+            if (getBuyPrice(buyType)!!.canAfford(player, amount.toDouble())) {
+                conditions.areMetAndTrigger(
+                    TriggerData(
+                        player = player
+                    ).dispatch(player.toDispatcher()
+                ))
+            }
+
+            return BuyStatus.MISSING_REQUIREMENTS
+        }
+
         if (!getBuyPrice(buyType)!!.canAfford(player, amount.toDouble())) {
             return BuyStatus.CANNOT_AFFORD
         }
@@ -337,6 +371,10 @@ class ShopItem(
             if (config.getDoubleFromExpression("sell.require", player) != 1.0) {
                 return SellStatus.MISSING_REQUIREMENTS
             }
+        }
+
+        if (!sellConditions.areMet(player.toDispatcher(), EmptyProvidedHolder)) {
+            return SellStatus.MISSING_REQUIREMENTS
         }
 
         return SellStatus.ALLOW
