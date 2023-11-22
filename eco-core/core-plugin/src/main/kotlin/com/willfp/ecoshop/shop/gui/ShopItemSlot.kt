@@ -219,11 +219,15 @@ class ShopItemSlot(
             }
 
             val meta = itemStack.itemMeta
+            @Suppress("DEPRECATION")
             val lore = (meta?.lore ?: emptyList())
                 .replaceIn("%playerbuys%", item.getTotalBuys(player))
                 .replaceIn("%playerlimit%", item.limit)
                 .replaceIn("%globalbuys%", item.getTotalGlobalBuys())
                 .replaceIn("%globallimit%", item.globalLimit)
+
+
+            @Suppress("DEPRECATION")
             meta?.lore = lore
             itemStack.itemMeta = meta
             itemStack

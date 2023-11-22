@@ -136,6 +136,7 @@ class Shop(
     val command = CommandShop(this, plugin)
 
     fun broadcastPurchase(player: Player, item: ShopItem, amount: Int) {
+        @Suppress("DEPRECATION")
         Bukkit.broadcastMessage(
             config.getString("buy-broadcasts.message")
                 .replace("%player%", player.savedDisplayName)

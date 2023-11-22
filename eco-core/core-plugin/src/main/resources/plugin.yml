@@ -1,5 +1,5 @@
 name: EcoShop
-version: ${projectVersion}
+version: ${version}
 main: com.willfp.ecoshop.EcoShopPlugin
 api-version: 1.17
 authors: [ Auxilor ]
