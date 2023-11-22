@@ -34,7 +34,7 @@ class CommandResetBuys(plugin: EcoPlugin) : Subcommand(
             return
         }
 
-        val item = ShopItems.getByID(args[1])
+        val item = ShopItems[args[1]]
 
         if (item == null) {
             sender.sendMessage(plugin.langYml.getMessage("invalid-item"))

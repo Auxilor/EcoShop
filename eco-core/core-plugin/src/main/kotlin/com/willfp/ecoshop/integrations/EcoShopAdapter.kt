@@ -1,4 +1,4 @@
-package com.willfp.ecoshop.integration
+package com.willfp.ecoshop.integrations
 
 import com.willfp.eco.core.integrations.shop.ShopIntegration
 import com.willfp.eco.core.integrations.shop.ShopSellEvent

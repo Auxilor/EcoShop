@@ -1,37 +1,21 @@
 package com.willfp.ecoshop.shop
 
-import com.google.common.collect.HashBiMap
-import com.google.common.collect.ImmutableList
+import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.ecoshop.EcoShopPlugin
+import com.willfp.libreforge.loader.LibreforgePlugin
+import com.willfp.libreforge.loader.configs.RegistrableCategory
 
 @Suppress("UNUSED")
-object ShopCategories {
-    private val BY_ID = HashBiMap.create<String, ShopCategory>()
-
-    /**
-     * Get category matching id.
-     *
-     * @param id The id to query.
-     * @return The matching category, or null if not found.
-     */
-    @JvmStatic
-    fun getByID(id: String): ShopCategory? {
-        return BY_ID[id]
+object ShopCategories : RegistrableCategory<ShopCategory>("category", "categories") {
+    override fun clear(plugin: LibreforgePlugin) {
+        registry.clear()
     }
 
-    /** All shop categories. */
-    @JvmStatic
-    fun values(): List<ShopCategory> {
-        return ImmutableList.copyOf(BY_ID.values)
-    }
-
-    @JvmStatic
-    internal fun update(plugin: EcoShopPlugin) {
+    override fun beforeReload(plugin: LibreforgePlugin) {
         ShopItems.clear()
-        BY_ID.clear()
+    }
 
-        for ((id, config) in plugin.getConfigs("categories")) {
-            BY_ID[id] = ShopCategory(plugin, id, config)
-        }
+    override fun acceptConfig(plugin: LibreforgePlugin, id: String, config: Config) {
+        registry.register(ShopCategory(plugin as EcoShopPlugin, id, config))
     }
 }

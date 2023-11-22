@@ -10,6 +10,7 @@ import com.willfp.eco.core.gui.slot.ConfigSlot
 import com.willfp.eco.core.gui.slot.FillerMask
 import com.willfp.eco.core.gui.slot.MaskItems
 import com.willfp.eco.core.items.Items
+import com.willfp.eco.core.registry.KRegistrable
 import com.willfp.eco.core.sound.PlayableSound
 import com.willfp.eco.util.formatEco
 import com.willfp.eco.util.savedDisplayName
@@ -39,9 +40,9 @@ fun Menu.kickBack(player: Player) =
 
 class Shop(
     val plugin: EcoShopPlugin,
-    val id: String,
+    override val id: String,
     val config: Config
-) {
+): KRegistrable {
     val clickSound = config.ifHasOrNull("click-sound") {
         PlayableSound.create(config.getSubsection(it))
     }

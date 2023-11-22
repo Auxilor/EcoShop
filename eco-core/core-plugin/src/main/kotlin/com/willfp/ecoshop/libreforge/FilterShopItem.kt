@@ -1,4 +1,4 @@
-package com.willfp.ecoshop.integration.libreforge.impl
+package com.willfp.ecoshop.libreforge
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.ecoshop.event.ShopEvent

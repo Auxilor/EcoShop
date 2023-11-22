@@ -14,6 +14,7 @@ import com.willfp.eco.core.gui.slot.MaskItems
 import com.willfp.eco.core.gui.slot.Slot
 import com.willfp.eco.core.items.Items
 import com.willfp.eco.core.items.builder.modify
+import com.willfp.eco.core.registry.KRegistrable
 import com.willfp.eco.util.formatEco
 import com.willfp.ecomponent.components.pageChangerWithDefault
 import com.willfp.ecomponent.menuStateVar
@@ -30,16 +31,15 @@ fun <T> Stack<T>.popOrNull(): T? =
 
 class ShopCategory(
     val plugin: EcoShopPlugin,
-    val id: String,
+    override val id: String,
     val config: Config
-) {
-
+) : KRegistrable {
     private val permission = config.getStringOrNull("permission")
 
     val items = config.getSubsections("items").mapNotNull {
         try {
             val item = ShopItem(plugin, it)
-            ShopItems.addNewItem(item)
+            ShopItems.register(item)
             item
         } catch (e: InvalidShopItemException) {
             plugin.logger.warning(e.message)

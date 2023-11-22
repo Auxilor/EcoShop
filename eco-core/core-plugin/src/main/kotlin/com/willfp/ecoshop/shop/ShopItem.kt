@@ -14,6 +14,7 @@ import com.willfp.eco.core.items.Items
 import com.willfp.eco.core.items.builder.ItemStackBuilder
 import com.willfp.eco.core.price.CombinedDisplayPrice
 import com.willfp.eco.core.price.ConfiguredPrice
+import com.willfp.eco.core.registry.KRegistrable
 import com.willfp.eco.util.formatEco
 import com.willfp.ecoshop.EcoShopPlugin
 import com.willfp.ecoshop.event.EcoShopBuyEvent
@@ -21,6 +22,10 @@ import com.willfp.ecoshop.event.EcoShopSellEvent
 import com.willfp.ecoshop.shop.gui.BuyMenu
 import com.willfp.ecoshop.shop.gui.SellMenu
 import com.willfp.ecoshop.shop.gui.ShopItemSlot
+import com.willfp.libreforge.ViolationContext
+import com.willfp.libreforge.effects.Effects
+import com.willfp.libreforge.toDispatcher
+import com.willfp.libreforge.triggers.TriggerData
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.OfflinePlayer
@@ -39,12 +44,17 @@ enum class BuyType {
 class ShopItem(
     plugin: EcoShopPlugin,
     val config: Config
-) {
-    val id = config.getString("id")
+) : KRegistrable {
+    override val id = config.getString("id")
 
     val commands = config.getStrings("command") + config.getStrings("commands")
 
     val item = if (config.has("item")) Items.lookup(config.getString("item")) else null
+
+    val effects = Effects.compileChain(
+        config.getSubsections("effects"),
+        ViolationContext(plugin, "shop item $id")
+    )
 
     val buyAmount = config.getIntOrNull("buy.amount") ?: 1
 
@@ -282,6 +292,16 @@ class ShopItem(
             )
         }
 
+        effects?.trigger(
+            player.toDispatcher(),
+            TriggerData(
+                player = player,
+                location = player.location,
+                item = player.inventory.itemInMainHand,
+                value = amount.toDouble()
+            )
+        )
+
         if (buyItemMessage != null) {
             for (message in buyItemMessage) {
                 player.sendMessage(
@@ -304,7 +324,7 @@ class ShopItem(
 
     /** Get if a [player] is allowed to sell this item. */
     fun getSellStatus(player: Player): SellStatus {
-        // Can't sell a command
+        // Can't sell a command or an effect
         if (item == null || sellPrice == null) {
             return SellStatus.CANNOT_SELL
         }
@@ -405,7 +425,7 @@ class ShopItem(
         var amountOfItems = 0
 
         for (itemStack in player.inventory.storageContents) {
-            if (!item.matches(itemStack)) {
+            if (!item.matches(itemStack) || itemStack == null) {
                 continue
             }
 

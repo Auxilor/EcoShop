@@ -121,6 +121,26 @@ items:
       row: 3 # The row.
       page: 2 # The page.
 
+  - id: do_something_cool
+
+    # Effects to run when the player buys the item.
+    # Read here: https://plugins.auxilor.io/effects/configuring-an-effect
+    effects: []
+
+    buy:
+      value: 65
+      type: crystals
+      display: "&b%value% Crystals ❖"
+
+    gui:
+      display:
+        item: nether_star
+        lore:
+          - "&fBuy me to do something cool!"
+      column: 6 # The column.
+      row: 3 # The row.
+      page: 2 # The page.
+
   - id: valkyrie_egg
 
     item: ecobosses:valkyrie_spawn_egg
@@ -152,7 +172,7 @@ items:
           - ""
           - "&e&oLeft click to buy with money,"
           - "&e&oRight click to buy with &bCrystals ❖&e&o!"
-      column: 6 # How far left to right (1-9).
+      column: 7 # How far left to right (1-9).
       row: 3 # How far up or down (1-6).
       page: 1 # The page.
 
