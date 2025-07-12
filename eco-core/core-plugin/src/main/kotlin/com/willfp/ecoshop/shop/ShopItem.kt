@@ -22,7 +22,6 @@ import com.willfp.ecoshop.event.EcoShopSellEvent
 import com.willfp.ecoshop.shop.gui.BuyMenu
 import com.willfp.ecoshop.shop.gui.SellMenu
 import com.willfp.ecoshop.shop.gui.ShopItemSlot
-import com.willfp.libreforge.BlankHolder.conditions
 import com.willfp.libreforge.EmptyProvidedHolder
 import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.conditions.Conditions
@@ -45,20 +44,23 @@ enum class BuyType {
 }
 
 class ShopItem(
-    plugin: EcoShopPlugin,
+    val plugin: EcoShopPlugin,
     val config: Config
 ) : KRegistrable {
     override val id = config.getString("id")
 
     private val context = ViolationContext(plugin, "shop item $id")
 
-    val commands = config.getStrings("command") + config.getStrings("commands")
-
     val item = if (config.has("item")) Items.lookup(config.getString("item")) else null
 
-    val effects = Effects.compileChain(
-        config.getSubsections("effects"),
-        context.with("effects")
+    val buyEffects = Effects.compileChain(
+        listOf("effects", "buy-effects").flatMap { config.getSubsections(it) },
+        context.with("buy-effects")
+    )
+
+    val sellEffects = Effects.compileChain(
+        config.getSubsections("sell-effects"),
+        context.with("sell-effects")
     )
 
     val buyAmount = config.getIntOrNull("buy.amount") ?: 1
@@ -136,11 +138,45 @@ class ShopItem(
         0
     )
 
-    private val sellCommands: List<String>? = config.getStringsOrNull("sell.sell-commands")
-
+    // * Deprecated options, to be removed in the future * //
+    @Deprecated("Use sell-effects instead")
     private val sellItemMessage: List<String>? = config.getStringsOrNull("sell.sell-message")
 
+    @Deprecated("Use buy-effects instead")
     private val buyItemMessage: List<String>? = config.getStringsOrNull("buy.buy-message")
+
+    @Deprecated("Use sell-effects instead")
+    private val sellCommands: List<String>? = config.getStringsOrNull("sell.sell-commands")
+
+    @Deprecated("Use buy-effects instead")
+    val commands = config.getStrings("command") + config.getStrings("commands")
+
+    // * Deprecated options, to be removed in the future * //
+    init {
+        if (!sellCommands.isNullOrEmpty()) {
+            plugin.logger.warning("Shop item '$id' uses deprecated 'sell.sell-commands'. Please switch to 'sell-effects'.")
+        }
+
+        if (commands.isNotEmpty()) {
+            plugin.logger.warning("Shop item '$id' uses deprecated 'commands' buy option. Please switch to 'buy-effects'.")
+        }
+
+        if (buyItemMessage.isNullOrEmpty()) {
+            plugin.logger.warning("Shop item '$id' uses deprecated 'buy.buy-message'. Please switch to 'buy-effects'.")
+        }
+
+        if (sellItemMessage.isNullOrEmpty()) {
+            plugin.logger.warning("Shop item '$id' uses deprecated 'sell.sell-message'. Please switch to 'sell-effects'.")
+        }
+
+        if (config.has("buy.require")) {
+            plugin.logger.warning("Shop item '$id' uses deprecated option 'buy.require'. Please switch to 'buy.conditions' instead.")
+        }
+
+        if (config.has("sell.require")) {
+            plugin.logger.warning("Shop item '$id' uses deprecated option 'sell.require'. Please switch to 'sell.conditions' instead.")
+        }
+    }
 
     init {
         if (this.item != null && this.item.item.amount != 1) {
@@ -257,6 +293,7 @@ class ShopItem(
             return BuyStatus.NO_PERMISSION
         }
 
+        // Deprecated option, to be removed in the future. Use buy-conditions instead.
         if (config.has("buy.require")) {
             if (config.getDoubleFromExpression("buy.require", player) != 1.0) {
                 return BuyStatus.MISSING_REQUIREMENTS
@@ -326,13 +363,14 @@ class ShopItem(
             )
         }
 
-        effects?.trigger(
+        buyEffects?.trigger(
             player.toDispatcher(),
             TriggerData(
                 player = player,
                 location = player.location,
                 item = player.inventory.itemInMainHand,
-                value = amount.toDouble()
+                value = amount.toDouble(),
+                altValue = basePrice.getValue(player) * amount
             )
         )
 
@@ -367,6 +405,7 @@ class ShopItem(
             return SellStatus.NO_PERMISSION
         }
 
+        // Deprecated option, to be removed in the future. Use sell-conditions instead.
         if (config.has("sell.require")) {
             if (config.getDoubleFromExpression("sell.require", player) != 1.0) {
                 return SellStatus.MISSING_REQUIREMENTS
@@ -433,6 +472,7 @@ class ShopItem(
         shop?.sellSound?.playTo(player)
 
         if (sellCommands != null) {
+            plugin.logger.warning("The 'sell-commands' option is deprecated, please use 'sell-effects' instead.")
             for (command in sellCommands) {
                 Bukkit.dispatchCommand(
                     Bukkit.getConsoleSender(),
@@ -441,6 +481,17 @@ class ShopItem(
                 )
             }
         }
+
+        sellEffects?.trigger(
+            player.toDispatcher(),
+            TriggerData(
+                player = player,
+                location = player.location,
+                item = player.inventory.itemInMainHand,
+                value = amount.toDouble(),
+                altValue = sellPrice.getValue(player) * amount
+            )
+        )
 
         if (sellItemMessage != null) {
             for (message in sellItemMessage) {
