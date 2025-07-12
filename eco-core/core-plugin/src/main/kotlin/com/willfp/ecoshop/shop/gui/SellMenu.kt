@@ -36,6 +36,7 @@ class SellMenu(
                     addLoreLines(
                         plugin.langYml.getStrings("confirm-sell-price")
                             .replaceIn("%price%", item.sellPrice.getDisplay(player, amount))
+                            .replaceIn("%amount%", amount.toString())
                     )
                 }
         }) {
@@ -90,6 +91,7 @@ class SellMenu(
                     addLoreLines(
                         plugin.langYml.getStrings("confirm-sell-price")
                             .replaceIn("%price%", item.sellPrice.getDisplay(player, amount))
+                            .replaceIn("%amount%", amount.toString())
                     )
                 }
             }
