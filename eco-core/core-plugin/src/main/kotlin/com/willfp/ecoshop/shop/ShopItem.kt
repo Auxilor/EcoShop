@@ -56,12 +56,14 @@ class ShopItem(
 
     val item = if (config.has("item")) Items.lookup(config.getString("item")) else null
 
-    val effects = Effects.compileChain(
+    val buyEffects = Effects.compileChain(
         config.getSubsections("effects"),
         context.with("effects")
     )
 
     val buyAmount = config.getIntOrNull("buy.amount") ?: 1
+
+    val sellAmount = config.getIntOrNull("sell.amount") ?: 1
 
     private val _displayItem = ItemStackBuilder(
         if (config.has("gui.display.item")) {
@@ -271,7 +273,7 @@ class ShopItem(
                     TriggerData(
                         player = player
                     ).dispatch(player.toDispatcher()
-                ))
+                    ))
             }
 
             return BuyStatus.MISSING_REQUIREMENTS
@@ -326,7 +328,7 @@ class ShopItem(
             )
         }
 
-        effects?.trigger(
+        buyEffects?.trigger(
             player.toDispatcher(),
             TriggerData(
                 player = player,
@@ -393,7 +395,7 @@ class ShopItem(
             }
 
             if (amount != null) {
-                if (getAmountInPlayerInventory(player) < amount) {
+                if (getAmountInPlayerInventory(player) < amount * sellAmount) {
                     return SellStatus.DONT_HAVE_ENOUGH
                 }
             }
@@ -422,12 +424,20 @@ class ShopItem(
             return 0
         }
 
-        val amountSold = amount.coerceAtMost(getAmountInPlayerInventory(player))
+        // Calculate total items needed based on sellAmount
+        val totalItemsNeeded = amount * sellAmount
+        val amountInInventory = getAmountInPlayerInventory(player)
+        // Calculate how many complete sell transactions are possible
+        val amountSold = (totalItemsNeeded / sellAmount).coerceAtMost(amountInInventory / sellAmount)
 
-        val priceMultipliers = deductItems(player, amountSold)
+        if (amountSold == 0) {
+            return 0
+        }
+
+        val priceMultipliers = deductItems(player, amountSold * sellAmount)
 
         for ((multiplier, times) in priceMultipliers) {
-            sellPrice.giveTo(player, multiplier * times)
+            sellPrice.giveTo(player, multiplier * (times / sellAmount))
         }
 
         shop?.sellSound?.playTo(player)
@@ -437,7 +447,7 @@ class ShopItem(
                 Bukkit.dispatchCommand(
                     Bukkit.getConsoleSender(),
                     command.replace("%player%", player.name)
-                        .replace("%amount%", amountSold.toString())
+                        .replace("%amount%", (amountSold * sellAmount).toString())
                 )
             }
         }
@@ -447,7 +457,7 @@ class ShopItem(
                 player.sendMessage(
                     message.formatEco()
                         .replace("%player%", player.name)
-                        .replace("%amount%", amountSold.toString())
+                        .replace("%amount%", (amountSold * sellAmount).toString())
                 )
             }
         }
@@ -479,10 +489,9 @@ class ShopItem(
      *
      * Map maps multipliers to amounts of times.
      */
-    private fun deductItems(player: Player, amount: Int): Map<Double, Int> {
+    private fun deductItems(player: Player, totalItems: Int): Map<Double, Int> {
         val multipliers = mutableMapOf<Double, Int>()
-
-        var left = amount
+        var itemsLeftToDeduct = totalItems
 
         if (item == null) {
             return emptyMap()
@@ -496,25 +505,24 @@ class ShopItem(
                 continue
             }
 
+            var itemsDeducted = 0
 
-            var times = 0
-
-            if (itemStack.amount <= left) {
-                left -= itemStack.amount
-                times += itemStack.amount
+            if (itemStack.amount <= itemsLeftToDeduct) {
+                itemsLeftToDeduct -= itemStack.amount
+                itemsDeducted += itemStack.amount
                 player.inventory.clear(i)
             } else {
-                itemStack.amount -= left
-                times += left
-                left = 0
+                itemStack.amount -= itemsLeftToDeduct
+                itemsDeducted += itemsLeftToDeduct
+                itemsLeftToDeduct = 0
             }
 
             val event = EcoShopSellEvent(player, this, this.sellPrice!!, itemStack)
             Bukkit.getPluginManager().callEvent(event)
 
-            multipliers[event.multiplier] = (multipliers[event.multiplier] ?: 0) + times
+            multipliers[event.multiplier] = (multipliers[event.multiplier] ?: 0) + itemsDeducted
 
-            if (left == 0) {
+            if (itemsLeftToDeduct == 0) {
                 break
             }
         }
@@ -584,22 +592,30 @@ fun ItemStack.sell(
     val price = this.getUnitSellValue(player)
     val item = this.shopItem!!
 
+    // Use sellAmount for single item sell
+    val totalItemsNeeded = item.sellAmount
+    if (this.amount < totalItemsNeeded) {
+        return false
+    }
+
     val event = EcoShopSellEvent(player, item, item.sellPrice!!, this)
     Bukkit.getPluginManager().callEvent(event)
 
-    price.giveTo(player, this.amount.toDouble() * event.multiplier)
+    price.giveTo(player, totalItemsNeeded.toDouble() * event.multiplier)
 
     player.sendMessage(
         EcoShopPlugin.instance.langYml.getMessage("sold-item")
-            .replace("%amount%", this.amount.toString())
+            .replace("%amount%", totalItemsNeeded.toString())
             .replace("%item%", item.displayName)
-            .replace("%price%", price.getDisplay(player, this.amount.toDouble() * event.multiplier))
+            .replace("%price%", price.getDisplay(player, totalItemsNeeded.toDouble() * event.multiplier))
     )
 
     shop?.sellSound?.playTo(player)
 
-    this.amount = 0
-    this.type = Material.AIR
+    this.amount -= totalItemsNeeded
+    if (this.amount <= 0) {
+        this.type = Material.AIR
+    }
 
     return true
 }
@@ -627,30 +643,43 @@ fun Collection<ItemStack>.sell(
     shop: Shop? = null
 ): Collection<ItemStack> {
     val unsold = mutableListOf<ItemStack>()
-    var amountSold = 0
+    var totalItemsSold = 0
     val displayBuilder = CombinedDisplayPrice.builder(player)
 
     for (itemStack in this) {
         if (!itemStack.isSellable(player)) {
             unsold += itemStack
+            continue
         }
 
         val price = itemStack.getUnitSellValue(player)
         val item = itemStack.shopItem!!
 
+        // Use sellAmount for bulk sell
+        val totalItemsNeeded = item.sellAmount
+        if (itemStack.amount < totalItemsNeeded) {
+            unsold += itemStack
+            continue
+        }
+
+        val amountSold = (itemStack.amount / item.sellAmount).coerceAtMost(1)
+        val itemsToDeduct = amountSold * item.sellAmount
+
         val event = EcoShopSellEvent(player, item, item.sellPrice!!, itemStack)
         Bukkit.getPluginManager().callEvent(event)
 
-        price.giveTo(player, itemStack.amount.toDouble() * event.multiplier)
+        price.giveTo(player, itemsToDeduct.toDouble() * event.multiplier)
 
         displayBuilder.add(
             price,
-            itemStack.amount.toDouble() * event.multiplier
+            itemsToDeduct.toDouble() * event.multiplier
         )
 
-        amountSold += itemStack.amount
-        itemStack.amount = 0
-        itemStack.type = Material.AIR
+        totalItemsSold += itemsToDeduct
+        itemStack.amount -= itemsToDeduct
+        if (itemStack.amount <= 0) {
+            itemStack.type = Material.AIR
+        }
     }
 
     // If none sold.
@@ -662,7 +691,7 @@ fun Collection<ItemStack>.sell(
 
     player.sendMessage(
         EcoShopPlugin.instance.langYml.getMessage("sold-multiple")
-            .replace("%amount%", amountSold.toString())
+            .replace("%amount%", totalItemsSold.toString())
             .replace("%price%", displayBuilder.build().displayStrings.toList().formatMultiple().formatEco(player))
     )
 
