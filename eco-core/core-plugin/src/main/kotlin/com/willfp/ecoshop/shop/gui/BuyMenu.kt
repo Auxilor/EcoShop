@@ -38,6 +38,7 @@ class BuyMenu(
                     addLoreLines(
                         plugin.langYml.getStrings("confirm-buy-price")
                             .replaceIn("%price%", item.getBuyPrice(buyType).getDisplay(player, amount))
+                            .replaceIn("%amount%", amount.toString())
                     )
                 }
         }) {
