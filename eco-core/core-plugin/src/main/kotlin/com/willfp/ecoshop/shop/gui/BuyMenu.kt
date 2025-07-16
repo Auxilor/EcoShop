@@ -38,6 +38,7 @@ class BuyMenu(
                     addLoreLines(
                         plugin.langYml.getStrings("confirm-buy-price")
                             .replaceIn("%price%", item.getBuyPrice(buyType).getDisplay(player, amount))
+                            .replaceIn("%amount%", amount.toString())
                     )
                 }
         }) {
@@ -94,6 +95,7 @@ class BuyMenu(
                     addLoreLines(
                         plugin.langYml.getStrings("confirm-buy-price")
                             .replaceIn("%price%", item.getBuyPrice(buyType).getDisplay(player, amount))
+                            .replaceIn("%amount%", amount.toString())
                     )
                 }
             }
@@ -160,6 +162,7 @@ class BuyMenu(
                     addLoreLines(
                         plugin.langYml.getStrings("confirm-buy-price")
                             .replaceIn("%price%", item.getBuyPrice(buyType).getDisplay(player, menu.amountOfItem[player]))
+                            .replaceIn("%amount%", menu.amountOfItem[player].toString())
                     )
                 }
             }) {
