@@ -56,134 +56,62 @@ gui:
 
 
 items:
+  ## Example using Items and the Item Lookup System ##
+  ####################################################
   - id: enchanted_diamond # The ID of the item, not shown to players.
-
-    # The item to buy/sell. Must have a quantity of one, so 'stone 16' would not be allowed.
-    # https://plugins.auxilor.io/all-plugins/the-item-lookup-system
-    item: ecoitems:enchanted_diamond
-
-    # (Optional) The custom display name, will inherit from the GUI item by default.
-    name: "&b&k!!&r <gradient:#2193b0>Enchanted Diamond</gradient:#6dd5ed>&r &b&k!!"
-
-    # Options for buying the item, see here:
-    # https://plugins.auxilor.io/all-plugins/prices
-    buy:
-      value: 500 - (%player_rank% * 25)
-      type: coins
-      display: "$%value%"
-
-      amount: 8 # (Optional) The quick buy / default buy amount. Defaults to 1 if not specified.
-      max-at-once: 16 # (Optional) The maximum amount that can be bought at once. Defaults to infinity if not specified.
-
-      buy-message: # (Optional) Enter messages to send to the player when the player buys this specific items. It will still send the 'bought-item/bought-multiple' from lang.yml
-        - "&6Thanks for buying this specific item"
-
-    # Options for selling the item, see here:
-    # https://plugins.auxilor.io/all-plugins/prices
-    sell:
-      value: 100 + (%player_rank% * 25)
-      type: coins
-      display: "$%value%"
-
-      require: "%player_rank% > 1" # (Optional) This expression must hold true to be allowed to sell this item.
-
-      # The conditions that must be met in order to sell this item.
-      # Read here: https://plugins.auxilor.io/effects/configuring-a-condition
-      conditions: [ ]
-
-      sell-command: # (Optional) Enter commands that should be executed when a player sells items. You can use %player% and %amount% placeholders
-        - "give %player% stone %amount%"
-      sell-message: # (Optional) Enter messages to send to the player when the player sells this specific items. It will still send the 'sold-item/sold-multiple' from lang.yml
-        - "&6Thanks for selling this specific item"
+    item: ecoitems:enchanted_diamond # The item to buy/sell (Quantity of 1) # https://plugins.auxilor.io/all-plugins/the-item-lookup-system
+    name: "&b&k!!&r <gradient:#2193b0>Enchanted Diamond</gradient:#6dd5ed>&r &b&k!!" # (Optional) The custom display name, will inherit from the GUI item by default.
     gui:
       column: 4 # How far left to right (1-9).
       row: 3 # How far up or down (1-6).
       page: 1 # The page.
+    buy: # Options for buying the item, see here: https://plugins.auxilor.io/all-plugins/prices
+      value: 500 - (%player_rank% * 25)
+      type: coins
+      display: "$%value%"
+      amount: 8 # (Optional) The quick buy / default buy amount. Defaults to 1 if not specified.
+      max-at-once: 16 # (Optional) The maximum amount that can be bought at once. Defaults to infinity if not specified.
+    sell: # Options for selling the item, see here: https://plugins.auxilor.io/all-plugins/prices
+      value: 100 + (%player_rank% * 25)
+      type: coins
+      display: "$%value%"
+      # The conditions that must be met in order to sell this item.
+      # Read here: https://plugins.auxilor.io/effects/configuring-a-condition
+      conditions:
+        - id: below_y
+          args:
+              y: 100 # The player must be below this Y level to sell the item.
 
+  ## Example using Effects and the Effect System ##
+  ####################################################
   - id: iron_rank
-
-    commands: # The commands to execute. You can use %player% and %amount% as placeholders.q
-      - lp user %player% parent set iron
-
-    buy:
-      value: "%ecomc_iron_price%"
-      type: crystals
-      display: "&b%value% Crystals ❖"
-
-      require: "%ecomc_iron_price% >= 0" # (Optional) This expression must hold true in order to be allowed to buy the item.
-
-      limit: 1 # (Optional) The max amount of times each player can buy this item, defaults to infinite.
-
+    # Effects to run when the player buys the item.
+    # Read here: https://plugins.auxilor.io/effects/configuring-an-effect
+    buy-effects:
+      - id: run_command
+        args:
+          command: "lp user %player% parent set iron"
     gui:
-      display: # This item is shown in the GUI. If you're selling an item, this defaults to the item itself.
+      display:
         item: diamond_chestplate
         lore:
           - "&fBuy &7&lIRON&r&f rank to get"
           - "&fthe following benefits:"
           - " &8»&f &eExample Perk"
-      column: 5 # The column.
-      row: 3 # The row.
-      page: 2 # The page.
-
-  - id: do_something_cool
-
-    # Effects to run when the player buys the item.
-    # Read here: https://plugins.auxilor.io/effects/configuring-an-effect
-    effects: []
-
-    buy:
-      value: 65
-      type: crystals
-      display: "&b%value% Crystals ❖"
-
-      # The conditions that must be met in order to buy this item.
-      # Read here: https://plugins.auxilor.io/effects/configuring-a-condition
-      conditions: [ ]
-
-    gui:
-      display:
-        item: nether_star
-        lore:
-          - "&fBuy me to do something cool!"
       column: 6 # The column.
       row: 3 # The row.
       page: 2 # The page.
-
-  - id: valkyrie_egg
-
-    item: ecobosses:valkyrie_spawn_egg
-
+      show-quick-buy-sell: false # (Optional) disable quick buy / quick sell text.
     buy:
-      value: 76850
-      type: coins
-      display: "&a$%value%"
-
-      max-at-once: 1 # If you want to skip the amount selection GUI, set max at once to 1 so clicking will instant-buy.
-
-    # Instead of having the item be buyable and sellable, you can have
-    # two buy options (Buy being left-click, Alt-Buy being right-click).
-    # limit / max-at-once, etc. are inherited from the buy options.
-    alt-buy:
-      value: 65
+      value: "%ecomc_iron_price%"
       type: crystals
-      display: "&b%value%❖"
-
+      display: "&b%value% Crystals ❖"
+      require: "%ecomc_iron_price% >= 0" # (Optional) This expression must hold true in order to be allowed to buy the item.
+      limit: 1 # (Optional) The max amount of times each player can buy this item, defaults to infinite.
       # The conditions that must be met in order to buy this item.
       # Read here: https://plugins.auxilor.io/effects/configuring-a-condition
-      conditions: [ ]
-
-    gui:
-      display:
-        lore: # You can inherit the item and just add your own extra lore to show additional information.
-          - ""
-          - "&fExample Lore"
-          - ""
-        bottom-lore: # You can also add lore to be put under other lore (e.g. price, quick buy/sell info, etc.)
-          - ""
-          - "&e&oLeft click to buy with money,"
-          - "&e&oRight click to buy with &bCrystals ❖&e&o!"
-      column: 7 # How far left to right (1-9).
-      row: 3 # How far up or down (1-6).
-      page: 1 # The page.
-
-      show-quick-buy-sell: false # (Optional) disable quick buy / quick sell text.
+      conditions:
+        - id: has_permission
+          args:
+            permission: 'group.iron'
+            inverse: true
