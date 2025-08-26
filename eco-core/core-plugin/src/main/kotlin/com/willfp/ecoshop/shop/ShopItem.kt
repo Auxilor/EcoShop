@@ -153,19 +153,19 @@ class ShopItem(
 
     // * Deprecated options, to be removed in the future * //
     init {
-        if (!sellCommands.isNullOrEmpty()) {
+        if (config.has("sell.sell-commands")) {
             plugin.logger.warning("Shop item '$id' uses deprecated 'sell.sell-commands'. Please switch to 'sell-effects'.")
         }
 
-        if (commands.isNotEmpty()) {
+        if (config.has("command") || config.has("commands")) {
             plugin.logger.warning("Shop item '$id' uses deprecated 'commands' buy option. Please switch to 'buy-effects'.")
         }
 
-        if (buyItemMessage.isNullOrEmpty()) {
+        if (config.has("buy.buy-message")) {
             plugin.logger.warning("Shop item '$id' uses deprecated 'buy.buy-message'. Please switch to 'buy-effects'.")
         }
 
-        if (sellItemMessage.isNullOrEmpty()) {
+        if (config.has("sell.sell-message")) {
             plugin.logger.warning("Shop item '$id' uses deprecated 'sell.sell-message'. Please switch to 'sell-effects'.")
         }
 
