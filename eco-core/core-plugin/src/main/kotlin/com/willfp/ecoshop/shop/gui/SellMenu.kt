@@ -88,6 +88,9 @@ class SellMenu(
                     val amount = menu.amountOfItem[player]
 
                     setAmount(amount)
+
+                    setDisplayName(item.displayName)
+
                     addLoreLines(
                         plugin.langYml.getStrings("confirm-sell-price")
                             .replaceIn("%price%", item.sellPrice.getDisplay(player, amount))

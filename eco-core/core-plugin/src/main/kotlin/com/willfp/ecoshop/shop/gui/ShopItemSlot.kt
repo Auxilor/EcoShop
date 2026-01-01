@@ -219,6 +219,9 @@ class ShopItemSlot(
             }
 
             val meta = itemStack.itemMeta
+
+            meta?.setDisplayName(item.displayName.formatEco(player))
+
             @Suppress("DEPRECATION")
             val lore = (meta?.lore ?: emptyList())
                 .replaceIn("%playerbuys%", item.getTotalBuys(player))
