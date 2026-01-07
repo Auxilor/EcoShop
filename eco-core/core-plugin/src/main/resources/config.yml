@@ -11,6 +11,8 @@ use-local-storage: false
 shop-items:
   register-permissions: false # Registering permissions will show them in permission plugins, but leads to long reload times.
 
+  sell-strict-match: true # If true, items being sold must match the shop item exactly (name, lore, enchantments, etc). If false, only the material and data value are checked.
+
   global-bottom-lore: # Options for global lore to be shown on all shop icons, disabled by default.
     buy: [ ] # Shown under buyable items.
     # - "&e&oLeft Click to buy"

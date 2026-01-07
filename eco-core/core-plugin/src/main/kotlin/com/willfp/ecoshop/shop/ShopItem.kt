@@ -118,6 +118,8 @@ class ShopItem(
         context.with("sell conditions")
     )
 
+    val isStrictMatch = plugin.configYml.getBoolOrNull("shop-items.sell-strict-match") ?: true
+
     val slot = ShopItemSlot(this, plugin)
 
     val isShowingQuickBuySell = config.getBoolOrNull("gui.show-quick-buy-sell") ?: true
@@ -514,7 +516,11 @@ class ShopItem(
         var amountOfItems = 0
 
         for (itemStack in player.inventory.storageContents) {
-            if (!item.matches(itemStack) || itemStack == null) {
+            if (itemStack == null) {
+                continue
+            }
+            val matches = if (isStrictMatch) itemStack.isSimilar(item.item) else item.matches(itemStack)
+            if (!matches) {
                 continue
             }
 
@@ -541,9 +547,9 @@ class ShopItem(
 
         // Using slots because of some freakish bug that prevented clearing the item?
         for (i in 0..35) {
-            val itemStack = player.inventory.getItem(i)
-
-            if (!item.matches(itemStack) || itemStack == null) {
+            val itemStack = player.inventory.getItem(i) ?: continue
+            val matches = if (isStrictMatch) itemStack.isSimilar(item.item) else item.matches(itemStack)
+            if (!matches) {
                 continue
             }
 

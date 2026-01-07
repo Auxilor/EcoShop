@@ -14,28 +14,51 @@ class CommandSellHandall(plugin: EcoPlugin) : PluginCommand(
     true
 ) {
     override fun onExecute(player: Player, args: List<String>) {
-        val test = player.inventory.itemInMainHand.shopItem?.item
+        val handStack = player.inventory.itemInMainHand
 
-        if (test == null) {
+        if (handStack.type.isAir || handStack.amount == 0) {
             player.sendMessage(plugin.langYml.getMessage("not-sellable"))
             return
         }
 
+        val shopItem = handStack.shopItem
+
+        if (shopItem == null) {
+            player.sendMessage(plugin.langYml.getMessage("not-sellable"))
+            return
+        }
+
+        val isStrict = plugin.configYml.getBoolOrNull("shop-items.sell-strict-match") ?: false
+
+        val baseItem = shopItem.item!!.item 
+
         val items = mutableMapOf<Int, ItemStack>()
 
         for (i in 0..35) {
-            val itemStack = player.inventory.getItem(i)
+            val itemStack = player.inventory.getItem(i) ?: continue
 
-            if (!test.matches(itemStack) || itemStack == null) {
-                continue
+            val matches = if (isStrict) {
+                itemStack.isSimilar(baseItem)
+            } else {
+                shopItem.item!!.matches(itemStack)
             }
 
-            items[i] = itemStack
+            if (matches) {
+                items[i] = itemStack
+            }
         }
 
-        val sold = items.values.sell(player)
-        if (sold.size == items.size) {
+        if (items.isEmpty()) {
             player.sendMessage(plugin.langYml.getMessage("no-sellable"))
+            return
+        }
+
+        val unsold = items.values.sell(player)
+
+        if (unsold.isEmpty()) {
+            for (i in items.keys) {
+                player.inventory.clear(i)
+            }
         } else {
             for (i in items.keys) {
                 player.inventory.clear(i)

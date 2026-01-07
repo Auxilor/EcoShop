@@ -15,24 +15,43 @@ class CommandSellAll(plugin: EcoPlugin) : PluginCommand(
     true
 ) {
     override fun onExecute(player: Player, args: List<String>) {
-        val items = mutableMapOf<Int, ItemStack>()
+        val toSell = mutableListOf<ItemStack>()
+        val slotsToClear = mutableListOf<Int>()
+
+        val isStrict = plugin.configYml.getBoolOrNull("shop-items.sell-strict-match") ?: false
 
         for (i in 0..35) {
             val itemStack = player.inventory.getItem(i) ?: continue
 
-            if (!itemStack.isSellable(player)) {
-                continue
+            val shopItem = itemStack.shopItem ?: continue
+            if (!shopItem.isSellable) continue
+
+            val matches = if (isStrict) {
+                itemStack.isSimilar(shopItem.item!!.item)
+            } else {
+                shopItem.item!!.matches(itemStack)
             }
 
-            items[i] = itemStack
+            if (matches) {
+                toSell.add(itemStack)
+                slotsToClear.add(i)
+            }
         }
 
-        val sold = items.values.sell(player)
-        if (sold.size == items.size) {
+        if (toSell.isEmpty()) {
             player.sendMessage(plugin.langYml.getMessage("no-sellable"))
+            return
+        }
+
+        val unsold = toSell.sell(player)
+
+        if (unsold.isEmpty()) {
+            for (slot in slotsToClear) {
+                player.inventory.clear(slot)
+            }
         } else {
-            for (i in items.keys) {
-                player.inventory.clear(i)
+            for (slot in slotsToClear) {
+                player.inventory.clear(slot)
             }
         }
     }
