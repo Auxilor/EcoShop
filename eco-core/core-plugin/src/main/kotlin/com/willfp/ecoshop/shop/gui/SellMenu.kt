@@ -181,7 +181,7 @@ class SellMenu(
                             plugin.langYml.getMessage("sold-item")
                                 .replace("%amount%", didSell.toString())
                                 .replace("%item%", item.displayName)
-                                .replace("%price%", item.sellPrice.getDisplay(player, amount))
+                                .replace("%price%", item.sellPrice.getDisplay(player, didSell))
                         )
 
                         menu.kickBack(player)
@@ -193,6 +193,51 @@ class SellMenu(
                 }
             }
         )
+
+        val sellAllConfig = plugin.configYml.getSubsection("sell-menu.sell-all-button")
+        if (sellAllConfig.getBool("enabled")) {
+            setSlot(
+                sellAllConfig.getInt("row", 3),
+                sellAllConfig.getInt("column", 5),
+                slot({ player, _ ->
+                    val maxAmount = item.getAmountInPlayerInventory(player)
+                    val priceDisplay = item.sellPrice?.getDisplay(player, maxAmount.toDouble()) ?: "0"
+
+                    val baseItem = Items.lookup(sellAllConfig.getString("item"))
+
+                    baseItem.modify {
+                        addLoreLines(
+                            sellAllConfig.getStrings("lore").map { line ->
+                                line.replace("%amount%", maxAmount.toString())
+                                    .replace("%price%", priceDisplay)
+                            }
+                        )
+                    }
+                }) {
+                    onLeftClick { player, _, _, menu ->
+                        val maxAmount = item.getAmountInPlayerInventory(player)
+                        if (maxAmount <= 0) {
+                            player.sendMessage(plugin.langYml.getMessage("no-sellable"))
+                            return@onLeftClick
+                        }
+
+                        val sold = item.sell(player, maxAmount, shop = menu.parentShop[player])
+
+                        if (sold > 0) {
+                            player.sendMessage(
+                                plugin.langYml.getMessage("sold-item")
+                                    .replace("%amount%", sold.toString())
+                                    .replace("%item%", item.displayName)
+                                    .replace("%price%", item.sellPrice.getDisplay(player, sold))
+                            )
+                            menu.kickBack(player)
+                        } else {
+                            player.sendMessage(plugin.langYml.getMessage("not-enough"))
+                        }
+                    }
+                }
+            )
+        }
 
         for (config in plugin.configYml.getSubsections("sell-menu.custom-slots")) {
             setSlot(

@@ -186,6 +186,16 @@ sell-menu:
     column: 6
     item: diamond unbreaking:1 hide_enchants name:"&aConfirm"
 
+  sell-all-button:
+    enabled: true
+    item: hopper name:"&aSell All"
+    lore:
+      - "&7Sell every matching item you have"
+      - "&7Amount: &e%amount%"
+      - "&7Price: &e%price%"
+    row: 3
+    column: 5
+
   add-buttons:
     - add: 1
       row: 4
