@@ -9,7 +9,7 @@ import com.willfp.eco.core.gui.slot.FillerMask
 import com.willfp.eco.core.gui.slot.MaskItems
 import com.willfp.eco.core.items.Items
 import com.willfp.eco.core.items.builder.modify
-import com.willfp.ecoshop.EcoShopPlugin
+import com.willfp.ecoshop.plugin
 import com.willfp.ecoshop.shop.SellStatus
 import com.willfp.ecoshop.shop.ShopItem
 import com.willfp.ecoshop.shop.configKey
@@ -21,10 +21,9 @@ import org.bukkit.entity.Player
 import kotlin.math.min
 
 class SellMenu(
-    val item: ShopItem,
-    private val plugin: EcoShopPlugin
+    val item: ShopItem
 ) {
-    private val sellMoreMenu = MoreMenu(item, plugin, "sell") { amount, stacks ->
+    private val sellMoreMenu = MoreMenu(item, "sell") { amount, stacks ->
         slot({ player, _ ->
             item.displayItem
                 .modify {

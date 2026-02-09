@@ -220,6 +220,7 @@ class ShopItemSlot(
 
             val meta = itemStack.itemMeta
 
+            @Suppress("DEPRECATION")
             meta?.setDisplayName(item.displayName.formatEco(player))
 
             @Suppress("DEPRECATION")

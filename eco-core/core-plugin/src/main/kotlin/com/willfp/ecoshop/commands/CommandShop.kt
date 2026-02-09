@@ -3,8 +3,6 @@ package com.willfp.ecoshop.commands
 import com.willfp.eco.core.EcoPlugin
 import com.willfp.eco.core.command.impl.PluginCommand
 import com.willfp.ecoshop.shop.Shop
-import com.willfp.ecoshop.shop.ShopCategories
-import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 
 class CommandShop(

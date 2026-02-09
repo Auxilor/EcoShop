@@ -9,7 +9,7 @@ import com.willfp.eco.core.gui.slot.FillerMask
 import com.willfp.eco.core.gui.slot.MaskItems
 import com.willfp.eco.core.items.Items
 import com.willfp.eco.core.items.builder.modify
-import com.willfp.ecoshop.EcoShopPlugin
+import com.willfp.ecoshop.plugin
 import com.willfp.ecoshop.shop.BuyStatus
 import com.willfp.ecoshop.shop.BuyType
 import com.willfp.ecoshop.shop.ShopItem
@@ -23,10 +23,9 @@ import kotlin.math.min
 
 class BuyMenu(
     val item: ShopItem,
-    private val plugin: EcoShopPlugin,
     private val buyType: BuyType
 ) {
-    private val buyMoreMenu = MoreMenu(item, plugin, "buy") { amount, stacks ->
+    private val buyMoreMenu = MoreMenu(item, "buy") { amount, stacks ->
         slot({ player, _ ->
             item.displayItem
                 .modify {

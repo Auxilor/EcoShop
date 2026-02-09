@@ -14,8 +14,8 @@ import com.willfp.eco.core.registry.KRegistrable
 import com.willfp.eco.core.sound.PlayableSound
 import com.willfp.eco.util.formatEco
 import com.willfp.eco.util.savedDisplayName
-import com.willfp.ecoshop.EcoShopPlugin
 import com.willfp.ecoshop.commands.CommandShop
+import com.willfp.ecoshop.plugin
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 
@@ -39,10 +39,9 @@ fun Menu.kickBack(player: Player) =
     this.previousMenus[player].popOrNull()?.openWithParentShop(player, this) ?: player.closeInventory()
 
 class Shop(
-    val plugin: EcoShopPlugin,
     override val id: String,
     val config: Config
-): KRegistrable {
+) : KRegistrable {
     val clickSound = config.ifHasOrNull("click-sound") {
         PlayableSound.create(config.getSubsection(it))
     }

@@ -2,7 +2,6 @@ package com.willfp.ecoshop.commands
 
 import com.willfp.eco.core.EcoPlugin
 import com.willfp.eco.core.command.impl.PluginCommand
-import com.willfp.ecoshop.shop.isSellable
 import com.willfp.ecoshop.shop.sell
 import com.willfp.ecoshop.shop.shopItem
 import org.bukkit.entity.Player

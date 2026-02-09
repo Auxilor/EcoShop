@@ -7,7 +7,7 @@ import org.bukkit.event.HandlerList
 import org.bukkit.event.player.PlayerEvent
 import org.bukkit.inventory.ItemStack
 
-class EcoShopSellEvent @JvmOverloads constructor(
+class EcoShopSellEvent(
     who: Player,
     override val shopItem: ShopItem,
     override var price: Price,

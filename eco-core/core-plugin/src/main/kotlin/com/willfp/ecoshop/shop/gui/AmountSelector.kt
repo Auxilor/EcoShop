@@ -8,7 +8,6 @@ import com.willfp.eco.core.gui.slot
 import com.willfp.eco.core.gui.slot.Slot
 import com.willfp.eco.core.items.Items
 import com.willfp.ecomponent.menuStateVar
-import com.willfp.ecoshop.EcoShopPlugin
 import com.willfp.ecoshop.shop.ShopItem
 import com.willfp.ecoshop.shop.parentShop
 import org.bukkit.entity.Player

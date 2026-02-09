@@ -9,7 +9,7 @@ import com.willfp.eco.core.gui.slot.FillerMask
 import com.willfp.eco.core.gui.slot.MaskItems
 import com.willfp.eco.core.gui.slot.Slot
 import com.willfp.eco.core.items.Items
-import com.willfp.ecoshop.EcoShopPlugin
+import com.willfp.ecoshop.plugin
 import com.willfp.ecoshop.shop.ShopItem
 import com.willfp.ecoshop.shop.kickBack
 import com.willfp.ecoshop.shop.openAndStack
@@ -18,7 +18,6 @@ import org.bukkit.entity.Player
 /** Key is buy or sell, slot is the actual slot given the amount of stacks. */
 class MoreMenu(
     val item: ShopItem,
-    private val plugin: EcoShopPlugin,
     private val key: String,
     val slotBuilder: (amount: Int, stacks: Int) -> Slot,
 ) {

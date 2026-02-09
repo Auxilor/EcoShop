@@ -18,7 +18,7 @@ import com.willfp.eco.core.registry.KRegistrable
 import com.willfp.eco.util.formatEco
 import com.willfp.ecomponent.components.pageChangerWithDefault
 import com.willfp.ecomponent.menuStateVar
-import com.willfp.ecoshop.EcoShopPlugin
+import com.willfp.ecoshop.plugin
 import org.bukkit.entity.Player
 import java.util.Stack
 
@@ -30,7 +30,6 @@ fun <T> Stack<T>.popOrNull(): T? =
     if (this.empty()) null else this.pop()
 
 class ShopCategory(
-    val plugin: EcoShopPlugin,
     override val id: String,
     val config: Config
 ) : KRegistrable {
@@ -38,7 +37,7 @@ class ShopCategory(
 
     val items = config.getSubsections("items").mapNotNull {
         try {
-            val item = ShopItem(plugin, it)
+            val item = ShopItem( it)
             ShopItems.register(item)
             item
         } catch (e: InvalidShopItemException) {

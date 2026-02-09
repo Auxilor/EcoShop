@@ -40,7 +40,7 @@ class CommandSellHandall(plugin: EcoPlugin) : PluginCommand(
             val matches = if (isStrict) {
                 itemStack.isSimilar(baseItem)
             } else {
-                shopItem.item!!.matches(itemStack)
+                shopItem.item.matches(itemStack)
             }
 
             if (matches) {

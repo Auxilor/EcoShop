@@ -1,13 +1,12 @@
 package com.willfp.ecoshop.shop.gui
 
-import com.willfp.eco.core.config.updating.ConfigUpdater
 import com.willfp.eco.core.drops.DropQueue
 import com.willfp.eco.core.gui.menu
 import com.willfp.eco.core.gui.menu.Menu
 import com.willfp.eco.core.gui.menu.MenuLayer
 import com.willfp.eco.core.gui.slot
 import com.willfp.eco.core.gui.slot.ConfigSlot
-import com.willfp.ecoshop.EcoShopPlugin
+import com.willfp.ecoshop.plugin
 import com.willfp.ecoshop.shop.ShopItems
 import com.willfp.ecoshop.shop.sell
 import org.bukkit.Material
@@ -19,7 +18,7 @@ object SellGUI {
     private var strictSellMatch = false
 
     @JvmStatic
-    fun update(plugin: EcoShopPlugin) {
+    fun update() {
         val rows = plugin.configYml.getInt("sell-gui.rows")
         strictSellMatch = plugin.configYml.getBoolOrNull("shop-items.sell-strict-match") ?: true
 
