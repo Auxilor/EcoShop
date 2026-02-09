@@ -1,6 +1,5 @@
 package com.willfp.ecoshop.shop.gui
 
-import com.willfp.eco.core.EcoPlugin
 import com.willfp.eco.core.gui.menu.Menu
 import com.willfp.eco.core.gui.onLeftClick
 import com.willfp.eco.core.gui.onRightClick
@@ -11,6 +10,7 @@ import com.willfp.eco.core.gui.slot.CustomSlot
 import com.willfp.eco.core.items.builder.modify
 import com.willfp.eco.util.formatEco
 import com.willfp.eco.util.toNiceString
+import com.willfp.ecoshop.plugin
 import com.willfp.ecoshop.shop.BuyStatus
 import com.willfp.ecoshop.shop.BuyType
 import com.willfp.ecoshop.shop.SellStatus
@@ -25,10 +25,9 @@ fun Collection<String>.replaceIn(token: String, replacement: Any?) =
     this.map { it.replace(token, replacement.toNiceString()) }
 
 class ShopItemSlot(
-    item: ShopItem,
-    plugin: EcoPlugin
+    item: ShopItem
 ) : CustomSlot() {
-    private val slot = slot(extractItemStack(item, plugin)) {
+    private val slot = slot(extractItemStack(item)) {
         fun handleMainBuyClick(player: Player, menu: Menu, buyType: BuyType) {
             val status = item.getBuyStatus(player, 1, buyType)
 
@@ -131,7 +130,7 @@ class ShopItemSlot(
         }
     }
 
-    private fun extractItemStack(item: ShopItem, plugin: EcoPlugin): (Player, Menu) -> ItemStack {
+    private fun extractItemStack(item: ShopItem): (Player, Menu) -> ItemStack {
         return { player: Player, _: Menu ->
             val playerBuysLeft = item.getBuysLeft(player)
             val zeroBuysLeftMessage = plugin.langYml.getStrings("cant-buy-again")

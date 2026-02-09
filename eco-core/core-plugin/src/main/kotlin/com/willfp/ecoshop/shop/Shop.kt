@@ -15,7 +15,6 @@ import com.willfp.eco.core.sound.PlayableSound
 import com.willfp.eco.util.formatEco
 import com.willfp.eco.util.savedDisplayName
 import com.willfp.ecoshop.commands.CommandShop
-import com.willfp.ecoshop.plugin
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 
@@ -132,7 +131,7 @@ class Shop(
         onOpen { player, menu -> menu.parentShop[player] = this@Shop }
     } else null
 
-    val command = CommandShop(this, plugin)
+    val command = CommandShop(this)
 
     fun broadcastPurchase(player: Player, item: ShopItem, amount: Int) {
         @Suppress("DEPRECATION")

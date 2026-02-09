@@ -1,12 +1,12 @@
 package com.willfp.ecoshop.commands
 
-import com.willfp.eco.core.EcoPlugin
 import com.willfp.eco.core.command.impl.PluginCommand
+import com.willfp.ecoshop.plugin
 import com.willfp.ecoshop.shop.sell
 import com.willfp.ecoshop.shop.shopItem
 import org.bukkit.entity.Player
 
-class CommandSellHand(plugin: EcoPlugin) : PluginCommand(
+object CommandSellHand : PluginCommand(
     plugin,
     "hand",
     "ecoshop.command.sell.hand",

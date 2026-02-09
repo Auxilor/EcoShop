@@ -1,13 +1,12 @@
 package com.willfp.ecoshop.commands
 
-import com.willfp.eco.core.EcoPlugin
 import com.willfp.eco.core.command.impl.PluginCommand
+import com.willfp.ecoshop.plugin
 import com.willfp.ecoshop.shop.Shop
 import org.bukkit.entity.Player
 
 class CommandShop(
-    private val shop: Shop,
-    plugin: EcoPlugin
+    private val shop: Shop
 ) : PluginCommand(
     plugin,
     shop.commandName,

@@ -119,7 +119,7 @@ class ShopItem(
 
     val isStrictMatch = plugin.configYml.getBoolOrNull("shop-items.sell-strict-match") ?: true
 
-    val slot = ShopItemSlot(this, plugin)
+    val slot = ShopItemSlot(this)
 
     val isShowingQuickBuySell = config.getBoolOrNull("gui.show-quick-buy-sell") ?: true
 

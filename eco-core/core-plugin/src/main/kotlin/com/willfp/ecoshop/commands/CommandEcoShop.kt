@@ -1,18 +1,18 @@
 package com.willfp.ecoshop.commands
 
-import com.willfp.eco.core.EcoPlugin
 import com.willfp.eco.core.command.impl.PluginCommand
+import com.willfp.ecoshop.plugin
 import org.bukkit.command.CommandSender
 
-class CommandEcoShop(plugin: EcoPlugin) : PluginCommand(
+object CommandEcoShop : PluginCommand(
     plugin,
     "ecoshop",
     "ecoshop.command.ecoshop",
     false
 ) {
     init {
-        this.addSubcommand(CommandReload(plugin))
-            .addSubcommand(CommandResetBuys(plugin))
+        this.addSubcommand(CommandReload)
+            .addSubcommand(CommandResetBuys)
     }
 
     override fun onExecute(sender: CommandSender, args: List<String>) {

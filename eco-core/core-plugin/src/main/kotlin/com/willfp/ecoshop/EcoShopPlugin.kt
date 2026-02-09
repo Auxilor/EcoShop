@@ -54,8 +54,8 @@ class EcoShopPlugin : LibreforgePlugin() {
 
     override fun loadPluginCommands(): List<PluginCommand> {
         return listOf(
-            CommandEcoShop(this),
-            CommandSell(this)
+            CommandEcoShop,
+            CommandSell
         )
     }
 }
