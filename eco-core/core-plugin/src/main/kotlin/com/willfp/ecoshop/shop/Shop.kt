@@ -41,21 +41,13 @@ class Shop(
     override val id: String,
     val config: Config
 ) : KRegistrable {
-    val clickSound = config.ifHasOrNull("click-sound") {
-        PlayableSound.create(config.getSubsection(it))
-    }
+    val clickSound = PlayableSound.create(config.getSubsection("click-sound"))
 
-    val buySound = config.ifHasOrNull("buy-sound") {
-        PlayableSound.create(config.getSubsection(it))
-    }
+    val buySound = PlayableSound.create(config.getSubsection("buy-sound"))
 
-    val sellSound = config.ifHasOrNull("sell-sound") {
-        PlayableSound.create(config.getSubsection(it))
-    }
+    val sellSound = PlayableSound.create(config.getSubsection("sell-sound"))
 
-    private val broadcastSound = config.ifHasOrNull("buy-broadcasts.sound") {
-        PlayableSound.create(config.getSubsection(it))
-    }
+    private val broadcastSound = PlayableSound.create(config.getSubsection("buy-broadcasts.sound"))
 
     val isBroadcasting = config.getBool("buy-broadcasts.enabled")
 

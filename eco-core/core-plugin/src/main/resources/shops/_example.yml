@@ -20,25 +20,33 @@ backwards-arrow: # The arrow for switching between pages. If on the first page, 
 buy-broadcasts: # Options for buy broadcasts
   enabled: true # If purchases in this shop should be broadcast to the server, good for /buy menus.
   message: "&b&lCrystal Shop&r &8»&r %player%&r&f has bought &r%item%&r&ffrom the &bCrystal Shop ❖&f!" # Use %player%, %item%, and %amount%
-  sound: # Broadcast sound, remove this section if you don't want a sound.
+  sound: # Broadcast sound
+    enabled: true
     sound: ui_toast_challenge_complete
     pitch: 1.5
     volume: 2
+    category: players
 
-click-sound: # A sound to be played when clicking an icon in this shop, remove this section if you don't want a sound.
+click-sound: # A sound to be played when clicking an icon in this shop
+  enabled: true
   sound: block_stone_button_click_on # The sound https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Sound.html
   pitch: 1 # The pitch (0.5 - 2)
   volume: 1
+  category: UI # The sound category https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/SoundCategory.html
 
-buy-sound: # A sound to be played when buying something in this shop, remove this section if you don't want a sound.
+buy-sound: # A sound to be played when buying something in this shop
+  enabled: true
   sound: entity_player_levelup
   pitch: 2
   volume: 1
+  category: players
 
-sell-sound: # A sound to be played when selling something in this shop, remove this section if you don't want a sound.
+sell-sound: # A sound to be played when selling something in this shop
+  enabled: true
   sound: block_amethyst_block_place
   pitch: 1.5
   volume: 1
+  category: players
 
 # Shops can work in two ways.
 
