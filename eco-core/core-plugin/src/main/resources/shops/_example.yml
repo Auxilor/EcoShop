@@ -34,14 +34,14 @@ click-sound: # A sound to be played when clicking an icon in this shop
   volume: 1
   category: UI # The sound category https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/SoundCategory.html
 
-buy-sound: # A sound to be played when buying something in this shop, remove this section if you don't want a sound.
+buy-sound: # A sound to be played when buying something in this shop
   enabled: true
   sound: entity_player_levelup
   pitch: 2
   volume: 1
   category: players
 
-sell-sound: # A sound to be played when selling something in this shop, remove this section if you don't want a sound.
+sell-sound: # A sound to be played when selling something in this shop
   enabled: true
   sound: block_amethyst_block_place
   pitch: 1.5
