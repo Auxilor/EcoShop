@@ -16,9 +16,9 @@ import com.willfp.eco.core.price.CombinedDisplayPrice
 import com.willfp.eco.core.price.ConfiguredPrice
 import com.willfp.eco.core.registry.KRegistrable
 import com.willfp.eco.util.formatEco
-import com.willfp.ecoshop.EcoShopPlugin
 import com.willfp.ecoshop.event.EcoShopBuyEvent
 import com.willfp.ecoshop.event.EcoShopSellEvent
+import com.willfp.ecoshop.plugin
 import com.willfp.ecoshop.shop.gui.BuyMenu
 import com.willfp.ecoshop.shop.gui.SellMenu
 import com.willfp.ecoshop.shop.gui.ShopItemSlot
@@ -44,7 +44,6 @@ enum class BuyType {
 }
 
 class ShopItem(
-    val plugin: EcoShopPlugin,
     val config: Config
 ) : KRegistrable {
     override val id = config.getString("id")
@@ -120,13 +119,13 @@ class ShopItem(
 
     val isStrictMatch = plugin.configYml.getBoolOrNull("shop-items.sell-strict-match") ?: true
 
-    val slot = ShopItemSlot(this, plugin)
+    val slot = ShopItemSlot(this)
 
     val isShowingQuickBuySell = config.getBoolOrNull("gui.show-quick-buy-sell") ?: true
 
-    private val buyMenus = BuyType.values().associateWith { BuyMenu(this, plugin, it) }
+    private val buyMenus = BuyType.entries.associateWith { BuyMenu(this, it) }
 
-    val sellMenu = SellMenu(this, plugin)
+    val sellMenu = SellMenu(this)
 
     val limit = config.getIntOrNull("buy.limit") ?: Int.MAX_VALUE
 
@@ -309,8 +308,10 @@ class ShopItem(
                 conditions.areMetAndTrigger(
                     TriggerData(
                         player = player
-                    ).dispatch(player.toDispatcher()
-                    ))
+                    ).dispatch(
+                        player.toDispatcher()
+                    )
+                )
             }
 
             return BuyStatus.MISSING_REQUIREMENTS
@@ -328,6 +329,7 @@ class ShopItem(
      *
      * This handles payment and dispatching the items / commands.
      */
+    @Suppress("DEPRECATION")
     fun buy(
         player: Player,
         amount: Int,
@@ -450,6 +452,7 @@ class ShopItem(
      * player doesn't have a certain amount of items it will sell as many as
      * possible.
      */
+    @Suppress("DEPRECATION")
     fun sell(
         player: Player,
         amount: Int,
@@ -647,7 +650,7 @@ fun ItemStack.sell(
     price.giveTo(player, this.amount.toDouble() * event.multiplier)
 
     player.sendMessage(
-        EcoShopPlugin.instance.langYml.getMessage("sold-item")
+        plugin.langYml.getMessage("sold-item")
             .replace("%amount%", this.amount.toString())
             .replace("%item%", item.displayName)
             .replace("%price%", price.getDisplay(player, this.amount.toDouble() * event.multiplier))
@@ -662,12 +665,11 @@ fun ItemStack.sell(
 }
 
 fun Collection<String>.formatMultiple(): String {
-    val langYml = EcoShopPlugin.instance.langYml
 
-    return if (langYml.has("multiple-format.${this.size}")) {
-        var base = langYml.getString("multiple-format.${this.size}")
+    return if (plugin.langYml.has("multiple-format.${this.size}")) {
+        var base = plugin.langYml.getString("multiple-format.${this.size}")
         for ((i, element) in this.withIndex()) {
-            base = base.replace("\$$i", element)
+            base = base.replace($$"$$$i", element)
         }
 
         base
@@ -718,7 +720,7 @@ fun Collection<ItemStack>.sell(
     shop?.sellSound?.playTo(player)
 
     player.sendMessage(
-        EcoShopPlugin.instance.langYml.getMessage("sold-multiple")
+        plugin.langYml.getMessage("sold-multiple")
             .replace("%amount%", amountSold.toString())
             .replace("%price%", displayBuilder.build().displayStrings.toList().formatMultiple().formatEco(player))
     )

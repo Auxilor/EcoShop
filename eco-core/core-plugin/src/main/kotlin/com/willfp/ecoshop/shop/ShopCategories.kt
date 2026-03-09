@@ -1,7 +1,6 @@
 package com.willfp.ecoshop.shop
 
 import com.willfp.eco.core.config.interfaces.Config
-import com.willfp.ecoshop.EcoShopPlugin
 import com.willfp.libreforge.loader.LibreforgePlugin
 import com.willfp.libreforge.loader.configs.RegistrableCategory
 
@@ -16,6 +15,6 @@ object ShopCategories : RegistrableCategory<ShopCategory>("category", "categorie
     }
 
     override fun acceptConfig(plugin: LibreforgePlugin, id: String, config: Config) {
-        registry.register(ShopCategory(plugin as EcoShopPlugin, id, config))
+        registry.register(ShopCategory(id, config))
     }
 }

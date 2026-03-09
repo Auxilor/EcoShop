@@ -1,15 +1,15 @@
 package com.willfp.ecoshop.commands
 
-import com.willfp.eco.core.EcoPlugin
 import com.willfp.eco.core.command.impl.Subcommand
 import com.willfp.eco.util.StringUtils
 import com.willfp.eco.util.savedDisplayName
+import com.willfp.ecoshop.plugin
 import com.willfp.ecoshop.shop.ShopItems
 import org.bukkit.Bukkit
 import org.bukkit.command.CommandSender
 import org.bukkit.util.StringUtil
 
-class CommandResetBuys(plugin: EcoPlugin) : Subcommand(
+object CommandResetBuys : Subcommand(
     plugin,
     "resetbuys",
     "ecoshop.command.resetbuys",

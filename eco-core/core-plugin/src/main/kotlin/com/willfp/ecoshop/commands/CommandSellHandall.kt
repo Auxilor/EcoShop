@@ -1,13 +1,13 @@
 package com.willfp.ecoshop.commands
 
-import com.willfp.eco.core.EcoPlugin
 import com.willfp.eco.core.command.impl.PluginCommand
+import com.willfp.ecoshop.plugin
 import com.willfp.ecoshop.shop.sell
 import com.willfp.ecoshop.shop.shopItem
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 
-class CommandSellHandall(plugin: EcoPlugin) : PluginCommand(
+object CommandSellHandall : PluginCommand(
     plugin,
     "handall",
     "ecoshop.command.sell.handall",
@@ -40,7 +40,7 @@ class CommandSellHandall(plugin: EcoPlugin) : PluginCommand(
             val matches = if (isStrict) {
                 itemStack.isSimilar(baseItem)
             } else {
-                shopItem.item!!.matches(itemStack)
+                shopItem.item.matches(itemStack)
             }
 
             if (matches) {

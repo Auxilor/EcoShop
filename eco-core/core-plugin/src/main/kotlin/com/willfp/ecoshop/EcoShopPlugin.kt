@@ -17,9 +17,12 @@ import com.willfp.libreforge.loader.configs.ConfigCategory
 import com.willfp.libreforge.triggers.Triggers
 import org.bukkit.event.Listener
 
+internal lateinit var plugin: EcoShopPlugin
+    private set
+
 class EcoShopPlugin : LibreforgePlugin() {
     init {
-        instance = this
+        plugin = this
 
         ShopManager.register(EcoShopAdapter)
     }
@@ -32,7 +35,7 @@ class EcoShopPlugin : LibreforgePlugin() {
     }
 
     override fun handleEnable() {
-        SellGUI.update(this)
+        SellGUI.update()
 
         Filters.register(FilterShopItem)
         Triggers.register(TriggerBuyItem)
@@ -40,7 +43,7 @@ class EcoShopPlugin : LibreforgePlugin() {
     }
 
     override fun handleReload() {
-        SellGUI.update(this)
+        SellGUI.update()
     }
 
     override fun loadListeners(): List<Listener> {
@@ -51,18 +54,8 @@ class EcoShopPlugin : LibreforgePlugin() {
 
     override fun loadPluginCommands(): List<PluginCommand> {
         return listOf(
-            CommandEcoShop(this),
-            CommandSell(this)
+            CommandEcoShop,
+            CommandSell
         )
-    }
-
-    override fun getMinimumEcoVersion(): String {
-        return "6.65.0"
-    }
-
-    companion object {
-        /** Instance of the plugin. */
-        lateinit var instance: EcoShopPlugin
-            private set
     }
 }
