@@ -20,33 +20,82 @@ object CommandResetBuys : Subcommand(
             sender.sendMessage(plugin.langYml.getMessage("must-specify-player"))
             return
         }
-
-        @Suppress("DEPRECATION")
-        val player = Bukkit.getOfflinePlayer(args[0])
-
-        if (!player.hasPlayedBefore() && !player.isOnline) {
-            sender.sendMessage(plugin.langYml.getMessage("invalid-player"))
-            return
-        }
-
         if (args.size == 1) {
             sender.sendMessage(plugin.langYml.getMessage("must-specify-item"))
             return
         }
 
-        val item = ShopItems[args[1]]
+        val players = if (args[0].equals("all", true)) {
+            val targets = LinkedHashMap<String, org.bukkit.OfflinePlayer>()
 
-        if (item == null) {
+            for (offline in Bukkit.getOfflinePlayers()) {
+                if (offline.hasPlayedBefore() || offline.isOnline) {
+                    targets[offline.uniqueId.toString()] = offline
+                }
+            }
+
+            for (online in Bukkit.getOnlinePlayers()) {
+                targets[online.uniqueId.toString()] = online
+            }
+
+            targets.values.toList()
+        } else {
+            @Suppress("DEPRECATION")
+            val player = Bukkit.getOfflinePlayer(args[0])
+
+            if (!player.hasPlayedBefore() && !player.isOnline) {
+                sender.sendMessage(plugin.langYml.getMessage("invalid-player"))
+                return
+            }
+
+            listOf(player)
+        }
+
+        val items = if (args[1].equals("all", true)) {
+            ShopItems.values().toList()
+        } else {
+            val item = ShopItems[args[1]]
+            if (item == null) {
+                sender.sendMessage(plugin.langYml.getMessage("invalid-item"))
+                return
+            }
+
+            listOf(item)
+        }
+
+        if (players.isEmpty()) {
+            sender.sendMessage(plugin.langYml.getMessage("invalid-player"))
+            return
+        }
+
+        if (items.isEmpty()) {
             sender.sendMessage(plugin.langYml.getMessage("invalid-item"))
             return
         }
 
-        item.resetTimesBought(player)
+        for (player in players) {
+            for (item in items) {
+                item.resetTimesBought(player)
+            }
+        }
+
+        if (players.size == 1 && items.size == 1) {
+            val player = players.first()
+            val item = items.first()
+
+            sender.sendMessage(
+                plugin.langYml.getMessage("reset-buys", StringUtils.FormatOption.WITHOUT_PLACEHOLDERS)
+                    .replace("%player%", player.savedDisplayName)
+                    .replace("%item%", item.displayName)
+            )
+            return
+        }
 
         sender.sendMessage(
-            plugin.langYml.getMessage("reset-buys", StringUtils.FormatOption.WITHOUT_PLACEHOLDERS)
-                .replace("%player%", player.savedDisplayName)
-                .replace("%item%", item.displayName)
+            plugin.langYml.getMessage("reset-buys-batch", StringUtils.FormatOption.WITHOUT_PLACEHOLDERS)
+                .replace("%players%", players.size.toString())
+                .replace("%items%", items.size.toString())
+                .replace("%resets%", (players.size * items.size).toString())
         )
     }
 
@@ -54,13 +103,13 @@ object CommandResetBuys : Subcommand(
         val completions = mutableListOf<String>()
 
         if (args.isEmpty()) {
-            return Bukkit.getOnlinePlayers().map { it.name }
+            return (Bukkit.getOnlinePlayers().map { it.name } + "all").distinct()
         }
 
         if (args.size == 1) {
             StringUtil.copyPartialMatches(
                 args[0],
-                Bukkit.getOnlinePlayers().map { it.name },
+                Bukkit.getOnlinePlayers().map { it.name } + "all",
                 completions
             )
         }
@@ -68,7 +117,7 @@ object CommandResetBuys : Subcommand(
         if (args.size == 2) {
             StringUtil.copyPartialMatches(
                 args[1],
-                ShopItems.values().map { it.id },
+                ShopItems.values().map { it.id } + "all",
                 completions
             )
         }

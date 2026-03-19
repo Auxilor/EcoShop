@@ -10,7 +10,9 @@ messages:
   must-specify-item: "&cYou must specify an item!"
   invalid-item: "&cInvalid item!"
   reset-buys: "&fReset how many times &r%player%&r&f bought &r%item%&f!"
+  reset-buys-batch: "&fReset buy history for &r%players%&f player(s) across &r%items%&f item(s) (&r%resets%&f resets)."
   reset-sells: "&fReset how many times &r%player%&r&f sold &r%item%&f!"
+  reset-sells-batch: "&fReset sell history for &r%players%&f player(s) across &r%items%&f item(s) (&r%resets%&f resets)."
   invalid-amount: "&cInvalid amount!"
   max-purchase-amount-exceeded: "&cYou can't buy more than %maxAmount% of an item at once!"
 
