@@ -129,8 +129,16 @@ class SellMenu(
                 AmountSetSelector(
                     config
                 ) {
+                    val maxSellable = min(
+                        item.getAmountInPlayerInventory(it),
+                        min(
+                            item.getSellsLeft(it),
+                            item.globalSellLimit - item.getTotalGlobalSells()
+                        )
+                    )
+
                     min(
-                        item.getMaxBuysAtOnce(it),
+                        maxSellable,
                         item.item?.item?.type?.maxStackSize ?: Int.MAX_VALUE
                     ).coerceAtMost(
                         min(
@@ -215,6 +223,13 @@ class SellMenu(
                 }) {
                     onLeftClick { player, _, _, menu ->
                         val maxAmount = item.getAmountInPlayerInventory(player)
+                        val status = item.getCurrentSellStatus(player)
+
+                        if (status != SellStatus.ALLOW) {
+                            player.sendMessage(plugin.langYml.getMessage("sell-status.${status.configKey}"))
+                            return@onLeftClick
+                        }
+
                         if (maxAmount <= 0) {
                             player.sendMessage(plugin.langYml.getMessage("no-sellable"))
                             return@onLeftClick

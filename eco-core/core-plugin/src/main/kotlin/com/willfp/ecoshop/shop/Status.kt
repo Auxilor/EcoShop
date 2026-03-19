@@ -14,6 +14,8 @@ enum class BuyStatus {
 /** Represents the ability of a player to sell an item. */
 enum class SellStatus {
     CANNOT_SELL,
+    SOLD_TOO_MANY,
+    GLOBAL_SOLD_TOO_MANY,
     NO_PERMISSION,
     MISSING_REQUIREMENTS,
     DONT_HAVE_ITEM,

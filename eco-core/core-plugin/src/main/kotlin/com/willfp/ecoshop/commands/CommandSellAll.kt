@@ -14,8 +14,7 @@ object CommandSellAll: PluginCommand(
     true
 ) {
     override fun onExecute(player: Player, args: List<String>) {
-        val toSell = mutableListOf<ItemStack>()
-        val slotsToClear = mutableListOf<Int>()
+        val itemsToSell = mutableMapOf<Int, ItemStack>()
 
         val isStrict = plugin.configYml.getBoolOrNull("shop-items.sell-strict-match") ?: false
 
@@ -32,25 +31,22 @@ object CommandSellAll: PluginCommand(
             }
 
             if (matches) {
-                toSell.add(itemStack)
-                slotsToClear.add(i)
+                itemsToSell[i] = itemStack
             }
         }
 
-        if (toSell.isEmpty()) {
+        if (itemsToSell.isEmpty()) {
             player.sendMessage(plugin.langYml.getMessage("no-sellable"))
             return
         }
 
-        val unsold = toSell.sell(player)
+        itemsToSell.values.sell(player)
 
-        if (unsold.isEmpty()) {
-            for (slot in slotsToClear) {
+        for ((slot, stack) in itemsToSell) {
+            if (stack.type.isAir || stack.amount <= 0) {
                 player.inventory.clear(slot)
-            }
-        } else {
-            for (slot in slotsToClear) {
-                player.inventory.clear(slot)
+            } else {
+                player.inventory.setItem(slot, stack)
             }
         }
     }

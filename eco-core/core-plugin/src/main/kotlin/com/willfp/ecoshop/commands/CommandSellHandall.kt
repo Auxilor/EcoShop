@@ -53,15 +53,13 @@ object CommandSellHandall : PluginCommand(
             return
         }
 
-        val unsold = items.values.sell(player)
+        items.values.sell(player)
 
-        if (unsold.isEmpty()) {
-            for (i in items.keys) {
-                player.inventory.clear(i)
-            }
-        } else {
-            for (i in items.keys) {
-                player.inventory.clear(i)
+        for ((slot, stack) in items) {
+            if (stack.type.isAir || stack.amount <= 0) {
+                player.inventory.clear(slot)
+            } else {
+                player.inventory.setItem(slot, stack)
             }
         }
     }

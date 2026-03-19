@@ -117,13 +117,23 @@ class ShopItemSlot(
                     )
                 } else {
                     val amount = item.getAmountInPlayerInventory(player)
+                    val cappedAmount = amount
+                        .coerceAtMost(item.getSellsLeft(player))
+                        .coerceAtMost(item.globalSellLimit - item.getTotalGlobalSells())
 
-                    item.sell(player, amount)
+                    if (cappedAmount <= 0) {
+                        player.sendMessage(
+                            plugin.langYml.getMessage("sell-status.${SellStatus.SOLD_TOO_MANY.configKey}")
+                        )
+                        return@onShiftRightClick
+                    }
+
+                    val sold = item.sell(player, cappedAmount)
                     player.sendMessage(
                         plugin.langYml.getMessage("sold-item")
-                            .replace("%amount%", amount.toString())
+                            .replace("%amount%", sold.toString())
                             .replace("%item%", item.displayName)
-                            .replace("%price%", item.sellPrice.getDisplay(player, amount))
+                            .replace("%price%", item.sellPrice.getDisplay(player, sold))
                     )
                 }
             }
@@ -228,6 +238,10 @@ class ShopItemSlot(
                 .replaceIn("%playerlimit%", item.limit)
                 .replaceIn("%globalbuys%", item.getTotalGlobalBuys())
                 .replaceIn("%globallimit%", item.globalLimit)
+                .replaceIn("%playersells%", item.getTotalSells(player))
+                .replaceIn("%playerselllimit%", item.sellLimit)
+                .replaceIn("%globalsells%", item.getTotalGlobalSells())
+                .replaceIn("%globalselllimit%", item.globalSellLimit)
 
 
             @Suppress("DEPRECATION")

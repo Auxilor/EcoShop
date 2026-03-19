@@ -75,6 +75,8 @@ items:
       value: 100 + (%player_rank% * 25)
       type: coins
       display: "$%value%"
+      limit: 256 # (Optional) The max amount of times each player can sell this item, defaults to infinite.
+      global-limit: 100000 # (Optional) The max amount of times this item can be sold across the whole server, defaults to infinite.
       # The conditions that must be met in order to sell this item.
       # Read here: https://plugins.auxilor.io/effects/configuring-a-condition
       conditions:

@@ -15,6 +15,8 @@ messages:
 
   sell-status:
     cannot-sell: "&cThis item can't be sold!"
+    sold-too-many: "&cYou can't sell this item again!"
+    global-sold-too-many: "&cThe server doesn't need any more of this item!"
     no-permission: "&cYou don't have permission to sell this item!"
     missing-requirements: "&cYou can't sell this item!"
     dont-have-item: "&cYou don't have any of this item!"
