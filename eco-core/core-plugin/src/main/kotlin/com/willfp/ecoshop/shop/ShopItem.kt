@@ -139,46 +139,6 @@ class ShopItem(
         0
     )
 
-    // * Deprecated options, to be removed in the future * //
-    @Deprecated("Use sell-effects instead")
-    private val sellItemMessage: List<String>? = config.getStringsOrNull("sell.sell-message")
-
-    @Deprecated("Use buy-effects instead")
-    private val buyItemMessage: List<String>? = config.getStringsOrNull("buy.buy-message")
-
-    @Deprecated("Use sell-effects instead")
-    private val sellCommands: List<String>? = config.getStringsOrNull("sell.sell-commands")
-
-    @Deprecated("Use buy-effects instead")
-    val commands = config.getStrings("command") + config.getStrings("commands")
-
-    // * Deprecated options, to be removed in the future * //
-    init {
-        if (config.has("sell.sell-commands")) {
-            plugin.logger.warning("Shop item '$id' uses deprecated 'sell.sell-commands'. Please switch to 'sell-effects'.")
-        }
-
-        if (config.has("command") || config.has("commands")) {
-            plugin.logger.warning("Shop item '$id' uses deprecated 'commands' buy option. Please switch to 'buy-effects'.")
-        }
-
-        if (config.has("buy.buy-message")) {
-            plugin.logger.warning("Shop item '$id' uses deprecated 'buy.buy-message'. Please switch to 'buy-effects'.")
-        }
-
-        if (config.has("sell.sell-message")) {
-            plugin.logger.warning("Shop item '$id' uses deprecated 'sell.sell-message'. Please switch to 'sell-effects'.")
-        }
-
-        if (config.has("buy.require")) {
-            plugin.logger.warning("Shop item '$id' uses deprecated option 'buy.require'. Please switch to 'buy.conditions' instead.")
-        }
-
-        if (config.has("sell.require")) {
-            plugin.logger.warning("Shop item '$id' uses deprecated option 'sell.require'. Please switch to 'sell.conditions' instead.")
-        }
-    }
-
     init {
         if (this.item != null && this.item.item.amount != 1) {
             throw InvalidShopItemException(
@@ -294,13 +254,6 @@ class ShopItem(
             return BuyStatus.NO_PERMISSION
         }
 
-        // Deprecated option, to be removed in the future. Use buy-conditions instead.
-        if (config.has("buy.require")) {
-            if (config.getDoubleFromExpression("buy.require", player) != 1.0) {
-                return BuyStatus.MISSING_REQUIREMENTS
-            }
-        }
-
         val conditions = if (buyType == BuyType.ALT) altBuyConditions else buyConditions
         if (!conditions.areMet(player.toDispatcher(), EmptyProvidedHolder)) {
             // Only run not met effects if player can afford to buy
@@ -327,9 +280,8 @@ class ShopItem(
     /**
      * Make a [player] buy this item a certain [amount] of times.
      *
-     * This handles payment and dispatching the items / commands.
+     * This handles payment and dispatching the items.
      */
-    @Suppress("DEPRECATION")
     fun buy(
         player: Player,
         amount: Int,
@@ -359,14 +311,6 @@ class ShopItem(
             queue.push()
         }
 
-        for (command in commands) {
-            Bukkit.dispatchCommand(
-                Bukkit.getConsoleSender(),
-                command.replace("%player%", player.name)
-                    .replace("%amount%", amount.toString())
-            )
-        }
-
         buyEffects?.trigger(
             player.toDispatcher(),
             TriggerData(
@@ -377,16 +321,6 @@ class ShopItem(
                 altValue = basePrice.getValue(player) * amount
             )
         )
-
-        if (buyItemMessage != null) {
-            for (message in buyItemMessage) {
-                player.sendMessage(
-                    message.formatEco()
-                        .replace("%player%", player.name)
-                        .replace("%amount%", amount.toString())
-                )
-            }
-        }
 
         player.profile.write(timesBoughtKey, getTotalBuys(player) + 1)
         Bukkit.getServer().profile.write(timesBoughtKey, getTotalGlobalBuys() + 1)
@@ -407,13 +341,6 @@ class ShopItem(
 
         if (!player.hasPermission("ecoshop.sell.$id")) {
             return SellStatus.NO_PERMISSION
-        }
-
-        // Deprecated option, to be removed in the future. Use sell-conditions instead.
-        if (config.has("sell.require")) {
-            if (config.getDoubleFromExpression("sell.require", player) != 1.0) {
-                return SellStatus.MISSING_REQUIREMENTS
-            }
         }
 
         if (!sellConditions.areMet(player.toDispatcher(), EmptyProvidedHolder)) {
@@ -452,7 +379,6 @@ class ShopItem(
      * player doesn't have a certain amount of items it will sell as many as
      * possible.
      */
-    @Suppress("DEPRECATION")
     fun sell(
         player: Player,
         amount: Int,
@@ -476,17 +402,6 @@ class ShopItem(
 
         shop?.sellSound?.playTo(player)
 
-        if (sellCommands != null) {
-            plugin.logger.warning("The 'sell-commands' option is deprecated, please use 'sell-effects' instead.")
-            for (command in sellCommands) {
-                Bukkit.dispatchCommand(
-                    Bukkit.getConsoleSender(),
-                    command.replace("%player%", player.name)
-                        .replace("%amount%", amountSold.toString())
-                )
-            }
-        }
-
         sellEffects?.trigger(
             player.toDispatcher(),
             TriggerData(
@@ -498,15 +413,6 @@ class ShopItem(
             )
         )
 
-        if (sellItemMessage != null) {
-            for (message in sellItemMessage) {
-                player.sendMessage(
-                    message.formatEco()
-                        .replace("%player%", player.name)
-                        .replace("%amount%", amountSold.toString())
-                )
-            }
-        }
 
         return amountSold
     }
