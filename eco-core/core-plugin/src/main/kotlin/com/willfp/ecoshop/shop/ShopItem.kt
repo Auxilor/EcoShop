@@ -539,6 +539,12 @@ class ShopItem(
         player.profile.write(timesBoughtKey, 0)
     }
 
+    fun resetTimesSold(player: OfflinePlayer) {
+        val totalSellsForPlayer = getTotalSells(player)
+        Bukkit.getServer().profile.write(timesSoldKey, getTotalGlobalSells() - totalSellsForPlayer)
+        player.profile.write(timesSoldKey, 0)
+    }
+
     fun recordSell(player: OfflinePlayer, amount: Int) {
         if (amount <= 0) {
             return

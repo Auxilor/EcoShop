@@ -38,6 +38,7 @@ permissions:
     children:
       ecoshop.command.reload: true
       ecoshop.command.resetbuys: true
+      ecoshop.command.resetsells: true
       ecoshop.command.ecoshop: true
       ecoshop.command.sell.*: true
 
@@ -49,6 +50,9 @@ permissions:
     default: op
   ecoshop.command.resetbuys:
     description: Allows resetting buys (for testing)
+    default: op
+  ecoshop.command.resetsells:
+    description: Allows resetting sells (for testing)
     default: op
   ecoshop.command.sell:
     description: Allows the use of /sell and the /sell GUI

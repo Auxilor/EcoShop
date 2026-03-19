@@ -13,6 +13,7 @@ object CommandEcoShop : PluginCommand(
     init {
         this.addSubcommand(CommandReload)
             .addSubcommand(CommandResetBuys)
+            .addSubcommand(CommandResetSells)
     }
 
     override fun onExecute(sender: CommandSender, args: List<String>) {
