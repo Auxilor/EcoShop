@@ -4,6 +4,8 @@ import com.willfp.eco.core.command.impl.Subcommand
 import com.willfp.eco.util.StringUtils
 import com.willfp.eco.util.toNiceString
 import com.willfp.ecoshop.plugin
+import com.willfp.ecoshop.shop.ShopCategories
+import com.willfp.ecoshop.shop.Shops
 import org.bukkit.command.CommandSender
 
 object CommandReload: Subcommand(
@@ -16,6 +18,8 @@ object CommandReload: Subcommand(
         sender.sendMessage(
             plugin.langYml.getMessage("reloaded", StringUtils.FormatOption.WITHOUT_PLACEHOLDERS)
                 .replace("%time%", plugin.reloadWithTime().toNiceString())
+                .replace("%shops%", Shops.values().size.toString())
+                .replace("%categories%", ShopCategories.values().size.toString())
         )
     }
 }
