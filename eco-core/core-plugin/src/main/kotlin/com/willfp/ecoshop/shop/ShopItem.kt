@@ -429,6 +429,10 @@ class ShopItem(
             return 0
         }
 
+        if (getSellStatus(player) != SellStatus.ALLOW) {
+            return 0
+        }
+
         val amountSold = amount
             .coerceAtMost(getAmountInPlayerInventory(player))
             .coerceAtMost(getSellsLeft(player))
@@ -591,7 +595,7 @@ fun ItemStack.isSellable(player: Player): Boolean {
 
 fun ItemStack.getUnitSellValue(player: Player): ConfiguredPrice {
     val item = this.shopItem ?: return ConfiguredPrice.FREE
-    if (item.getSellStatus(player) != SellStatus.ALLOW) {
+    if (item.getCurrentSellStatus(player, this.amount) != SellStatus.ALLOW) {
         return ConfiguredPrice.FREE
     }
 
@@ -664,7 +668,7 @@ fun Collection<ItemStack>.sell(
             continue
         }
 
-        if (item.getSellStatus(player) != SellStatus.ALLOW) {
+        if (item.getCurrentSellStatus(player, itemStack.amount) != SellStatus.ALLOW) {
             unsold += itemStack
             continue
         }

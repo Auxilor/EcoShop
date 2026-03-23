@@ -30,7 +30,7 @@ object CommandSellHandall : PluginCommand(
 
         val isStrict = plugin.configYml.getBoolOrNull("shop-items.sell-strict-match") ?: false
 
-        val baseItem = shopItem.item!!.item 
+        val baseItem = shopItem.item!!.item
 
         val items = mutableMapOf<Int, ItemStack>()
 
@@ -53,6 +53,7 @@ object CommandSellHandall : PluginCommand(
             return
         }
 
+        val amountBeforeSell = items.values.sumOf { it.amount }
         items.values.sell(player)
 
         for ((slot, stack) in items) {
@@ -61,6 +62,11 @@ object CommandSellHandall : PluginCommand(
             } else {
                 player.inventory.setItem(slot, stack)
             }
+        }
+
+        val amountAfterSell = items.values.sumOf { if (it.type.isAir || it.amount <= 0) 0 else it.amount }
+        if (amountBeforeSell == amountAfterSell) {
+            player.sendMessage(plugin.langYml.getMessage("not-sellable"))
         }
     }
 }

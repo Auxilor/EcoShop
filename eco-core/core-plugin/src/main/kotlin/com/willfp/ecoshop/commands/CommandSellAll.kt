@@ -40,6 +40,7 @@ object CommandSellAll: PluginCommand(
             return
         }
 
+        val amountBeforeSell = itemsToSell.values.sumOf { it.amount }
         itemsToSell.values.sell(player)
 
         for ((slot, stack) in itemsToSell) {
@@ -48,6 +49,11 @@ object CommandSellAll: PluginCommand(
             } else {
                 player.inventory.setItem(slot, stack)
             }
+        }
+
+        val amountAfterSell = itemsToSell.values.sumOf { if (it.type.isAir || it.amount <= 0) 0 else it.amount }
+        if (amountBeforeSell == amountAfterSell) {
+            player.sendMessage(plugin.langYml.getMessage("no-sellable"))
         }
     }
 }
