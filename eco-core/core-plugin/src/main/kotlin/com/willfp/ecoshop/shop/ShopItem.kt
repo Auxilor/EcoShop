@@ -586,7 +586,7 @@ val ItemStack.shopItem: ShopItem?
 
 fun ItemStack.isSellable(player: Player): Boolean {
     val item = this.shopItem ?: return false
-    if (item.getCurrentSellStatus(player, this.amount) != SellStatus.ALLOW) {
+    if (item.getSellStatus(player, this.amount) != SellStatus.ALLOW) {
         return false
     }
 
@@ -595,7 +595,7 @@ fun ItemStack.isSellable(player: Player): Boolean {
 
 fun ItemStack.getUnitSellValue(player: Player): ConfiguredPrice {
     val item = this.shopItem ?: return ConfiguredPrice.FREE
-    if (item.getCurrentSellStatus(player, this.amount) != SellStatus.ALLOW) {
+    if (item.getSellStatus(player, this.amount) != SellStatus.ALLOW) {
         return ConfiguredPrice.FREE
     }
 
