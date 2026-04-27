@@ -23,11 +23,14 @@ import com.willfp.ecoshop.shop.gui.BuyMenu
 import com.willfp.ecoshop.shop.gui.SellMenu
 import com.willfp.ecoshop.shop.gui.ShopItemSlot
 import com.willfp.libreforge.EmptyProvidedHolder
+import com.willfp.libreforge.NamedValue
 import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.conditions.Conditions
 import com.willfp.libreforge.effects.Effects
 import com.willfp.libreforge.toDispatcher
+import com.willfp.libreforge.triggers.DispatchedTrigger
 import com.willfp.libreforge.triggers.TriggerData
+import com.willfp.libreforge.triggers.impl.TriggerBlank
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.OfflinePlayer
@@ -337,14 +340,19 @@ class ShopItem(
         }
 
         buyEffects?.trigger(
-            player.toDispatcher(),
-            TriggerData(
-                player = player,
-                location = player.location,
-                item = player.inventory.itemInMainHand,
-                value = amount.toDouble(),
-                altValue = basePrice.getValue(player) * amount
-            )
+            DispatchedTrigger(
+                player.toDispatcher(),
+                TriggerBlank,
+                TriggerData(
+                    player = player,
+                    location = player.location,
+                    item = player.inventory.itemInMainHand,
+                    value = amount.toDouble(),
+                    altValue = basePrice.getValue(player) * amount
+                )
+            ).apply {
+                addPlaceholder(NamedValue("amount", amount))
+            }
         )
 
         player.profile.write(timesBoughtKey, getTotalBuys(player) + 1)
@@ -451,14 +459,19 @@ class ShopItem(
         shop?.sellSound?.playTo(player)
 
         sellEffects?.trigger(
-            player.toDispatcher(),
-            TriggerData(
-                player = player,
-                location = player.location,
-                item = player.inventory.itemInMainHand,
-                value = amountSold.toDouble(),
-                altValue = sellPrice.getValue(player) * amountSold
-            )
+            DispatchedTrigger(
+                player.toDispatcher(),
+                TriggerBlank,
+                TriggerData(
+                    player = player,
+                    location = player.location,
+                    item = player.inventory.itemInMainHand,
+                    value = amountSold.toDouble(),
+                    altValue = sellPrice.getValue(player) * amountSold
+                )
+            ).apply {
+                addPlaceholder(NamedValue("amount", amountSold))
+            }
         )
 
         recordSell(player, amountSold)
