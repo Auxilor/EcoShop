@@ -608,7 +608,7 @@ fun ItemStack.sell(
     shop: Shop? = null
 ): Boolean {
     val item = this.shopItem ?: return false
-    if (item.getCurrentSellStatus(player, this.amount) != SellStatus.ALLOW) {
+    if (item.getSellStatus(player, this.amount) != SellStatus.ALLOW) {
         return false
     }
 
@@ -668,7 +668,7 @@ fun Collection<ItemStack>.sell(
             continue
         }
 
-        if (item.getCurrentSellStatus(player, itemStack.amount) != SellStatus.ALLOW) {
+        if (item.getSellStatus(player, itemStack.amount) != SellStatus.ALLOW) {
             unsold += itemStack
             continue
         }
