@@ -608,7 +608,7 @@ fun ItemStack.sell(
     shop: Shop? = null
 ): Boolean {
     val item = this.shopItem ?: return false
-    if (item.getSellStatus(player, this.amount) != SellStatus.ALLOW) {
+    if (item.getCurrentSellStatus(player, this.amount) != SellStatus.ALLOW) {
         return false
     }
 
@@ -682,9 +682,9 @@ fun Collection<ItemStack>.sell(
             continue
         }
 
-        val price = itemStack.getUnitSellValue(player)
+        val price = item.sellPrice!!
 
-        val event = EcoShopSellEvent(player, item, item.sellPrice!!, itemStack)
+        val event = EcoShopSellEvent(player, item, price, itemStack)
         Bukkit.getPluginManager().callEvent(event)
 
         price.giveTo(player, sellableAmount.toDouble() * event.multiplier)
