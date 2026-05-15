@@ -50,7 +50,7 @@ class EcoShopPlugin : LibreforgePlugin() {
 
         decayTask?.cancel()
         decayTask = DynamicPricingDecayTask().also {
-            it.runTaskTimer(this, 20L * 60L, 20L * 60L)
+            it.runTaskTimer(this, 1200L, 1200L)
         }
     }
 
