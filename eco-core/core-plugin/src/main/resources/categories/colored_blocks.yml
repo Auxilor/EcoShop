@@ -1,6 +1,23 @@
 item: lime_concrete name:"&aColored Blocks"
 lore: [ ]
 
+dynamic-pricing:
+  enabled: false
+  max-increase: 1.5 # Cap at 150% of base price
+  max-decrease: 0.5 # Floor at 50% of base price
+
+  buy:
+    enabled: true
+    formula: "%base_price% * (1 + 0.0781 * log(1 + %buys%) - 0.0781 * log(1 + %sells%))"
+
+  alt-buy:
+    enabled: true
+    formula: "%base_price% * (1 + 0.0781 * log(1 + %buys%) - 0.0781 * log(1 + %sells%))"
+
+  sell:
+    enabled: true
+    formula: "%base_price% * (1 + 0.0781 * log(1 + %buys%) - 0.0781 * log(1 + %sells%))"
+
 gui:
   rows: 6
   title: Colored Blocks

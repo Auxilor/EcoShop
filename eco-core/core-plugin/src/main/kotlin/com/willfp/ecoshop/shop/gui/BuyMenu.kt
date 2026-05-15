@@ -36,13 +36,14 @@ class BuyMenu(
                     )
                     addLoreLines(
                         plugin.langYml.getStrings("confirm-buy-price")
-                            .replaceIn("%price%", item.getBuyPrice(buyType).getDisplay(player, amount))
+                            .replaceIn("%price%", item.getBuyPrice(buyType).getDisplay(player, amount * item.getEffectiveBuyMultiplier(buyType, player)))
                             .replaceIn("%amount%", amount.toString())
                     )
                 }
         }) {
             onLeftClick { player, _, _, menu ->
                 val status = item.getBuyStatus(player, amount, buyType)
+                val buyDisplayMultiplier = item.getEffectiveBuyMultiplier(buyType, player)
 
                 if (status == BuyStatus.ALLOW) {
                     item.buy(
@@ -56,12 +57,12 @@ class BuyMenu(
                         plugin.langYml.getMessage("bought-item-multiple")
                             .replace("%amount%", amount.toString())
                             .replace("%item%", item.displayName)
-                            .replace("%price%", item.getBuyPrice(buyType).getDisplay(player, amount))
+                            .replace("%price%", item.getBuyPrice(buyType).getDisplay(player, amount * buyDisplayMultiplier))
                     )
                 } else {
                     player.sendMessage(
                         plugin.langYml.getMessage("buy-status.${status.configKey}")
-                            .replace("%price%", item.getBuyPrice(buyType).getDisplay(player, amount))
+                            .replace("%price%", item.getBuyPrice(buyType).getDisplay(player, amount * buyDisplayMultiplier))
                     )
                 }
             }
@@ -96,7 +97,7 @@ class BuyMenu(
 
                     addLoreLines(
                         plugin.langYml.getStrings("confirm-buy-price")
-                            .replaceIn("%price%", item.getBuyPrice(buyType).getDisplay(player, amount))
+                            .replaceIn("%price%", item.getBuyPrice(buyType).getDisplay(player, amount * item.getEffectiveBuyMultiplier(buyType, player)))
                             .replaceIn("%amount%", amount.toString())
                     )
                 }
@@ -163,7 +164,7 @@ class BuyMenu(
                 Items.lookup(plugin.configYml.getString("buy-menu.confirm.item")).modify {
                     addLoreLines(
                         plugin.langYml.getStrings("confirm-buy-price")
-                            .replaceIn("%price%", item.getBuyPrice(buyType).getDisplay(player, menu.amountOfItem[player]))
+                            .replaceIn("%price%", item.getBuyPrice(buyType).getDisplay(player, menu.amountOfItem[player] * item.getEffectiveBuyMultiplier(buyType, player)))
                             .replaceIn("%amount%", menu.amountOfItem[player].toString())
                     )
                 }
@@ -172,6 +173,7 @@ class BuyMenu(
                     val amount = menu.amountOfItem[player]
 
                     val status = item.getBuyStatus(player, amount, buyType)
+                    val buyDisplayMultiplier = item.getEffectiveBuyMultiplier(buyType, player)
 
                     if (status == BuyStatus.ALLOW) {
                         item.buy(
@@ -185,14 +187,14 @@ class BuyMenu(
                             plugin.langYml.getMessage("bought-item-multiple")
                                 .replace("%amount%", amount.toString())
                                 .replace("%item%", item.displayName)
-                                .replace("%price%", item.getBuyPrice(buyType).getDisplay(player, amount))
+                                .replace("%price%", item.getBuyPrice(buyType).getDisplay(player, amount * buyDisplayMultiplier))
                         )
 
                         menu.kickBack(player)
                     } else {
                         player.sendMessage(
                             plugin.langYml.getMessage("buy-status.${status.configKey}")
-                                .replace("%price%", item.getBuyPrice(buyType).getDisplay(player, amount))
+                                .replace("%price%", item.getBuyPrice(buyType).getDisplay(player, amount * buyDisplayMultiplier))
                         )
                     }
                 }

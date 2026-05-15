@@ -34,13 +34,14 @@ class SellMenu(
                     )
                     addLoreLines(
                         plugin.langYml.getStrings("confirm-sell-price")
-                            .replaceIn("%price%", item.sellPrice.getDisplay(player, amount))
+                            .replaceIn("%price%", item.sellPrice.getDisplay(player, amount * item.getEffectiveSellMultiplier(player)))
                             .replaceIn("%amount%", amount.toString())
                     )
                 }
         }) {
             onLeftClick { player, _, _, menu ->
                 val status = item.getCurrentSellStatus(player, amount)
+                val sellDisplayMultiplier = item.getEffectiveSellMultiplier(player)
 
                 if (status == SellStatus.ALLOW) {
                     val didSell = item.sell(
@@ -53,7 +54,7 @@ class SellMenu(
                         plugin.langYml.getMessage("sold-item")
                             .replace("%amount%", didSell.toString())
                             .replace("%item%", item.displayName)
-                            .replace("%price%", item.sellPrice.getDisplay(player, didSell))
+                            .replace("%price%", item.sellPrice.getDisplay(player, didSell * sellDisplayMultiplier))
                     )
                 } else {
                     player.sendMessage(
@@ -92,7 +93,7 @@ class SellMenu(
 
                     addLoreLines(
                         plugin.langYml.getStrings("confirm-sell-price")
-                            .replaceIn("%price%", item.sellPrice.getDisplay(player, amount))
+                            .replaceIn("%price%", item.sellPrice.getDisplay(player, amount * item.getEffectiveSellMultiplier(player)))
                             .replaceIn("%amount%", amount.toString())
                     )
                 }
@@ -167,7 +168,7 @@ class SellMenu(
                 Items.lookup(plugin.configYml.getString("sell-menu.confirm.item")).modify {
                     addLoreLines(
                         plugin.langYml.getStrings("confirm-sell-price")
-                            .replaceIn("%price%", item.sellPrice.getDisplay(player, menu.amountOfItem[player]))
+                            .replaceIn("%price%", item.sellPrice.getDisplay(player, menu.amountOfItem[player] * item.getEffectiveSellMultiplier(player)))
                             .replaceIn("%amount%", menu.amountOfItem[player].toString())
                     )
                 }
@@ -176,6 +177,7 @@ class SellMenu(
                     val amount = menu.amountOfItem[player]
 
                     val status = item.getCurrentSellStatus(player, amount)
+                    val sellDisplayMultiplier = item.getEffectiveSellMultiplier(player)
 
                     if (status == SellStatus.ALLOW) {
                         val didSell = item.sell(
@@ -188,7 +190,7 @@ class SellMenu(
                             plugin.langYml.getMessage("sold-item")
                                 .replace("%amount%", didSell.toString())
                                 .replace("%item%", item.displayName)
-                                .replace("%price%", item.sellPrice.getDisplay(player, didSell))
+                                .replace("%price%", item.sellPrice.getDisplay(player, didSell * sellDisplayMultiplier))
                         )
 
                         menu.kickBack(player)
@@ -208,7 +210,7 @@ class SellMenu(
                 sellAllConfig.getInt("column", 5),
                 slot({ player, _ ->
                     val maxAmount = item.getAmountInPlayerInventory(player)
-                    val priceDisplay = item.sellPrice?.getDisplay(player, maxAmount.toDouble()) ?: "0"
+                    val priceDisplay = item.sellPrice?.getDisplay(player, maxAmount * item.getEffectiveSellMultiplier(player)) ?: "0"
 
                     val baseItem = Items.lookup(sellAllConfig.getString("item"))
 
@@ -235,6 +237,7 @@ class SellMenu(
                             return@onLeftClick
                         }
 
+                        val sellDisplayMultiplier = item.getEffectiveSellMultiplier(player)
                         val sold = item.sell(player, maxAmount, shop = menu.parentShop[player])
 
                         if (sold > 0) {
@@ -242,7 +245,7 @@ class SellMenu(
                                 plugin.langYml.getMessage("sold-item")
                                     .replace("%amount%", sold.toString())
                                     .replace("%item%", item.displayName)
-                                    .replace("%price%", item.sellPrice.getDisplay(player, sold))
+                                    .replace("%price%", item.sellPrice.getDisplay(player, sold * sellDisplayMultiplier))
                             )
                             menu.kickBack(player)
                         } else {

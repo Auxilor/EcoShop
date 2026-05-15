@@ -8,6 +8,23 @@ item: diamond_sword name:"&fExample Category" # The item shown in the shop.
 lore: [ ] # The lore of the item shown in the shop.
 # permission: ecoshop.category.permission1 # (Optional) The permission required to access/use the category.
 
+dynamic-pricing:
+  enabled: false
+  max-increase: 1.5 # Cap at 150% of base price
+  max-decrease: 0.5 # Floor at 50% of base price
+
+  buy:
+    enabled: true
+    formula: "%base_price% * (1 + 0.0781 * log(1 + %buys%) - 0.0781 * log(1 + %sells%))"
+
+  alt-buy:
+    enabled: true
+    formula: "%base_price% * (1 + 0.0781 * log(1 + %buys%) - 0.0781 * log(1 + %sells%))"
+
+  sell:
+    enabled: true
+    formula: "%base_price% * (1 + 0.0781 * log(1 + %buys%) - 0.0781 * log(1 + %sells%))"
+
 # Options for the category GUI.
 gui:
   rows: 6 # The amount of rows to have (1-6).
@@ -56,6 +73,35 @@ gui:
 
 
 items:
+  ## Example using Per-Item Dynamic Pricing Override ##
+  ######################################################
+  # Per-item overrides live inside the buy/sell/alt-buy sections alongside value and type.
+  # Any field omitted here inherits from the category-level dynamic-pricing block above.
+  - id: per_item_pricing_example
+    item: diamond
+    gui:
+      column: 2
+      row: 2
+      page: 1
+    buy:
+      value: 100
+      type: coins
+      display: "$%value%"
+      dynamic-pricing: # (Optional) Override buy dynamic-pricing for this item only.
+        enabled: true
+        max-increase: 3.0 # This item's buy price can go up to 300% of base.
+        max-decrease: 0.5
+        formula: "%base_price% * (1 + 0.0781 * log(1 + %buys%) - 0.0781 * log(1 + %sells%))"
+    sell:
+      value: 50
+      type: coins
+      display: "$%value%"
+      dynamic-pricing: # (Optional) Override sell dynamic-pricing for this item only.
+        enabled: true
+        max-increase: 1.5
+        max-decrease: 0.3
+        formula: "%base_price% * (1 + 0.0781 * log(1 + %buys%) - 0.0781 * log(1 + %sells%))"
+
   ## Example using Items and the Item Lookup System ##
   ####################################################
   - id: enchanted_diamond # The ID of the item, not shown to players.

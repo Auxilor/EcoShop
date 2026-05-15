@@ -31,10 +31,11 @@ class ShopItemSlot(
         fun handleMainBuyClick(player: Player, menu: Menu, buyType: BuyType) {
             val status = item.getBuyStatus(player, 1, buyType)
 
+            val buyDisplayMultiplier = item.getEffectiveBuyMultiplier(buyType, player)
             if (status != BuyStatus.ALLOW) {
                 player.sendMessage(
                     plugin.langYml.getMessage("buy-status.${status.configKey}")
-                        .replace("%price%", item.getBuyPrice(buyType).getDisplay(player, 1))
+                        .replace("%price%", item.getBuyPrice(buyType).getDisplay(player, buyDisplayMultiplier))
                 )
             } else {
                 if (item.getMaxBuysAtOnce(player) == 1) {
@@ -48,7 +49,7 @@ class ShopItemSlot(
                     player.sendMessage(
                         plugin.langYml.getMessage("bought-item")
                             .replace("%item%", item.displayName)
-                            .replace("%price%", item.getBuyPrice(buyType)?.getDisplay(player) ?: "")
+                            .replace("%price%", item.getBuyPrice(buyType)?.getDisplay(player, buyDisplayMultiplier) ?: "")
                     )
                 } else {
                     menu.parentShop[player]?.clickSound?.playTo(player)
@@ -60,10 +61,11 @@ class ShopItemSlot(
         fun handleQuickBuyClick(player: Player, menu: Menu, buyType: BuyType) {
             val status = item.getBuyStatus(player, item.buyAmount, buyType)
 
+            val quickBuyDisplayMultiplier = item.getEffectiveBuyMultiplier(buyType, player)
             if (status != BuyStatus.ALLOW) {
                 player.sendMessage(
                     plugin.langYml.getMessage("buy-status.${status.configKey}")
-                        .replace("%price%", item.getBuyPrice(buyType).getDisplay(player, item.buyAmount))
+                        .replace("%price%", item.getBuyPrice(buyType).getDisplay(player, item.buyAmount * quickBuyDisplayMultiplier))
                 )
             } else {
                 item.buy(
@@ -77,7 +79,7 @@ class ShopItemSlot(
                     plugin.langYml.getMessage("bought-item-multiple")
                         .replace("%amount%", item.buyAmount.toString())
                         .replace("%item%", item.displayName)
-                        .replace("%price%", item.getBuyPrice(buyType).getDisplay(player, item.buyAmount))
+                        .replace("%price%", item.getBuyPrice(buyType).getDisplay(player, item.buyAmount * quickBuyDisplayMultiplier))
                 )
             }
         }
@@ -128,12 +130,13 @@ class ShopItemSlot(
                         return@onShiftRightClick
                     }
 
+                    val sellDisplayMultiplier = item.getEffectiveSellMultiplier(player)
                     val sold = item.sell(player, cappedAmount)
                     player.sendMessage(
                         plugin.langYml.getMessage("sold-item")
                             .replace("%amount%", sold.toString())
                             .replace("%item%", item.displayName)
-                            .replace("%price%", item.sellPrice.getDisplay(player, sold))
+                            .replace("%price%", item.sellPrice.getDisplay(player, sold * sellDisplayMultiplier))
                     )
                 }
             }
@@ -150,8 +153,8 @@ class ShopItemSlot(
                 "buy-price"
             }
             val altBuyMessage = plugin.langYml.getStrings("dual-buy-price")
-                .replaceIn("%price%", item.buyPrice?.getDisplay(player) ?: "")
-                .replaceIn("%alt_price%", item.altBuyPrice?.getDisplay(player) ?: "")
+                .replaceIn("%price%", item.buyPrice?.getDisplay(player, item.getEffectiveBuyMultiplier(BuyType.NORMAL, player)) ?: "")
+                .replaceIn("%alt_price%", item.altBuyPrice?.getDisplay(player, item.getEffectiveBuyMultiplier(BuyType.ALT, player)) ?: "")
             val status = item.getBuyStatus(player, 1, BuyType.NORMAL)
             val itemStack = item.displayItem.modify {
                 if (item.isBuyable) {
@@ -166,7 +169,7 @@ class ShopItemSlot(
                                     altBuyMessage
                                 } else {
                                     plugin.langYml.getStrings(fallbackPriceMessage)
-                                        .replaceIn("%price%", item.buyPrice?.getDisplay(player) ?: "")
+                                        .replaceIn("%price%", item.buyPrice?.getDisplay(player, item.getEffectiveBuyMultiplier(BuyType.NORMAL, player)) ?: "")
                                 }
                             }
                         }
@@ -176,7 +179,7 @@ class ShopItemSlot(
                 if (item.isSellable) {
                     addLoreLines(
                         plugin.langYml.getStrings("sell-price")
-                            .replaceIn("%price%", item.sellPrice?.getDisplay(player) ?: "")
+                            .replaceIn("%price%", item.sellPrice?.getDisplay(player, item.getEffectiveSellMultiplier(player)) ?: "")
                     )
                 }
 
@@ -185,12 +188,12 @@ class ShopItemSlot(
                         if (item.hasAltBuy) {
                             addLoreLines(
                                 plugin.langYml.getStrings("quick-buy-alt-present")
-                                    .replaceIn("%price%", item.buyPrice.getDisplay(player, item.buyAmount))
+                                    .replaceIn("%price%", item.buyPrice.getDisplay(player, item.buyAmount * item.getEffectiveBuyMultiplier(BuyType.NORMAL, player)))
                                     .replaceIn("%amount%", item.buyAmount.toString())
                             )
                             addLoreLines(
                                 plugin.langYml.getStrings("quick-buy-alt")
-                                    .replaceIn("%price%", item.altBuyPrice.getDisplay(player, item.buyAmount))
+                                    .replaceIn("%price%", item.altBuyPrice.getDisplay(player, item.buyAmount * item.getEffectiveBuyMultiplier(BuyType.ALT, player)))
                                     .replaceIn("%amount%", item.buyAmount.toString())
                             )
                         } else {
