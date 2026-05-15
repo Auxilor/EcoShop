@@ -100,7 +100,7 @@ items:
       column: 2
       row: 4
       page: 1
-    item: grass
+    item: short_grass
     buy:
       type: coins
       value: 50

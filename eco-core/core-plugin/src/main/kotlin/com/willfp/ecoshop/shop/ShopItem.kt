@@ -70,7 +70,7 @@ class ShopItem(
     private val _displayItem = ItemStackBuilder(
         if (config.has("gui.display.item")) {
             Items.lookup(config.getString("gui.display.item")).item
-        } else item?.item ?: ItemStack(Material.AIR)
+        } else item?.item?.clone() ?: ItemStack(Material.AIR)
     )
         .setAmount(buyAmount)
         .addLoreLines(config.getStrings("gui.display.lore"))
