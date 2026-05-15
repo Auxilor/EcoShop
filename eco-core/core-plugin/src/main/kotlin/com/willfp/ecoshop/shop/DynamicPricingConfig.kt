@@ -13,7 +13,10 @@ data class PriceDynamicConfig(
 data class DynamicPricingConfig(
     val buy: PriceDynamicConfig,
     val altBuy: PriceDynamicConfig,
-    val sell: PriceDynamicConfig
+    val sell: PriceDynamicConfig,
+    val decayEnabled: Boolean = false,
+    val decayRate: Double = 0.0,
+    val decayPeriodMinutes: Int = 1440
 ) {
     companion object {
         fun from(config: Config, parent: DynamicPricingConfig? = null): DynamicPricingConfig {
@@ -38,10 +41,17 @@ data class DynamicPricingConfig(
                 return PriceDynamicConfig(enabled, maxIncrease, maxDecrease, formula)
             }
 
+            val decayEnabled = config.getBoolOrNull("decay.enabled") ?: parent?.decayEnabled ?: false
+            val decayRate = config.getDoubleOrNull("decay.rate") ?: parent?.decayRate ?: 0.0
+            val decayPeriodMinutes = config.getIntOrNull("decay.period") ?: parent?.decayPeriodMinutes ?: 1440
+
             return DynamicPricingConfig(
                 buy = parseType("buy", parent?.buy),
                 altBuy = parseType("alt-buy", parent?.altBuy),
-                sell = parseType("sell", parent?.sell)
+                sell = parseType("sell", parent?.sell),
+                decayEnabled = decayEnabled,
+                decayRate = decayRate,
+                decayPeriodMinutes = decayPeriodMinutes
             )
         }
     }

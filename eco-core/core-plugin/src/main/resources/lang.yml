@@ -13,6 +13,8 @@ messages:
   reset-buys-batch: "&fReset buy history for &r%players%&f player(s) across &r%items%&f item(s) (&r%resets%&f resets)."
   reset-sells: "&fReset how many times &r%player%&r&f sold &r%item%&f!"
   reset-sells-batch: "&fReset sell history for &r%players%&f player(s) across &r%items%&f item(s) (&r%resets%&f resets)."
+  reset-dynamic-pricing: "&fReset dynamic pricing for &r%item%&f!"
+  reset-dynamic-pricing-batch: "&fReset dynamic pricing for &r%items%&f item(s)."
   invalid-amount: "&cInvalid amount!"
   max-purchase-amount-exceeded: "&cYou can't buy more than %maxAmount% of an item at once!"
 

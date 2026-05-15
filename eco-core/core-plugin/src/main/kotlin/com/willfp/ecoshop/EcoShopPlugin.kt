@@ -8,6 +8,7 @@ import com.willfp.ecoshop.integrations.EcoShopAdapter
 import com.willfp.ecoshop.libreforge.FilterShopItem
 import com.willfp.ecoshop.libreforge.TriggerBuyItem
 import com.willfp.ecoshop.libreforge.TriggerSellItem
+import com.willfp.ecoshop.shop.DynamicPricingDecayTask
 import com.willfp.ecoshop.shop.ShopCategories
 import com.willfp.ecoshop.shop.Shops
 import com.willfp.ecoshop.shop.gui.SellGUI
@@ -21,6 +22,8 @@ internal lateinit var plugin: EcoShopPlugin
     private set
 
 class EcoShopPlugin : LibreforgePlugin() {
+    private var decayTask: DynamicPricingDecayTask? = null
+
     init {
         plugin = this
 
@@ -44,6 +47,11 @@ class EcoShopPlugin : LibreforgePlugin() {
 
     override fun handleReload() {
         SellGUI.update()
+
+        decayTask?.cancel()
+        decayTask = DynamicPricingDecayTask().also {
+            it.runTaskTimer(this, 20L * 60L, 20L * 60L)
+        }
     }
 
     override fun loadListeners(): List<Listener> {

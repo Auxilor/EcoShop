@@ -6,17 +6,22 @@ dynamic-pricing:
   max-increase: 1.5 # Cap at 150% of base price
   max-decrease: 0.5 # Floor at 50% of base price
 
+  decay:
+    enabled: false # Whether decay is active for this category
+    rate: 0.0    # Decay rate per period (0.0 = disabled, 0.1 = 10% per period)
+    period: 1440 # Period in minutes (default: 1440 = 24 hours)
+
   buy:
     enabled: true
-    formula: "%base_price% * (1 + 0.0781 * log(1 + %buys%) - 0.0781 * log(1 + %sells%))"
+    formula: "%base_price% * (1 + 0.0781 * log(1 + max(%buys% - %sells%, 0)) - 0.0781 * log(1 + max(%sells% - %buys%, 0)))"
 
   alt-buy:
     enabled: true
-    formula: "%base_price% * (1 + 0.0781 * log(1 + %buys%) - 0.0781 * log(1 + %sells%))"
+    formula: "%base_price% * (1 + 0.0781 * log(1 + max(%buys% - %sells%, 0)) - 0.0781 * log(1 + max(%sells% - %buys%, 0)))"
 
   sell:
     enabled: true
-    formula: "%base_price% * (1 + 0.0781 * log(1 + %buys%) - 0.0781 * log(1 + %sells%))"
+    formula: "%base_price% * (1 + 0.0781 * log(1 + max(%buys% - %sells%, 0)) - 0.0781 * log(1 + max(%sells% - %buys%, 0)))"
 
 gui:
   rows: 3
