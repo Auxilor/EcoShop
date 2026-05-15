@@ -15,6 +15,8 @@ import com.willfp.eco.core.items.builder.ItemStackBuilder
 import com.willfp.eco.core.price.CombinedDisplayPrice
 import com.willfp.eco.core.price.ConfiguredPrice
 import com.willfp.eco.core.registry.KRegistrable
+import com.willfp.eco.util.NumberUtils
+import com.willfp.eco.util.StringUtils
 import com.willfp.eco.util.formatEco
 import com.willfp.ecoshop.event.EcoShopBuyEvent
 import com.willfp.ecoshop.event.EcoShopSellEvent
@@ -47,9 +49,44 @@ enum class BuyType {
 }
 
 class ShopItem(
-    val config: Config
+    val config: Config,
+    categoryDynamicPricing: DynamicPricingConfig? = null
 ) : KRegistrable {
     override val id = config.getString("id")
+
+    val dynamicPricing: DynamicPricingConfig? = run {
+        val hasBuyDp = config.has("buy") && config.getSubsection("buy").has("dynamic-pricing")
+        val hasAltBuyDp = config.has("alt-buy") && config.getSubsection("alt-buy").has("dynamic-pricing")
+        val hasSellDp = config.has("sell") && config.getSubsection("sell").has("dynamic-pricing")
+
+        if (!hasBuyDp && !hasAltBuyDp && !hasSellDp) return@run categoryDynamicPricing
+
+        fun parseItemType(priceKey: String, parentType: PriceDynamicConfig?): PriceDynamicConfig {
+            if (!config.has(priceKey)) return parentType ?: PriceDynamicConfig(false, 2.0, 0.0, null)
+            val section = config.getSubsection(priceKey)
+            if (!section.has("dynamic-pricing")) return parentType ?: PriceDynamicConfig(false, 2.0, 0.0, null)
+            val dp = section.getSubsection("dynamic-pricing")
+            val enabled = dp.getBoolOrNull("enabled") ?: parentType?.enabled ?: false
+            val maxIncrease = dp.getDoubleOrNull("max-increase") ?: parentType?.maxIncrease ?: 2.0
+            val maxDecrease = dp.getDoubleOrNull("max-decrease") ?: parentType?.maxDecrease ?: 0.0
+            val formula = if (enabled)
+                dp.getStringOrNull("formula", false, StringUtils.FormatOption.WITHOUT_PLACEHOLDERS)
+                    ?: parentType?.formula
+            else null
+            return PriceDynamicConfig(enabled, maxIncrease, maxDecrease, formula)
+        }
+
+        DynamicPricingConfig(
+            buy = parseItemType("buy", categoryDynamicPricing?.buy),
+            altBuy = parseItemType("alt-buy", categoryDynamicPricing?.altBuy),
+            sell = parseItemType("sell", categoryDynamicPricing?.sell),
+            decayEnabled = categoryDynamicPricing?.decayEnabled ?: false,
+            decayRate = categoryDynamicPricing?.decayRate ?: 0.0,
+            decayPeriodMinutes = categoryDynamicPricing?.decayPeriodMinutes ?: 1440
+        )
+    }
+
+    private val warnedFormulas = mutableSetOf<String>()
 
     private val context = ViolationContext(plugin, "shop item $id")
 
@@ -152,6 +189,24 @@ class ShopItem(
         0
     )
 
+    private val dynamicBuysKey = PersistentDataKey(
+        plugin.createNamespacedKey("${id}_dp_buys"),
+        PersistentDataKeyType.INT,
+        0
+    )
+
+    private val dynamicSellsKey = PersistentDataKey(
+        plugin.createNamespacedKey("${id}_dp_sells"),
+        PersistentDataKeyType.INT,
+        0
+    )
+
+    private val lastDecayTimeKey = PersistentDataKey(
+        plugin.createNamespacedKey("${id}_dp_last_decay"),
+        PersistentDataKeyType.INT,
+        0
+    )
+
     init {
         if (this.item != null && this.item.item.amount != 1) {
             throw InvalidShopItemException(
@@ -228,6 +283,71 @@ class ShopItem(
         }
     }
 
+    private fun effectiveBuyValue(buyType: BuyType, baseValue: Double): Double {
+        val pc = when (buyType) {
+            BuyType.NORMAL -> dynamicPricing?.buy
+            BuyType.ALT -> dynamicPricing?.altBuy
+        } ?: return baseValue
+        if (!pc.enabled) return baseValue
+        val formula = pc.formula ?: return baseValue
+
+        val substituted = formula
+            .replace("%base_price%", baseValue.toString())
+            .replace("%buys%", getDynamicGlobalBuys().toString())
+            .replace("%sells%", getDynamicGlobalSells().toString())
+
+        val result = NumberUtils.evaluateExpression(substituted)
+        if (result.isNaN() || result.isInfinite() || (result == 0.0 && baseValue != 0.0)) {
+            if (warnedFormulas.add("$id:$formula")) {
+                plugin.logger.warning("[EcoShop] Dynamic pricing formula failed for item '$id': \"$formula\"")
+            }
+            return baseValue
+        }
+
+        val clamped = result.coerceIn(
+            minOf(baseValue * pc.maxDecrease, baseValue * pc.maxIncrease),
+            maxOf(baseValue * pc.maxDecrease, baseValue * pc.maxIncrease)
+        )
+        return Math.round(clamped * 100) / 100.0
+    }
+
+    private fun effectiveSellValue(baseValue: Double): Double {
+        val pc = dynamicPricing?.sell ?: return baseValue
+        if (!pc.enabled) return baseValue
+        val formula = pc.formula ?: return baseValue
+
+        val substituted = formula
+            .replace("%base_price%", baseValue.toString())
+            .replace("%buys%", getDynamicGlobalBuys().toString())
+            .replace("%sells%", getDynamicGlobalSells().toString())
+
+        val result = NumberUtils.evaluateExpression(substituted)
+        if (result.isNaN() || result.isInfinite() || (result == 0.0 && baseValue != 0.0)) {
+            if (warnedFormulas.add("$id:$formula")) {
+                plugin.logger.warning("[EcoShop] Dynamic pricing formula failed for item '$id': \"$formula\"")
+            }
+            return baseValue
+        }
+
+        val clamped = result.coerceIn(
+            minOf(baseValue * pc.maxDecrease, baseValue * pc.maxIncrease),
+            maxOf(baseValue * pc.maxDecrease, baseValue * pc.maxIncrease)
+        )
+        return Math.round(clamped * 100) / 100.0
+    }
+
+    fun getEffectiveBuyMultiplier(buyType: BuyType, player: Player): Double {
+        val baseValue = getBuyPrice(buyType)?.getValue(player) ?: return 1.0
+        if (baseValue <= 0) return 1.0
+        return effectiveBuyValue(buyType, baseValue) / baseValue
+    }
+
+    fun getEffectiveSellMultiplier(player: Player): Double {
+        val baseValue = sellPrice?.getValue(player) ?: return 1.0
+        if (baseValue <= 0) return 1.0
+        return effectiveSellValue(baseValue) / baseValue
+    }
+
     /** Get the max amount of times this item can be bought at a single time. */
     fun getMaxBuysAtOnce(player: Player): Int {
         return maxAtOnce.coerceAtMost(getBuysLeft(player))
@@ -246,6 +366,46 @@ class ShopItem(
     /** Get the total amount of times a server has bought this item. */
     fun getTotalGlobalBuys(): Int {
         return Bukkit.getServer().profile.read(timesBoughtKey)
+    }
+
+    private fun getDynamicGlobalBuys(): Int =
+        Bukkit.getServer().profile.read(dynamicBuysKey)
+
+    private fun getDynamicGlobalSells(): Int =
+        Bukkit.getServer().profile.read(dynamicSellsKey)
+
+    fun hasDynamicActivity(): Boolean =
+        getDynamicGlobalBuys() > 0 || getDynamicGlobalSells() > 0
+
+    fun resetDynamicPricing() {
+        Bukkit.getServer().profile.write(dynamicBuysKey, 0)
+        Bukkit.getServer().profile.write(dynamicSellsKey, 0)
+        Bukkit.getServer().profile.write(lastDecayTimeKey, 0)
+    }
+
+    fun applyDecay() {
+        val dp = dynamicPricing ?: return
+        if (!dp.decayEnabled || dp.decayRate <= 0.0) return
+
+        val nowSeconds = (System.currentTimeMillis() / 1000L).toInt()
+        val lastDecay = Bukkit.getServer().profile.read(lastDecayTimeKey)
+
+        if (lastDecay == 0) {
+            Bukkit.getServer().profile.write(lastDecayTimeKey, nowSeconds)
+            return
+        }
+
+        if (nowSeconds - lastDecay < dp.decayPeriodMinutes * 60) return
+
+        val oldBuys = getDynamicGlobalBuys()
+        val oldSells = getDynamicGlobalSells()
+        val newBuys = (oldBuys * (1.0 - dp.decayRate)).toInt()
+        val newSells = (oldSells * (1.0 - dp.decayRate)).toInt()
+
+        Bukkit.getServer().profile.write(dynamicBuysKey, newBuys)
+        Bukkit.getServer().profile.write(dynamicSellsKey, newSells)
+        Bukkit.getServer().profile.write(lastDecayTimeKey, nowSeconds)
+
     }
 
     /** Get the max amount of times this player can sell this item again. */
@@ -282,10 +442,11 @@ class ShopItem(
             return BuyStatus.NO_PERMISSION
         }
 
+        val dynamicMultiplier = getEffectiveBuyMultiplier(buyType, player)
         val conditions = if (buyType == BuyType.ALT) altBuyConditions else buyConditions
         if (!conditions.areMet(player.toDispatcher(), EmptyProvidedHolder)) {
             // Only run not met effects if player can afford to buy
-            if (getBuyPrice(buyType)!!.canAfford(player, amount.toDouble())) {
+            if (getBuyPrice(buyType)!!.canAfford(player, amount.toDouble() * dynamicMultiplier)) {
                 conditions.areMetAndTrigger(
                     TriggerData(
                         player = player
@@ -298,7 +459,7 @@ class ShopItem(
             return BuyStatus.MISSING_REQUIREMENTS
         }
 
-        if (!getBuyPrice(buyType)!!.canAfford(player, amount.toDouble())) {
+        if (!getBuyPrice(buyType)!!.canAfford(player, amount.toDouble() * dynamicMultiplier)) {
             return BuyStatus.CANNOT_AFFORD
         }
 
@@ -326,7 +487,7 @@ class ShopItem(
         val event = EcoShopBuyEvent(player, this, basePrice.price, buyType)
         Bukkit.getPluginManager().callEvent(event)
 
-        event.price.pay(player, amount.toDouble())
+        event.price.pay(player, amount.toDouble() * getEffectiveBuyMultiplier(buyType, player))
 
         if (item != null) {
             val queue = DropQueue(player)
@@ -355,8 +516,9 @@ class ShopItem(
             }
         )
 
-        player.profile.write(timesBoughtKey, getTotalBuys(player) + 1)
-        Bukkit.getServer().profile.write(timesBoughtKey, getTotalGlobalBuys() + 1)
+        player.profile.write(timesBoughtKey, getTotalBuys(player) + amount)
+        Bukkit.getServer().profile.write(timesBoughtKey, getTotalGlobalBuys() + amount)
+        Bukkit.getServer().profile.write(dynamicBuysKey, getDynamicGlobalBuys() + amount)
 
         if (shop?.isBroadcasting == true) {
             shop.broadcastPurchase(player, this, amount)
@@ -452,8 +614,9 @@ class ShopItem(
 
         val priceMultipliers = deductItems(player, amountSold)
 
+        val dynamicSellMultiplier = getEffectiveSellMultiplier(player)
         for ((multiplier, times) in priceMultipliers) {
-            sellPrice.giveTo(player, multiplier * times)
+            sellPrice.giveTo(player, multiplier * dynamicSellMultiplier * times)
         }
 
         shop?.sellSound?.playTo(player)
@@ -569,6 +732,7 @@ class ShopItem(
 
         player.profile.write(timesSoldKey, getTotalSells(player) + amount)
         Bukkit.getServer().profile.write(timesSoldKey, getTotalGlobalSells() + amount)
+        Bukkit.getServer().profile.write(dynamicSellsKey, getDynamicGlobalSells() + amount)
     }
 
     fun getBuyPrice(buyType: BuyType) = when (buyType) {
@@ -631,14 +795,15 @@ fun ItemStack.sell(
     val event = EcoShopSellEvent(player, item, price, this)
     Bukkit.getPluginManager().callEvent(event)
 
-    price.giveTo(player, soldAmount.toDouble() * event.multiplier)
+    val dynamicSellMultiplier = item.getEffectiveSellMultiplier(player)
+    price.giveTo(player, soldAmount.toDouble() * event.multiplier * dynamicSellMultiplier)
     item.recordSell(player, soldAmount)
 
     player.sendMessage(
         plugin.langYml.getMessage("sold-item")
             .replace("%amount%", soldAmount.toString())
             .replace("%item%", item.displayName)
-            .replace("%price%", price.getDisplay(player, soldAmount.toDouble() * event.multiplier))
+            .replace("%price%", price.getDisplay(player, soldAmount.toDouble() * event.multiplier * dynamicSellMultiplier))
     )
 
     shop?.sellSound?.playTo(player)
@@ -700,12 +865,13 @@ fun Collection<ItemStack>.sell(
         val event = EcoShopSellEvent(player, item, price, itemStack)
         Bukkit.getPluginManager().callEvent(event)
 
-        price.giveTo(player, sellableAmount.toDouble() * event.multiplier)
+        val dynamicSellMultiplier = item.getEffectiveSellMultiplier(player)
+        price.giveTo(player, sellableAmount.toDouble() * event.multiplier * dynamicSellMultiplier)
         item.recordSell(player, sellableAmount)
 
         displayBuilder.add(
             price,
-            sellableAmount.toDouble() * event.multiplier
+            sellableAmount.toDouble() * event.multiplier * dynamicSellMultiplier
         )
 
         amountSold += sellableAmount

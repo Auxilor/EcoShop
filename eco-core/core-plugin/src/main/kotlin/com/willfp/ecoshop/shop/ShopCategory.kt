@@ -35,9 +35,14 @@ class ShopCategory(
 ) : KRegistrable {
     private val permission = config.getStringOrNull("permission")
 
+    private val dynamicPricing: DynamicPricingConfig? =
+        if (config.has("dynamic-pricing"))
+            DynamicPricingConfig.from(config.getSubsection("dynamic-pricing"))
+        else null
+
     val items = config.getSubsections("items").mapNotNull {
         try {
-            val item = ShopItem( it)
+            val item = ShopItem(it, dynamicPricing)
             ShopItems.register(item)
             item
         } catch (e: InvalidShopItemException) {
