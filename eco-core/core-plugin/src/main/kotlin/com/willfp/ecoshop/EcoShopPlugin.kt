@@ -1,5 +1,6 @@
 package com.willfp.ecoshop
 
+import com.willfp.eco.core.bstats.EcoMetricsChart
 import com.willfp.eco.core.command.impl.PluginCommand
 import com.willfp.eco.core.integrations.shop.ShopManager
 import com.willfp.ecoshop.commands.CommandEcoShop
@@ -10,6 +11,7 @@ import com.willfp.ecoshop.libreforge.TriggerBuyItem
 import com.willfp.ecoshop.libreforge.TriggerSellItem
 import com.willfp.ecoshop.shop.DynamicPricingDecayTask
 import com.willfp.ecoshop.shop.ShopCategories
+import com.willfp.ecoshop.shop.ShopItems
 import com.willfp.ecoshop.shop.Shops
 import com.willfp.ecoshop.shop.gui.SellGUI
 import com.willfp.libreforge.filters.Filters
@@ -66,4 +68,19 @@ class EcoShopPlugin : LibreforgePlugin() {
             CommandSell
         )
     }
+
+    override fun getCustomCharts() = listOf(
+        EcoMetricsChart.SingleLine("total_shops") { Shops.values().size },
+        EcoMetricsChart.SingleLine("total_shop_categories") { ShopCategories.values().size },
+        EcoMetricsChart.SingleLine("total_shop_items") { ShopItems.values().size },
+        EcoMetricsChart.SimplePie("use_local_storage") {
+            if (configYml.getBool("use-local-storage")) "local" else "shared"
+        },
+        EcoMetricsChart.SimplePie("register_permissions") {
+            if (configYml.getBool("shop-items.register-permissions")) "enabled" else "disabled"
+        },
+        EcoMetricsChart.SimplePie("sell_all_button") {
+            if (configYml.getBool("sell-menu.sell-all-button.enabled")) "enabled" else "disabled"
+        }
+    )
 }
