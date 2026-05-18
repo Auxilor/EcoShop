@@ -6,6 +6,7 @@ import com.willfp.eco.core.integrations.shop.ShopManager
 import com.willfp.ecoshop.commands.CommandEcoShop
 import com.willfp.ecoshop.commands.CommandSell
 import com.willfp.ecoshop.integrations.EcoShopAdapter
+import com.willfp.ecoshop.libreforge.EffectBuyItem
 import com.willfp.ecoshop.libreforge.FilterShopItem
 import com.willfp.ecoshop.libreforge.TriggerBuyItem
 import com.willfp.ecoshop.libreforge.TriggerSellItem
@@ -14,6 +15,7 @@ import com.willfp.ecoshop.shop.ShopCategories
 import com.willfp.ecoshop.shop.ShopItems
 import com.willfp.ecoshop.shop.Shops
 import com.willfp.ecoshop.shop.gui.SellGUI
+import com.willfp.libreforge.effects.Effects
 import com.willfp.libreforge.filters.Filters
 import com.willfp.libreforge.loader.LibreforgePlugin
 import com.willfp.libreforge.loader.configs.ConfigCategory
@@ -45,6 +47,7 @@ class EcoShopPlugin : LibreforgePlugin() {
         Filters.register(FilterShopItem)
         Triggers.register(TriggerBuyItem)
         Triggers.register(TriggerSellItem)
+        Effects.register(EffectBuyItem)
     }
 
     override fun handleReload() {
