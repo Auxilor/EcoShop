@@ -54,6 +54,8 @@ class EcoShopPlugin : LibreforgePlugin() {
         decayTask = DynamicPricingDecayTask().also {
             it.runTaskTimer(this, 1200L, 1200L)
         }
+
+        registerPlaceholders(this)
     }
 
     override fun loadListeners(): List<Listener> {
