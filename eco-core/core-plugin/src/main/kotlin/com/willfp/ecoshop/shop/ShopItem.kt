@@ -475,9 +475,11 @@ class ShopItem(
         player: Player,
         amount: Int,
         buyType: BuyType,
-        shop: Shop? = null
+        shop: Shop? = null,
+        bypassLimits: Boolean = false,
+        priceValueOverride: Double? = null
     ) {
-        require(amount in 1..getMaxBuysAtOnce(player))
+        require(if (bypassLimits) amount >= 1 else amount in 1..getMaxBuysAtOnce(player))
 
         val basePrice = when (buyType) {
             BuyType.NORMAL -> buyPrice
@@ -487,7 +489,13 @@ class ShopItem(
         val event = EcoShopBuyEvent(player, this, basePrice.price, buyType)
         Bukkit.getPluginManager().callEvent(event)
 
-        event.price.pay(player, amount.toDouble() * getEffectiveBuyMultiplier(buyType, player))
+        val payAmount = if (priceValueOverride != null) {
+            val baseValue = basePrice.getValue(player)
+            if (baseValue > 0) amount.toDouble() * (priceValueOverride / baseValue) else 0.0
+        } else {
+            amount.toDouble() * getEffectiveBuyMultiplier(buyType, player)
+        }
+        event.price.pay(player, payAmount)
 
         if (item != null) {
             val queue = DropQueue(player)
