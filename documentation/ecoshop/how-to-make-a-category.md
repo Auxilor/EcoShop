@@ -1,48 +1,65 @@
 ---
-title: How to make a Category
+title: "How to Make a Category"
 sidebar_position: 2
 ---
 
-## Categories
+A **category** is the actual shop screen, the menu where players buy and sell; a [shop](how-to-make-a-shop) is just a doorway to one or more of them. Each category is one file holding an **icon**, an optional **dynamic pricing** block, the **GUI** layout, and a list of **items**. This page covers building one from scratch.
 
-Categories are how shops are organised. Items are sold / bought in categories, they're the actual 'shop' part. In the [How to make a Shop](https://plugins.auxilor.io/ecoshop/how-to-make-a-shop) section, you will have seen how shops can either be a portal to a bunch of categories, or alternatively just directly link to a category.
+## Quick start
 
-## How to add shops
-Each category is its own config file, placed in the `/categories/` folder, and you can add or remove them as you please. There's an example config called `_example.yml` to help you out!
+1. Open the `categories/` folder in your EcoShop config directory.
+2. Copy `_example.yml` and rename the copy, e.g. `gear.yml`. The file name (without `.yml`) becomes the category ID.
+3. Set the `item:` icon and the `gui.title` players will see.
+4. Add at least one entry under `items:` (see [How to make an Item](how-to-make-an-item)).
+5. Reference this category from a shop, by ID, under that shop's `categories` or `direct-category`.
+6. Save, then run `/ecoshop reload`.
+7. Open the shop in game and click through to the category; your items should appear.
 
-The ID of the category is the file name. This is what you use in commands, effects and placeholders.
-ID's must be lowercase letters, numbers, and underscores only.
+:::tip
+`_example.yml` is included as a reference and is **never loaded**, so copy or rename it to make a real category. You can also organise categories into subfolders inside `categories/`, and they'll still load.
+:::
 
-One category can be in as many shops as you want! EcoShop is smart, it knows what shop you opened the category from, so any sounds / broadcasts from the shop you came from will work even if 2 shops share the same category.
+## Naming and IDs
 
-## Example Category Config
+The file name without `.yml` is the category's ID, and that is what shops reference and what placeholders use. The `item:` icon uses the [Item Lookup System](https://plugins.auxilor.io/the-item-lookup-system) syntax. One category can sit in as many shops as you like.
+
+:::warning ID rules
+IDs may only contain lowercase letters, numbers, and underscores (a-z, 0-9, _). No spaces, capitals, or hyphens, or the category will not load.
+:::
+
+## The structure of a category
+
+A category is made of four parts:
+
+| Part | What it controls |
+| --- | --- |
+| **Category info** | The icon, lore, and access permission for the category |
+| **Dynamic pricing** | Optional demand-based price changes for every item inside |
+| **GUI** | The menu's size, title, navigation, and page layout |
+| **Items** | The items players actually buy and sell |
+
+Here is a complete category with every part in place:
 
 ```yaml
-item: diamond_sword name:"&fExample Category"
-lore: [ ]
-permission: ecoshop.category.permission1
+# === Category info: icon, lore, access ===
+item: diamond_sword name:"&fExample Category" # The icon shown for this category in a shop.
+lore: # Lore lines on that icon.
+  - "&aBuy all the best gear here!"
+permission: ecoshop.category.permission1 # Optional; permission required to open the category.
 
+# === Dynamic pricing: demand-based prices ===
 dynamic-pricing:
-  enabled: false
-  max-increase: 1.5
-  max-decrease: 0.5
-  decay:
-    enabled: false
-    rate: 0.0
-    period: 1440
+  enabled: false # Off by default; see the Dynamic Pricing page for the full system.
+  max-increase: 1.5 # Cap prices at 150% of base.
+  max-decrease: 0.5 # Floor prices at 50% of base.
   buy:
     enabled: true
     formula: "%base_price% * (1 + 0.0781 * log(1 + max(%buys% - %sells%, 0)) - 0.0781 * log(1 + max(%sells% - %buys%, 0)))"
-  alt-buy:
-    enabled: true
-    formula: "%base_price% * (1 + 0.0781 * log(1 + max(%buys% - %sells%, 0)) - 0.0781 * log(1 + max(%sells% - %buys%, 0)))"
-  sell:
-    enabled: true
-    formula: "%base_price% * (1 + 0.0781 * log(1 + max(%buys% - %sells%, 0)) - 0.0781 * log(1 + max(%sells% - %buys%, 0)))"
 
+# === GUI: the category menu ===
 gui:
-  rows: 6
-  title: "Demo Category"
+  rows: 6 # Height of the menu (1-6).
+  title: "Demo Category" # The menu title.
   forwards-arrow:
     item: arrow name:"&fNext Page"
     row: 6
@@ -53,112 +70,101 @@ gui:
     column: 4
   pages:
     - page: 1
-      mask:
+      mask: # Decorative background.
         items:
           - gray_stained_glass_pane
           - black_stained_glass_pane
-        pattern:
+        pattern: # 0 empty, 1 first mask item, 2 second mask item.
           - "222222222"
           - "211111112"
           - "211111112"
           - "211111112"
           - "211111112"
           - "222222222"
-      custom-slots: [ ]
+      custom-slots: [ ] # Extra decorative or command slots.
 
-items: []
+# === Items: what players buy and sell ===
+items: [] # Each entry is a shop item; see How to make an Item.
 ```
 
-## Understanding all the sections
+### Category info
 
-### The Category Info Section
+These fields decide how the category looks in its parent shop and who may open it.
 
 ```yaml
-item: diamond_sword name:"&fExample Category" # The item shown in the shop.
-lore: # The lore of the item shown in the shop.
+item: diamond_sword name:"&fExample Category" # The icon shown for this category in a shop.
+lore: # Lore lines on that icon.
   - "&aBuy all the best gear here!"
-permission: ecoshop.category.permission1 # (Optional) The permission required to access/use the category.
+permission: ecoshop.category.permission1 # Optional; without it the category is open to everyone.
 ```
 
-### The Dynamic Pricing Section
+### Dynamic pricing
 
-Categories support dynamic pricing, where item prices fluctuate based on server-wide buy and sell activity.
+This optional block makes every item in the category respond to server-wide demand, with caps on how far prices can move.
 
 ```yaml
 dynamic-pricing:
-  enabled: false # Whether dynamic pricing is active for this category.
-  max-increase: 1.5 # Cap at 150% of base price.
-  max-decrease: 0.5 # Floor at 50% of base price.
-
-  decay:
-    enabled: false # Whether price decay is active for this category.
-    rate: 0.1 # Percentage of counters removed per period (0.1 = 10%).
-    period: 1440 # Period in minutes (1440 = 24 hours).
-
+  enabled: false # Turn the whole system on or off for this category.
+  max-increase: 1.5 # Highest a price may reach, as a multiple of base (1.5 = 150%).
+  max-decrease: 0.5 # Lowest a price may reach, as a multiple of base (0.5 = 50%).
   buy:
-    enabled: true # Whether dynamic pricing applies to the buy price.
-    formula: "%base_price% * (1 + 0.0781 * log(1 + max(%buys% - %sells%, 0)) - 0.0781 * log(1 + max(%sells% - %buys%, 0)))"
-
-  alt-buy:
-    enabled: true
-    formula: "%base_price% * (1 + 0.0781 * log(1 + max(%buys% - %sells%, 0)) - 0.0781 * log(1 + max(%sells% - %buys%, 0)))"
-
-  sell:
-    enabled: true # Whether dynamic pricing applies to the sell price.
+    enabled: true # Apply dynamic pricing to the buy price.
     formula: "%base_price% * (1 + 0.0781 * log(1 + max(%buys% - %sells%, 0)) - 0.0781 * log(1 + max(%sells% - %buys%, 0)))"
 ```
 
-Read here for more info: [Dynamic Pricing](https://plugins.auxilor.io/ecoshop/dynamic-pricing).
+Dynamic pricing is a system of its own, including decay, per-price-type formulas, and per-item overrides. See [Dynamic Pricing](dynamic-pricing) for the full reference.
 
-### The GUI Section
-Check out the [GUI Options](https://plugins.auxilor.io/all-plugins/pages) for more info on how to configure the GUI.
+### GUI
+
+The GUI block lays out the category menu itself. See [GUI Options](https://plugins.auxilor.io/all-plugins/pages) for the mask, pattern, and page fields.
+
 ```yaml
 gui:
-  rows: 6 # The amount of rows to have (1-6).
-  title: "Demo Category" # The title of the GUI.
-
-  # Navigation options, hidden if on the first/last page.
-  forwards-arrow:
-    item: arrow name:"&fNext Page" # The item for the forwards arrow - see Item Lookup System
+  rows: 6 # Height of the menu (1-6).
+  title: "Demo Category" # The menu title.
+  forwards-arrow: # Hidden on the last page.
+    item: arrow name:"&fNext Page"
     row: 6
     column: 6
-  backwards-arrow:
+  backwards-arrow: # Hidden on the first page.
     item: arrow name:"&fPrevious Page"
     row: 6
     column: 4
-
-  # Add as many pages as you want by appending to this list
   pages:
     - page: 1
-      mask:
-        items: # The background material
-          - gray_stained_glass_pane
-          - black_stained_glass_pane
-        pattern: # 0 for empty, 1 for the first item, 2 for the second item, etc
-          - "222222222"
-          - "211111112"
-          - "211111112"
-          - "211111112"
-          - "211111112"
-          - "222222222" 
-
-      custom-slots: [ ] # See here for a how-to: https://plugins.auxilor.io/all-plugins/custom-gui-slots
+      custom-slots: [ ] # Add as many pages as you want by appending to this list.
 ```
 
-### The Items Section
+### Items
+
+The `items` list is the point of the category. Each entry is a shop item with its own buy and sell options and GUI position.
 
 ```yaml
-# Your items go here! Read here for more info: https://plugins.auxilor.io/ecoshop/how-to-make-an-item
 items:
-  - id: shop_item_id
-    ...rest of item config
+  - id: cooked_mutton # See How to make an Item for the full item format.
+    item: cooked_mutton
+    buy:
+      type: coins
+      value: 20
+      display: "$%value%"
+    gui:
+      row: 1
+      column: 4
+      page: 1
 ```
 
-This section is where you put any items that you are buying and/or selling in this category.
+Building items is a topic on its own; see [How to make an Item](how-to-make-an-item).
 
-Read here for more info on creating your shop items: [How to make an Item](how-to-make-an-item).
+:::tip Troubleshooting
+- **Category icon missing from the shop?** The shop's `categories` `id` does not match this file's name. Make them match.
+- **Players cannot open the category?** A `permission` is set that they do not have. Grant it or remove the line.
+- **An item does not show up?** Its `gui` row, column, or page is outside the menu, or the `items` list is empty. Check the coordinates against `gui.rows`.
+:::
 
 <hr/>
 
-## Default configs
-The default configs can be found [here](https://github.com/Auxilor/EcoShop/blob/main/eco-core/core-plugin/src/main/resources/categories).
+## Where to go next
+
+- **Stock the shelves:** [How to make an Item](how-to-make-an-item) is the next step.
+- **React to demand:** [Dynamic Pricing](dynamic-pricing) explains the pricing block above in full.
+- **Wire it up:** [How to make a Shop](how-to-make-a-shop) shows how shops point at this category.

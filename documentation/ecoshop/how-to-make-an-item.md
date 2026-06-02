@@ -1,176 +1,190 @@
 ---
-title: How to make an Item
+title: "How to Make an Item"
 sidebar_position: 3
 ---
-# Items
-Items are everything that can be bought or sold in the shop. They can be real items or commands, single-purchase, limited purchase, buy only, sell only, both, they can be bought with 2 different currency types - the point is, there's a lot of options to wrap your head around.
 
-These items go into your category config, read here for more into: [categories](https://plugins.auxilor.io/ecoshop/how-to-make-a-category).
+An **item** is a single entry in a category's `items` list, the thing a player actually buys or sells. It carries a **buy** price, a **sell** price, or both, a **display** in the menu, and optional **effects** that run on purchase. Items can be physical items, commands, or pure effects, with per-player and server-wide limits. This page covers writing one.
 
-# How to add items
+## Quick start
 
-## Simple buy-sell item
+1. Open a category file in `categories/`, or copy one of the example items out of `categories/_example.yml`.
+2. Under that category's `items:` list, add an entry with a unique `id`.
+3. Set `item:` to what the player receives, e.g. `cooked_mutton`.
+4. Add a `buy` block, a `sell` block, or both, each with a `type`, `value`, and `display`.
+5. Set the `gui` `row`, `column`, and `page` so the icon has a place in the menu.
+6. Save, then run `/ecoshop reload`.
+7. Open the shop, find the item, and buy it to confirm it works.
 
-Let's start with a really simple shop item - if you're making a standard buy-sell shop, this is what most of your items will look like:
+:::tip
+`categories/_example.yml` ships ready-made items, including buy-sell, effect, and dynamic-pricing examples, and is **never loaded**, so copy an item out of it into a real category file as your starting point. Items live inside category files, so they are organised by organising those category files.
+:::
+
+## Naming and IDs
+
+Unlike shops and categories, an item's ID is the `id:` field you set, not a file name. That ID is what commands and placeholders use, so keep it unique within the category. The `item:` field uses the [Item Lookup System](https://plugins.auxilor.io/the-item-lookup-system) syntax.
+
+:::warning ID rules
+IDs may only contain lowercase letters, numbers, and underscores (a-z, 0-9, _). No spaces, capitals, or hyphens, or the item will not load.
+:::
+
+## The structure of an item
+
+An item is made of four parts:
+
+| Part | What it controls |
+| --- | --- |
+| **Display** | The icon, name, and lore shown in the menu |
+| **Buying** | The buy price, optional alt-buy currency, and purchase limits |
+| **Selling** | The sell price and sell limits |
+| **Effects and conditions** | Effects on purchase or sale, and conditions that gate the trade |
+
+Here is a complete item with the common parts in place:
 
 ```yaml
-- id: cooked_mutton # The internal ID of the item, used in commands and placeholders.
-  item: cooked_mutton # The item shown in the shop, read here for more info: https://plugins.auxilor.io/the-item-lookup-system
-  buy: # The buy options, read below for more info.
-    type: coins # The currency type, read here for more info: https://plugins.auxilor.io/all-plugins/prices
-    value: 20 # The price, read here for more info: https://plugins.auxilor.io/all-plugins/prices
-    display: $%value% # The price display, read here for more info: https://plugins.auxilor.io/all-plugins/prices
-  sell: # Same as above, but for selling the item back to the shop.
+# === Display: the icon and name in the menu ===
+- id: enchanted_diamond # Internal ID, used in commands and placeholders, never shown to players.
+  item: ecoitems:enchanted_diamond # The item bought or sold; uses Item Lookup System syntax.
+  name: "&bEnchanted Diamond" # Optional; overrides the icon's name in the menu.
+  gui:
+    row: 3 # Row in the menu (1-6).
+    column: 4 # Column in the menu (1-9).
+    page: 1 # Page the icon sits on.
+
+  # === Buying: price and limits to purchase ===
+  buy:
+    type: coins # Currency type; see the prices system.
+    value: 500 # Price; can be a plain number or an expression.
+    display: "$%value%" # How the price renders in the menu.
+    amount: 8 # Optional; default buy amount, defaults to 1.
+    max-at-once: 16 # Optional; cap per purchase, removes the multi-buy GUI.
+    limit: 10 # Optional; max times each player can buy, defaults to unlimited.
+    global-limit: 100000 # Optional; max buys across all players, defaults to unlimited.
+  alt-buy: # Optional second currency the player can choose instead.
+    type: crystals
+    value: 65
+    display: "&b%value% ❖"
+
+  # === Selling: price and limits to sell back ===
+  sell:
     type: coins
-    value: 10
-    display: $%value%
-  gui: # The GUI options
-    column: 4 # The column to display the item in (1-9)
-    row: 1 # The row to display the item in (1-6)
-    page: 1 # The page to display the item on
+    value: 100
+    display: "$%value%"
+    limit: 256 # Optional; max times each player can sell.
+
+  # === Effects and conditions: extra behaviour ===
+  buy-effects: # Optional; run on purchase, with or without a physical item.
+    - id: run_command
+      args:
+        command: "lp user %player% parent set iron"
 ```
 
-## Buy Effect Items
+### Display
 
-An effect item has no physical item, and when bought, it runs the configured effects. These are configured very similarly to the standard buy-sell items, but with a `buy-effects` section instead `item`.
-Because effects are not a physical item, they cannot have a `sell` option, but they still have most of the other options.
-
-With effect items, you could have an item that gives the player a potion effect when they buy it, or even an item that runs a custom effect chain to do something really cool.
+The icon is whatever `item:` resolves to, but you can override its name and lore, or replace the shown icon entirely without changing what the player receives.
 
 ```yaml
-- id: my_effect_item 
-  buy-effects: # The effects to run when the item is bought, read here for more info: https://plugins.auxilor.io/effects/configuring-an-effect
-    - id: potion_effect
-      args:
-        effect: speed
-        level: 1
-        duration: 2000
-  buy:
-    value: 65
-    type: crystals
-    display: "&b%value% Crystals ❖"
-  gui: 
-    display: # Effects are not items, so you need to configure a display item here.
-      item: nether_star name:"&fCool Effect Item" # The item shown in the shop, read here for more info: https://plugins.auxilor.io/the-item-lookup-system
-      lore: # The lore of the item shown in the shop.
-        - "&fBuy me to do something cool!"
-    column: 6
-    row: 3
+- id: cooked_mutton
+  item: cooked_mutton # What the player actually gets.
+  name: "&6&lMutton Chop" # Optional; overrides only the menu name.
+  gui:
+    row: 1
+    column: 4
     page: 1
+    show-quick-buy-sell: false # Optional; hides the default quick buy/sell lore.
+    display: # Optional; change the shown icon without changing the purchased item.
+      item: diamond name:"&bSpecial Diamond"
+      lore:
+        - "&7A very special diamond!"
+      bottom-lore: # Lore under the price, rendered per player, so placeholders work.
+        - "&7You have bought &e%playerbuys%&7 of these!"
 ```
 
-# Additional Config Options
+### Buying
 
-## General
-
-### `name`
-
-Overrides the display name of the item shown in the shop GUI. If not set, the name is inherited from the item itself.
-
-```yaml
-- id: cooked_mutton
-  item: cooked_mutton
-  name: "&6&lMutton Chop"
-```
-
-### `buy-effects`
-
-Effects to run when the item is bought. Can be added to any item alongside a regular `item:`, not just effect-only items. Read here for more info: [Configuring an Effect](https://plugins.auxilor.io/effects/configuring-an-effect).
-
-```yaml
-buy-effects:
-  - id: broadcast
-    args:
-      message: "&f%player% just bought %item%!"
-```
-
-## Buying (Applies to alt-buy too)
-
-### Alt-Buy
-
-EcoShop supports buying items with multiple currencies using the `alt-buy` options. All the options that work with `buy` also apply to `alt-buy`. These are configured the same way, using the [price](https://plugins.auxilor.io/all-plugins/prices) system.
-
-```yaml
-    alt-buy:
-      value: 65
-      type: crystals
-      display: "&b%value%❖"
-```
-A dual currency item will show both prices in the shop, and the player can choose which one to buy with. This looks like this in the config:
-
-```yaml
-- id: cooked_mutton
-  item: cooked_mutton
-  buy:
-    type: coins
-    value: 20
-    display: 
-  alt-buy:
-    type: crystals
-    value: 65
-    display: "&b%value%❖"
-```
-
-### `conditions`
-
-Any conditions that must be met to buy the item. Read here for more info: [Configuring a Condition](https://plugins.auxilor.io/effects/configuring-a-condition).
+The `buy` block sets the price. Only `type`, `value`, and `display` are required; everything after is an optional field you add on top.
 
 ```yaml
 buy:
-  conditions:
-    - id: has_permission
-      args:
-        permission: group.iron  
+  type: coins # Currency; see the prices system.
+  value: 500 - (%player_rank% * 25) # Price; expressions are allowed.
+  display: "$%value%" # How the price renders in the menu.
 ```
 
-### `require`
+:::info Values are expressions
+`value` and `require` are evaluated as math, so you can use placeholders and arithmetic, e.g. `500 - (%player_rank% * 25)`. See the [Math](https://plugins.auxilor.io/all-plugins/math) and [Prices](https://plugins.auxilor.io/all-plugins/prices) guides.
+:::
 
-An expression that must evaluate to true for the player to be allowed to buy the item. Read here for more info: [Math](https://plugins.auxilor.io/all-plugins/math).
+#### `alt-buy`
+
+A second currency the player can choose instead, with the same fields as `buy`. The menu shows both prices side by side.
+
+```yaml
+alt-buy:
+  type: crystals
+  value: 65
+  display: "&b%value% ❖"
+```
+
+#### `amount`
+
+The default, or quick-buy, amount handed over per purchase. Defaults to `1`.
 
 ```yaml
 buy:
-  require: "%player_level% >= 10"
+  amount: 8
 ```
 
-### `limit`
+#### `max-at-once`
 
-The max times a player can buy this item.
+Caps how many a player can buy in one go, and removes the multi-buy GUI. Defaults to unlimited.
+
+```yaml
+buy:
+  max-at-once: 16
+```
+
+#### `limit`
+
+The maximum number of times each player may buy this item. Defaults to unlimited.
 
 ```yaml
 buy:
   limit: 1
 ```
 
-### `global-limit`
+#### `global-limit`
 
-The max times all players can buy this item.
+The maximum number of times all players combined may buy this item. Defaults to unlimited.
 
 ```yaml
 buy:
   global-limit: 1
 ```
 
-### `max-at-once`
+#### `require`
 
-The max amount of this item a player can buy at once. (Removes the multi-buy GUI).
-
-```yaml
-buy:
-  max-at-once: 1
-```
-
-### `amount`
-
-The amount of items to be bought at once.
+A math expression that must hold true for the player to buy. Defaults to always allowed.
 
 ```yaml
 buy:
-  amount: 32
+  require: "%player_level% >= 10"
 ```
 
-### `dynamic-pricing`
+#### `conditions`
 
-Override the category-level dynamic pricing settings for this item's buy price. Any field not set here inherits from the category `dynamic-pricing` block.
+Eco conditions that must pass before the purchase is allowed. The same key works under `sell`.
+
+```yaml
+buy:
+  conditions:
+    - id: has_permission
+      args:
+        permission: group.iron
+```
+
+#### `dynamic-pricing`
+
+Makes this one item's buy price react to demand, overriding the category. Any field you omit inherits from the category block. See [Dynamic Pricing](dynamic-pricing).
 
 ```yaml
 buy:
@@ -178,115 +192,127 @@ buy:
     enabled: true
     max-increase: 3.0
     max-decrease: 0.5
-    formula: "%base_price% * (1 + 0.0781 * log(1 + %buys%) - 0.0781 * log(1 + %sells%))"
 ```
 
-Read here for more info: [Dynamic Pricing](https://plugins.auxilor.io/ecoshop/dynamic-pricing).
+### Selling
 
-## Sell
+The `sell` block mirrors `buy` and lets players sell the item back, with the same required `type`, `value`, and `display`.
 
-### `conditions`
+```yaml
+sell:
+  type: coins
+  value: 100 + (%player_rank% * 25)
+  display: "$%value%"
+```
 
-Any conditions that must be met to sell the item. Read here for more info: [Configuring a Condition](https://plugins.auxilor.io/effects/configuring-a-condition).
+#### `limit`
+
+The maximum number of times each player may sell this item. Defaults to unlimited.
+
+```yaml
+sell:
+  limit: 256
+```
+
+#### `global-limit`
+
+The maximum number of times all players combined may sell this item. Defaults to unlimited.
+
+```yaml
+sell:
+  global-limit: 100000
+```
+
+#### `conditions`
+
+Eco conditions that must pass before the sale is allowed, exactly as under `buy`.
 
 ```yaml
 sell:
   conditions:
-    - id: has_permission
+    - id: below_y
       args:
-        permission: group.iron
+        y: 100
 ```
 
-### `limit`
+#### `dynamic-pricing`
 
-The max times a player can sell this item.
-
-```yaml
-sell:
-  limit: 1
-```
-
-### `global-limit`
-
-The max times all players can sell this item.
-
-```yaml
-sell:
-  global-limit: 1
-```
-
-### `dynamic-pricing`
-
-Override the category-level dynamic pricing settings for this item's sell price. Any field not set here inherits from the category `dynamic-pricing` block.
+Overrides the category's sell pricing for this item only, inheriting any field you leave out. See [Dynamic Pricing](dynamic-pricing).
 
 ```yaml
 sell:
   dynamic-pricing:
-    enabled: true
-    max-increase: 1.5
-    max-decrease: 0.3
-    formula: "%base_price% * (1 + 0.0781 * log(1 + %buys%) - 0.0781 * log(1 + %sells%))"
+    enabled: false
 ```
 
-Read here for more info: [Dynamic Pricing](https://plugins.auxilor.io/ecoshop/dynamic-pricing).
+### Effects and conditions
 
-### `sell-effects`
-
-Effects that run when the item is sold. Read here for more info: [Configuring an Effect](https://plugins.auxilor.io/effects/configuring-an-effect).
+Effects run extra behaviour on a trade, and conditions gate whether the trade is allowed. An item with `buy-effects` and no `item:` is a pure effect item: it has no physical drop, so it cannot be sold, and it needs a `gui.display` to give the icon something to show.
 
 ```yaml
-sell-effects:
-  - id: broadcast
-    args:
-      message: "&f%player%&r&f has sold &r%item%&r&f for &b%value%❖&f!"
+- id: iron_rank
+  buy-effects: # Run when bought; here, grant a rank.
+    - id: run_command
+      args:
+        command: "lp user %player% parent set iron"
+  sell-effects: # Optional; run when the item is sold.
+    - id: broadcast
+      args:
+        message: "&f%player% sold %item% for &b%value%❖&f!"
+  gui:
+    display: # Required for effect-only items, since there is no item icon.
+      item: diamond_chestplate name:"&fIron Rank"
+      lore:
+        - "&fGrants the Iron rank."
+    row: 3
+    column: 6
+    page: 2
+  buy:
+    type: crystals
+    value: 65
+    display: "&b%value% Crystals ❖"
+    conditions: # Must pass for the player to buy.
+      - id: has_permission
+        args:
+          permission: group.iron
+          inverse: true
 ```
 
-## GUI
+:::danger Effects are their own system
+Effects and conditions are configured by the shared eco system, not by EcoShop, so the full list of effect and condition IDs and their arguments lives there:
 
-### `show-quick-buy-sell`
+- [Configuring an Effect](https://plugins.auxilor.io/effects/configuring-an-effect)
+- [Configuring an Effect Chain](https://plugins.auxilor.io/effects/configuring-a-chain)
+:::
 
-By default, quick buy/sell lore is shown on item slots. Set to `false` to hide it.
+## Internal placeholders
 
-```yaml
-gui:
-  show-quick-buy-sell: false
-```
+These placeholders are available in an item's `display`, `bottom-lore`, and price `display` fields:
 
-### `display`
+| Placeholder | Value |
+| --- | --- |
+| `%amount%` | The amount of items the player bought |
+| `%value%` | The buy/sell value, for use in a price display |
+| `%value_commas%` | The comma-separated buy/sell value |
+| `%playerlimit%` | The per-player purchase limit for the item |
+| `%playerbuys%` | The number of times the player has bought this item |
+| `%globallimit%` | The global purchase limit for the item |
+| `%globalbuys%` | The number of times the item has been bought globally |
+| `%playerselllimit%` | The per-player sell limit for the item |
+| `%playersells%` | The number of times the player has sold this item |
+| `%globalselllimit%` | The global sell limit for the item |
+| `%globalsells%` | The number of times the item has been sold globally |
 
-Overrides the item shown in the shop GUI slot without affecting the item given to the player on purchase. Useful for adding custom lore or a different icon to any item, not just effect items.
+:::tip Troubleshooting
+- **Item icon is missing or barren?** It is an effect-only item with no `gui.display`. Add a `display` with an `item` and `lore`.
+- **Players cannot buy it?** A `require` expression or a `conditions` entry is failing, or a `limit` is reached. Check those against the player.
+- **Price shows blank?** The `display` is empty or omits `%value%`. Set `display: "$%value%"`.
+:::
 
-```yaml
-gui:
-  display:
-    item: diamond name:"&bSpecial Diamond" # The item shown in the shop GUI
-    lore:
-      - "&7A very special diamond!"
-```
+<hr/>
 
-### `display.bottom-lore`
+## Where to go next
 
-Lore appended below the price information on the shop slot. Rendered per-player, so placeholders are supported.
-
-```yaml
-gui:
-  display:
-    bottom-lore:
-      - "&7You have bought &e%playerbuys%&7 of these!"
-```
-
-## Internal Placeholders
-
-| Placeholder         | Value                                                       |
-|---------------------|-------------------------------------------------------------|
-| `%amount%`          | The amount of items the player bought                       |
-| `%value%`           | The buy/sell value, to use in price display                 |
-| `%value_commas%`    | The comma separated buy/sell value, to use in price display |
-| `%playerlimit%`     | The per-player purchase limit for the item                  |
-| `%playerbuys%`      | The amount of times the player has bought this item         |
-| `%globallimit%`     | The global purchase limit for the item                      |
-| `%globalbuys%`      | The amount of times the item has been bought globally       |
-| `%playerselllimit%` | The per-player sell limit for the item                      |
-| `%playersells%`     | The amount of times the player has sold this item           |
-| `%globalselllimit%` | The global sell limit for the item                          |
-| `%globalsells%`     | The amount of times the item has been sold globally         |
+- **Place items in context:** [How to make a Category](how-to-make-a-category) shows the file these items live in.
+- **Make prices move:** [Dynamic Pricing](dynamic-pricing) covers the `dynamic-pricing` overrides referenced above.
+- **Tune global menus:** [Plugin Config](plugin-config) controls the shared buy and sell GUIs.

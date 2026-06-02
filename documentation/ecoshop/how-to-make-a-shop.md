@@ -1,187 +1,206 @@
 ---
-title: How to make a Shop
+title: "How to Make a Shop"
 sidebar_position: 1
 ---
-## Shops
-Creating shops is easy if you follow the basic rules: A shop requires [categories](https://plugins.auxilor.io/ecoshop/how-to-make-a-category), and categories require [items](https://plugins.auxilor.io/ecoshop/how-to-make-an-item).
-If you follow this guide in order, you will have a shop up and running in no time! If you want to skip ahead, use the links above or in the sidebar.
 
-## How to add shops
-Each shop is its own config file, placed in the `/shops/` folder, and you can add or remove them as you please. There's an example config called `_example.yml` to help you out!
+A **shop** is the top-level menu a player opens with a **command**; it holds a set of **categories**, either as a paged picker or as a single category the player lands in directly. This page covers creating a shop file, naming it, and laying out its parts.
 
-The ID of the shop is the file name. This is what you use in commands, effects and placeholders.
-ID's must be lowercase letters, numbers, and underscores only.
+## Quick start
 
-## Example Shop Config
+1. Open the `shops/` folder in your EcoShop config directory.
+2. Copy `_example.yml` and rename the copy, e.g. `shop.yml`. The file name (without `.yml`) becomes the shop ID.
+3. Set `command:` to the command you want players to run, e.g. `shop`.
+4. Under `pages:`, list the `categories` you want, each with a `row` and `column`. The category IDs must match real [category](how-to-make-a-category) files.
+5. Save, then run `/ecoshop reload`.
+6. Run your shop command in game; the category picker should open.
+
+:::tip
+`_example.yml` is included as a reference and is **never loaded**, so copy or rename it to make a real shop. You can also organise shops into subfolders inside `shops/`, and they'll still load.
+:::
+
+## Naming and IDs
+
+The file name without `.yml` is the shop's ID. That ID is what you use in commands, effects, and placeholders. Item fields like the arrows below use the [Item Lookup System](https://plugins.auxilor.io/the-item-lookup-system) syntax.
+
+:::warning ID rules
+IDs may only contain lowercase letters, numbers, and underscores (a-z, 0-9, _). No spaces, capitals, or hyphens, or the shop will not load.
+:::
+
+## The structure of a shop
+
+A shop is made of four parts:
+
+| Part | What it controls |
+| --- | --- |
+| **Shop info** | The GUI title and the command that opens the shop |
+| **Navigation** | The forward and back arrows between pages |
+| **Broadcasts and sounds** | Purchase announcements and the click, buy, and sell sounds |
+| **Categories** | Which categories the shop shows, and whether it is paged or direct |
+
+Here is a complete shop with every part in place:
 
 ```yaml
-title: "Demo Shop"
-command: "demoshop"
+# === Shop info: name and command ===
+title: Demo Shop # The GUI title shown at the top of the shop.
+command: demoshop # The command players run to open this shop.
 
-forwards-arrow:
-  item: arrow name:"&fNext Page"
+# === Navigation: page arrows ===
+forwards-arrow: # Shown on every page except the last.
+  item: arrow name:"&fNext Page" # Item syntax comes from the Item Lookup System.
   row: 6
   column: 6
-
-backwards-arrow:
+backwards-arrow: # Shown on every page except the first.
   item: arrow name:"&fPrevious Page"
   row: 6
   column: 4
 
-buy-broadcasts:
+# === Broadcasts and sounds: feedback on actions ===
+buy-broadcasts: # Announce purchases to the whole server; good for /buy menus.
   enabled: true
-  message: "&b&lCrystal Shop&r &8»&r %player%&r&f has bought &r%item%&r&ffrom the &bCrystal Shop ❖&f!"
+  message: "&b%player%&f bought &r%item%&f!" # Supports %player%, %item%, and %amount%.
   sound:
     enabled: true
     sound: ui_toast_challenge_complete
     pitch: 1.5
     volume: 2
-    category: PLAYERS
-
-click-sound:
+    category: players
+click-sound: # Played when a player clicks any icon in this shop.
   enabled: true
   sound: block_stone_button_click_on
   pitch: 1
   volume: 1
   category: UI
-
-buy-sound:
+buy-sound: # Played on a successful purchase.
   enabled: true
   sound: entity_player_levelup
   pitch: 2
   volume: 1
-  category: UI
-
-sell-sound:
+  category: players
+sell-sound: # Played on a successful sale.
   enabled: true
   sound: block_amethyst_block_place
   pitch: 1.5
   volume: 1
-  category: UI
+  category: players
 
-rows: 3
-pages:
+# === Categories: what the shop contains ===
+rows: 3 # Height of the category-picker GUI (1-6).
+pages: # Add as many pages as you want.
   - page: 1
-    mask:
+    mask: # Decorative filler behind the categories.
       items:
         - gray_stained_glass_pane
         - black_stained_glass_pane
-      pattern:
+      pattern: # 0 empty, 1 first mask item, 2 second mask item.
         - "222222222"
         - "211111112"
         - "211000112"
         - "211000112"
         - "211111112"
         - "222222222"
-    categories:
+    categories: # Where each category icon sits in the GUI.
       - id: example
         row: 3
         column: 3
       - id: example_2
         row: 4
         column: 6
-
-    custom-slots: [ ]
+    custom-slots: [ ] # Extra decorative or command slots.
 ```
 
-## Understanding all the sections
+### Shop info
 
-### The Shop Info Section
+The title and command are the only required fields a shop must have.
+
 ```yaml
-title: Demo Shop # The GUI title.
-command: demoshop # The command to open the shop.
+title: Demo Shop # The GUI title shown at the top of the shop.
+command: demoshop # The command players run to open this shop.
 ```
 
-### The GUI Section
+### Navigation
+
+The arrows move players between pages and hide themselves when there is nowhere to go.
+
 ```yaml
-forwards-arrow: # The arrow for switching between pages. If on the last page, this will not show up.
+forwards-arrow: # Hidden on the last page.
   item: arrow name:"&fNext Page"
   row: 6
   column: 6
-
-backwards-arrow: # The arrow for switching between pages. If on the first page, this will not show up.
+backwards-arrow: # Hidden on the first page.
   item: arrow name:"&fPrevious Page"
   row: 6
   column: 4
 ```
 
-### The Broadcasts and Sounds Section
-You can read more about configuring sounds in the [Sound Configs](https://plugins.auxilor.io/all-plugins/sounds) guide.
-```yaml
-buy-broadcasts: # Options for buy broadcasts
-  enabled: true # If purchases in this shop should be broadcast to the server, good for /buy menus.
-  message: "&b&lCrystal Shop&r &8»&r %player%&r&f has bought &r%item%&r&ffrom the &bCrystal Shop ❖&f!" # Use %player%, %item%, and %amount%
-  sound: # Broadcast sound.
-    enabled: true # Whether the sound should be played or not.
-    sound: ui_toast_challenge_complete # The sound https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Sound.html
-    pitch: 1.5 # The pitch (0.5 - 2)
-    volume: 2 # The volume (0.5 - 2)
-    category: PLAYERS # The sound category https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/SoundCategory.html
+### Broadcasts and sounds
 
-click-sound: # A sound to be played when clicking an icon in this shop.
+These give feedback when players act in the shop. Broadcasts go to the whole server; the three sounds play locally for the buyer. See the [Sound Configs](https://plugins.auxilor.io/all-plugins/sounds) guide for the sound fields.
+
+```yaml
+buy-broadcasts:
+  enabled: true # Announce every purchase in this shop to the server.
+  message: "&b%player%&f bought &r%item%&f!" # Supports %player%, %item%, and %amount%.
+  sound: # A sound played alongside the broadcast.
+    enabled: true
+    sound: ui_toast_challenge_complete
+    pitch: 1.5
+    volume: 2
+    category: players
+click-sound: # Played when an icon is clicked.
   enabled: true
   sound: block_stone_button_click_on
   pitch: 1
   volume: 1
   category: UI
-
-buy-sound: # A sound to be played when buying something in this shop.
-  enabled: true
-  sound: entity_player_levelup
-  pitch: 2
-  volume: 1
-  category: UI
-
-sell-sound: # A sound to be played when selling something in this shop.
-  enabled: true
-  sound: block_amethyst_block_place
-  pitch: 1.5
-  volume: 1
-  category: UI
 ```
 
-### The Categories Section
+### Categories
 
-There are two methods to add [categories](https://plugins.auxilor.io/ecoshop/how-to-make-a-category), first is a direct and second is a list.
-
-A direct-category shop is where you link the shop straight to a category, so when the player opens the shop, they are sent directly to that category. 
-This is good for single page shops, such as a boss spawn egg shop (eg: `/boss-shop`)
-```yaml
-direct-category: example_category # The ID of the category.
-```
-
-The second method is to have a list of categories in the shop GUI, this is good for multi-category shops (eg. A typical `/shop`). You can have as many categories as you want in the list, and you can even have the same category in multiple shops if you want.
-You need to configure the page, and then the list of categories for that page.
+A shop reaches its categories in one of two ways. Use a **paged** list when the shop is a hub of many categories, e.g. a typical `/shop`:
 
 ```yaml
-# If you want a regular shop that contains multiple categories, use these options here
 rows: 3
-pages: # All the pages in the preview GUI. You can add as many pages as you want.
+pages:
   - page: 1
-    mask: # Filler items for decoration
-      items: # Add as many items as you want
-        - gray_stained_glass_pane # Item 1
-        - black_stained_glass_pane # Item 2
-      pattern:
-        - "222222222"
-        - "211111112"
-        - "211000112"
-        - "211000112"
-        - "211111112"
-        - "222222222"
-    categories: # Where to put categories in the GUI
-      - id: example # The category ID
-        row: 3 # The row
-        column: 3 # The column
+    categories: # Place each category icon in the picker.
+      - id: example
+        row: 3
+        column: 3
       - id: example_2
         row: 4
         column: 6
-
-    # Custom GUI slots; see here for a how-to: https://plugins.auxilor.io/all-plugins/pages#custom-gui-slots
-    custom-slots: [ ]
 ```
+
+Use `direct-category` instead when the shop should drop the player straight into one category, e.g. a single-page `/bossshop`:
+
+```yaml
+direct-category: example_category # Opens this category immediately, with no picker.
+```
+
+:::info One category, many shops
+The same category can appear in any number of shops. EcoShop tracks which shop a player opened the category from, so that shop's sounds and broadcasts apply even when two shops share a category.
+:::
+
+## Internal placeholders
+
+These placeholders are available inside `buy-broadcasts.message`:
+
+| Placeholder | Value |
+| --- | --- |
+| `%player%` | The name of the player who bought the item |
+| `%item%` | The display name of the item that was bought |
+| `%amount%` | The amount the player bought |
+
+:::tip Troubleshooting
+- **Shop command does nothing?** The file is still named `_example.yml`, or you have not reloaded. Rename it to a real ID and run `/ecoshop reload`.
+- **A category slot is empty?** The `id` under `categories` does not match a category file name. Check the category's file name in `categories/`.
+- **Arrows never appear?** There is only one page, so there is nowhere to navigate. Add a second page to see them.
+:::
 
 <hr/>
 
-## Default configs
-The default configs can be found [here](https://github.com/Auxilor/EcoShop/blob/main/eco-core/core-plugin/src/main/resources/shops).
+## Where to go next
+
+- **Fill your shop:** [How to make a Category](how-to-make-a-category) is the next step; shops are empty without categories.
+- **Add things to sell:** [How to make an Item](how-to-make-an-item) covers the items inside a category.
+- **Global menus:** [Plugin Config](plugin-config) configures the shared buy, sell, and mass-sell GUIs.
