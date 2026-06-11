@@ -64,10 +64,8 @@ class Shop(
 
         val maxPage = pages.size.coerceAtLeast(1)
 
-        val titleTemplate = config.getString("title")
-
         fun renderTitle(page: Int) = StringUtils.format(
-            titleTemplate
+            config.getString("title")
                 .replace("%page%", page.toString())
                 .replace("%max_page%", maxPage.toString())
         )
