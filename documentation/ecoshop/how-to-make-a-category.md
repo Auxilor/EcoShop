@@ -59,7 +59,7 @@ dynamic-pricing:
 # === GUI: the category menu ===
 gui:
   rows: 6 # Height of the menu (1-6).
-  title: "Demo Category" # The menu title.
+  title: "Demo Category" # The menu title. Supports %page% and %max_page% placeholders.
   forwards-arrow:
     item: arrow name:"&fNext Page"
     row: 6
@@ -121,7 +121,7 @@ The GUI block lays out the category menu itself. See [GUI Options](https://plugi
 ```yaml
 gui:
   rows: 6 # Height of the menu (1-6).
-  title: "Demo Category" # The menu title.
+  title: "Demo Category" # The menu title. Supports %page% and %max_page% placeholders.
   forwards-arrow: # Hidden on the last page.
     item: arrow name:"&fNext Page"
     row: 6
