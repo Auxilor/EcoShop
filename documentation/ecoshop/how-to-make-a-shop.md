@@ -41,7 +41,7 @@ Here is a complete shop with every part in place:
 
 ```yaml
 # === Shop info: name and command ===
-title: Demo Shop # The GUI title shown at the top of the shop.
+title: Demo Shop # The GUI title shown at the top of the shop. Supports %page% and %max_page% placeholders.
 command: demoshop # The command players run to open this shop.
 
 # === Navigation: page arrows ===
@@ -113,7 +113,7 @@ pages: # Add as many pages as you want.
 The title and command are the only required fields a shop must have.
 
 ```yaml
-title: Demo Shop # The GUI title shown at the top of the shop.
+title: Demo Shop # The GUI title shown at the top of the shop. Supports %page% and %max_page% placeholders.
 command: demoshop # The command players run to open this shop.
 ```
 

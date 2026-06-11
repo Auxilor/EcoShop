@@ -33,7 +33,7 @@ dynamic-pricing:
 # Options for the category GUI.
 gui:
   rows: 6 # The amount of rows to have (1-6).
-  title: "Demo Category" # The title of the GUI.
+  title: "Demo Category" # The title of the GUI. Supports %page% and %max_page% placeholders.
 
   # Navigation options, hidden if on the first/last page.
   forwards-arrow:

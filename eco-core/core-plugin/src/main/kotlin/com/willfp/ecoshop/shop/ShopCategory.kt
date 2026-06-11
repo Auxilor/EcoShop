@@ -5,7 +5,9 @@ import com.willfp.eco.core.gui.addPage
 import com.willfp.eco.core.gui.menu
 import com.willfp.eco.core.gui.menu.Menu
 import com.willfp.eco.core.gui.menu.MenuLayer
+import com.willfp.eco.core.gui.onEvent
 import com.willfp.eco.core.gui.onLeftClick
+import com.willfp.eco.core.gui.page.PageChangeEvent
 import com.willfp.eco.core.gui.page.PageChanger
 import com.willfp.eco.core.gui.slot
 import com.willfp.eco.core.gui.slot.ConfigSlot
@@ -15,6 +17,7 @@ import com.willfp.eco.core.gui.slot.Slot
 import com.willfp.eco.core.items.Items
 import com.willfp.eco.core.items.builder.modify
 import com.willfp.eco.core.registry.KRegistrable
+import com.willfp.eco.util.StringUtils
 import com.willfp.eco.util.formatEco
 import com.willfp.ecomponent.components.pageChangerWithDefault
 import com.willfp.ecomponent.menuStateVar
@@ -73,11 +76,24 @@ class ShopCategory(
     }
 
     private val menu: Menu = menu(config.getInt("gui.rows")) {
-        title = config.getFormattedString("gui.title")
+        val pages = config.getSubsections("gui.pages")
+
+        val maxPage = pages.size.coerceAtLeast(1)
+
+        fun renderTitle(page: Int) = StringUtils.format(
+            config.getString("gui.title")
+                .replace("%page%", page.toString())
+                .replace("%max_page%", maxPage.toString())
+        )
+
+        title = renderTitle(1)
+
+        onEvent<PageChangeEvent> { eventPlayer, _, event ->
+            @Suppress("DEPRECATION")
+            eventPlayer.openInventory.setTitle(renderTitle(event.newPage))
+        }
 
         allowChangingHeldItem()
-
-        val pages = config.getSubsections("gui.pages")
 
         maxPages(pages.size)
 
