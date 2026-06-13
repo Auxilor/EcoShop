@@ -2,16 +2,13 @@ package com.willfp.ecoshop.shop
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.gui.addPage
+import com.willfp.eco.core.gui.addPageChanger
 import com.willfp.eco.core.gui.menu
 import com.willfp.eco.core.gui.menu.Menu
-import com.willfp.eco.core.gui.menu.MenuLayer
-import com.willfp.eco.core.gui.onEvent
-import com.willfp.eco.core.gui.page.PageChangeEvent
 import com.willfp.eco.core.gui.page.PageChanger
 import com.willfp.eco.core.gui.slot.ConfigSlot
 import com.willfp.eco.core.gui.slot.FillerMask
 import com.willfp.eco.core.gui.slot.MaskItems
-import com.willfp.eco.core.items.Items
 import com.willfp.eco.core.registry.KRegistrable
 import com.willfp.eco.core.sound.PlayableSound
 import com.willfp.eco.util.StringUtils
@@ -62,48 +59,16 @@ class Shop(
     val menu = if (config.has("pages")) menu(config.getInt("rows")) {
         val pages = config.getSubsections("pages")
 
-        val maxPage = pages.size.coerceAtLeast(1)
-
-        fun renderTitle(page: Int) = StringUtils.format(
-            config.getString("title")
-                .replace("%page%", page.toString())
-                .replace("%max_page%", maxPage.toString())
-        )
-
-        title = renderTitle(1)
-
-        onEvent<PageChangeEvent> { eventPlayer, _, event ->
-            @Suppress("DEPRECATION")
-            eventPlayer.openInventory.setTitle(renderTitle(event.newPage))
-        }
+        title = StringUtils.format(config.getString("title"))
 
         allowChangingHeldItem()
 
         maxPages(pages.size)
 
-        val forwardsArrow = PageChanger(
-            Items.lookup(config.getString("forwards-arrow.item")).item,
-            PageChanger.Direction.FORWARDS
-        )
+        val pageChangeSound = PlayableSound.create(config.getSubsection("page-change-sound"))
 
-        val backwardsArrow = PageChanger(
-            Items.lookup(config.getString("backwards-arrow.item")).item,
-            PageChanger.Direction.BACKWARDS
-        )
-
-        addComponent(
-            MenuLayer.TOP,
-            config.getInt("forwards-arrow.row"),
-            config.getInt("forwards-arrow.column"),
-            forwardsArrow
-        )
-
-        addComponent(
-            MenuLayer.TOP,
-            config.getInt("backwards-arrow.row"),
-            config.getInt("backwards-arrow.column"),
-            backwardsArrow
-        )
+        addPageChanger(config, "forwards-arrow", PageChanger.Direction.FORWARDS, pageChangeSound)
+        addPageChanger(config, "backwards-arrow", PageChanger.Direction.BACKWARDS, pageChangeSound)
 
         for (pageConfig in pages) {
             val pageNumber = pageConfig.getInt("page")
