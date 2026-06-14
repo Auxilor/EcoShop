@@ -47,13 +47,13 @@ object EffectBuyItem : Effect<NoCompileData>("buy_item") {
         )
         optional(
             "amount",
-            description = "The number of the item to buy. Supports expressions.",
+            description = "The number of the item to buy.",
             type = ArgType.EXPRESSION,
             default = "1"
         )
         optional(
             "price",
-            description = "Overrides the price charged for the purchase. Supports expressions.",
+            description = "Overrides the price charged for the purchase.",
             type = ArgType.EXPRESSION
         )
         optional(
