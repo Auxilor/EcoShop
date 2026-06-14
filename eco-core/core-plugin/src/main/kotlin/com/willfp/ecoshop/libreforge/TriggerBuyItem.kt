@@ -15,7 +15,12 @@ object TriggerBuyItem : Trigger("buy_item") {
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.LOCATION,
-        TriggerParameter.EVENT
+        TriggerParameter.EVENT,
+        TriggerParameter.VALUE
+    )
+
+    override val parameterDescriptions = mapOf(
+        TriggerParameter.VALUE to "The price the player paid for the item"
     )
 
     @EventHandler(ignoreCancelled = true)
