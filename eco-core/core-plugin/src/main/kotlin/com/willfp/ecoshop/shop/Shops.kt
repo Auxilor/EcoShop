@@ -6,6 +6,10 @@ import com.willfp.libreforge.loader.configs.RegistrableCategory
 
 object Shops : RegistrableCategory<Shop>("shop", "shops") {
     override fun clear(plugin: LibreforgePlugin) {
+        for (shop in registry.values()) {
+            shop.remove()
+        }
+
         registry.clear()
     }
 
