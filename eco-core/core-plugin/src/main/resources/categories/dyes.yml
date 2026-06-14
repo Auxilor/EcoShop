@@ -25,10 +25,17 @@ dynamic-pricing:
 
 gui:
   rows: 4
-  title: "Dyes"
+  title: "Dyes (%page%/%max_page%)"
+
+  page-change-sound:
+    enabled: true
+    sound: ui.button.click
+    pitch: 1.0
+    volume: 1.0
 
   forwards-arrow:
     item: arrow name:"&fNext Page"
+    item-inactive: gray_dye name:"&7Next Page"
     row: 4
     column: 6
   backwards-arrow:
@@ -39,12 +46,14 @@ gui:
   pages:
     - page: 1
       mask:
-        items: []
+        items:
+          - gray_stained_glass_pane
+          - black_stained_glass_pane
         pattern:
-          - "000000000"
-          - "000000000"
-          - "000000000"
-          - "000000000"
+          - "222222222"
+          - "211111112"
+          - "211111112"
+          - "222222222"
 
 items:
   - id: black_dye
