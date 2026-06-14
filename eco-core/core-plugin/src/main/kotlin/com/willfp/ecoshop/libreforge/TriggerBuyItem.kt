@@ -8,6 +8,10 @@ import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.event.EventHandler
 
 object TriggerBuyItem : Trigger("buy_item") {
+    override val description = "Fires when the player buys an item from the shop."
+
+    override val categories = setOf("economy")
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.LOCATION,
