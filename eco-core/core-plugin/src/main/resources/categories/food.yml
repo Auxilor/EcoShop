@@ -25,11 +25,18 @@ dynamic-pricing:
 
 gui:
   rows: 3
-  title: Food
+  title: "Food (%page%/%max_page%)"
+
+  page-change-sound:
+    enabled: true
+    sound: ui.button.click
+    pitch: 1.0
+    volume: 1.0
 
   forwards-arrow:
     column: 6
     item: arrow name:"&fNext Page"
+    item-inactive: gray_dye name:"&7Next Page"
     row: 3
   backwards-arrow:
     column: 4
@@ -40,10 +47,12 @@ gui:
     - page: 1
       mask:
         pattern:
-          - '000000000'
-          - '000000000'
-          - '000000000'
-        items: []
+          - '222222222'
+          - '211111112'
+          - '222222222'
+        items:
+          - gray_stained_glass_pane
+          - black_stained_glass_pane
 
 items:
   - id: cooked_chicken

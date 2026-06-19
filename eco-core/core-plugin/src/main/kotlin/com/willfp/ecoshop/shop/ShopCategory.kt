@@ -2,12 +2,10 @@ package com.willfp.ecoshop.shop
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.gui.addPage
+import com.willfp.eco.core.gui.addPageChanger
 import com.willfp.eco.core.gui.menu
 import com.willfp.eco.core.gui.menu.Menu
-import com.willfp.eco.core.gui.menu.MenuLayer
-import com.willfp.eco.core.gui.onEvent
 import com.willfp.eco.core.gui.onLeftClick
-import com.willfp.eco.core.gui.page.PageChangeEvent
 import com.willfp.eco.core.gui.page.PageChanger
 import com.willfp.eco.core.gui.slot
 import com.willfp.eco.core.gui.slot.ConfigSlot
@@ -17,9 +15,9 @@ import com.willfp.eco.core.gui.slot.Slot
 import com.willfp.eco.core.items.Items
 import com.willfp.eco.core.items.builder.modify
 import com.willfp.eco.core.registry.KRegistrable
+import com.willfp.eco.core.sound.PlayableSound
 import com.willfp.eco.util.StringUtils
 import com.willfp.eco.util.formatEco
-import com.willfp.ecomponent.components.pageChangerWithDefault
 import com.willfp.ecomponent.menuStateVar
 import com.willfp.ecoshop.plugin
 import org.bukkit.entity.Player
@@ -78,49 +76,29 @@ class ShopCategory(
     private val menu: Menu = menu(config.getInt("gui.rows")) {
         val pages = config.getSubsections("gui.pages")
 
-        val maxPage = pages.size.coerceAtLeast(1)
-
-        fun renderTitle(page: Int) = StringUtils.format(
-            config.getString("gui.title")
-                .replace("%page%", page.toString())
-                .replace("%max_page%", maxPage.toString())
-        )
-
-        title = renderTitle(1)
-
-        onEvent<PageChangeEvent> { eventPlayer, _, event ->
-            @Suppress("DEPRECATION")
-            eventPlayer.openInventory.setTitle(renderTitle(event.newPage))
-        }
+        title = StringUtils.format(config.getString("gui.title"))
 
         allowChangingHeldItem()
 
         maxPages(pages.size)
 
-        val forwardsArrow = PageChanger(
-            Items.lookup(config.getString("gui.forwards-arrow.item")).item,
-            PageChanger.Direction.FORWARDS
-        )
+        val pageChangeSound = PlayableSound.create(config.getSubsection("gui.page-change-sound"))
 
-        val backwardsArrow = pageChangerWithDefault(
-            Items.lookup(config.getString("gui.backwards-arrow.item")).item,
-            PageChanger.Direction.BACKWARDS
-        ) { player, _, _, menu ->
-            menu.kickBack(player)
-        }
+        addPageChanger(config, "gui.forwards-arrow", PageChanger.Direction.FORWARDS, pageChangeSound)
 
-        addComponent(
-            MenuLayer.TOP,
-            config.getInt("gui.forwards-arrow.row"),
-            config.getInt("gui.forwards-arrow.column"),
-            forwardsArrow
-        )
+        val backwardsActive = Items.lookup(config.getString("gui.backwards-arrow.item")).item
+        val backwardsRow = config.getIntOrNull("gui.backwards-arrow.location.row")
+            ?: config.getInt("gui.backwards-arrow.row")
+        val backwardsColumn = config.getIntOrNull("gui.backwards-arrow.location.column")
+            ?: config.getInt("gui.backwards-arrow.column")
 
-        addComponent(
-            MenuLayer.TOP,
-            config.getInt("gui.backwards-arrow.row"),
-            config.getInt("gui.backwards-arrow.column"),
-            backwardsArrow
+        addPageChanger(
+            PageChanger.Direction.BACKWARDS,
+            backwardsActive,
+            null,
+            pageChangeSound,
+            backwardsRow,
+            backwardsColumn
         )
 
         for (pageConfig in pages) {
@@ -132,6 +110,16 @@ class ShopCategory(
                         MaskItems.fromItemNames(pageConfig.getStrings("mask.items")),
                         *pageConfig.getStrings("mask.pattern").toTypedArray()
                     )
+                )
+
+                setSlot(
+                    backwardsRow,
+                    backwardsColumn,
+                    slot(backwardsActive) {
+                        onLeftClick { player, _, _, menu ->
+                            menu.kickBack(player)
+                        }
+                    }
                 )
 
                 for (item in items) {
