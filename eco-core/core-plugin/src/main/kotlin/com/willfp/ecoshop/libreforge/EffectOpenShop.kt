@@ -1,6 +1,7 @@
 package com.willfp.ecoshop.libreforge
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.ecoshop.shop.ShopCategories
 import com.willfp.ecoshop.shop.Shops
 import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.NoCompileData
@@ -25,12 +26,25 @@ object EffectOpenShop : Effect<NoCompileData>("open_shop") {
             description = "The ID of the shop to open for the player.",
             type = ArgType.STRING
         )
+
+        optional(
+            "category",
+            description = "The ID of a category to open directly, instead of the shop's main menu.",
+            type = ArgType.STRING
+        )
     }
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
         val player = data.player ?: return false
 
         val shop = Shops[config.getString("shop")] ?: return false
+
+        val categoryId = config.getStringOrNull("category")
+        if (categoryId != null) {
+            val category = ShopCategories.getByID(categoryId) ?: return false
+            category.openDirect(player, shop)
+            return true
+        }
 
         val menu = shop.menu
         if (menu != null) {
