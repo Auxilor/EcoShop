@@ -21,7 +21,7 @@
     </a>
 </p>
 
-[![Docs](https://i.imgur.com/rntg2XP.png)](https://plugins.auxilor.io/ecoshop)
+[![Docs](https://i.imgur.com/rntg2XP.png)](https://hub.auxilor.io/ecoshop/ecoshop)
 
 ## License
 *Click here to read [the entire license](https://github.com/Auxilor/EcoShop/blob/master/LICENSE.md).*

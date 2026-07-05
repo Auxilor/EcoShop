@@ -68,7 +68,7 @@ gui:
           - "211111112"
           - "222222222"
 
-      # Custom GUI slots; see here for a how-to: https://plugins.auxilor.io/all-plugins/custom-gui-slots
+      # Custom GUI slots; see here for a how-to: https://hub.auxilor.io/wiki/eco/pages#custom-gui-slots
       custom-slots: [ ]
 
     - page: 2
@@ -118,26 +118,26 @@ items:
   ## Example using Items and the Item Lookup System ##
   ####################################################
   - id: enchanted_diamond # The ID of the item, not shown to players.
-    item: ecoitems:enchanted_diamond # The item to buy/sell (Quantity of 1) # https://plugins.auxilor.io/all-plugins/the-item-lookup-system
+    item: ecoitems:enchanted_diamond # The item to buy/sell (Quantity of 1) # https://hub.auxilor.io/wiki/eco/the-item-lookup-system-the-item-lookup-system
     name: "&b&k!!&r <gradient:#2193b0>Enchanted Diamond</gradient:#6dd5ed>&r &b&k!!" # (Optional) The custom display name, will inherit from the GUI item by default.
     gui:
       column: 4 # How far left to right (1-9).
       row: 3 # How far up or down (1-6).
       page: 1 # The page.
-    buy: # Options for buying the item, see here: https://plugins.auxilor.io/all-plugins/prices
+    buy: # Options for buying the item, see here: https://hub.auxilor.io/wiki/eco/the-price-lookup-system
       value: 500 - (%player_rank% * 25)
       type: coins
       display: "$%value%"
       amount: 8 # (Optional) The quick buy / default buy amount. Defaults to 1 if not specified.
       max-at-once: 16 # (Optional) The maximum amount that can be bought at once. Defaults to infinity if not specified.
-    sell: # Options for selling the item, see here: https://plugins.auxilor.io/all-plugins/prices
+    sell: # Options for selling the item, see here: https://hub.auxilor.io/wiki/eco/the-price-lookup-system
       value: 100 + (%player_rank% * 25)
       type: coins
       display: "$%value%"
       limit: 256 # (Optional) The max amount of times each player can sell this item, defaults to infinite.
       global-limit: 100000 # (Optional) The max amount of times this item can be sold across the whole server, defaults to infinite.
       # The conditions that must be met in order to sell this item.
-      # Read here: https://plugins.auxilor.io/effects/configuring-a-condition
+      # Read here: https://hub.auxilor.io/wiki/libreforge/configuring-a-condition
       conditions:
         - id: below_y
           args:
@@ -147,7 +147,7 @@ items:
   ####################################################
   - id: iron_rank
     # Effects to run when the player buys the item.
-    # Read here: https://plugins.auxilor.io/effects/configuring-an-effect
+    # Read here: https://hub.auxilor.io/wiki/libreforge/configuring-an-effect
     buy-effects:
       - id: run_command
         args:
@@ -170,7 +170,7 @@ items:
       require: "%ecomc_iron_price% >= 0" # (Optional) This expression must hold true in order to be allowed to buy the item.
       limit: 1 # (Optional) The max amount of times each player can buy this item, defaults to infinite.
       # The conditions that must be met in order to buy this item.
-      # Read here: https://plugins.auxilor.io/effects/configuring-a-condition
+      # Read here: https://hub.auxilor.io/wiki/libreforge/configuring-a-condition
       conditions:
         - id: has_permission
           args:

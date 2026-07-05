@@ -87,5 +87,5 @@ pages:
         row: 2
         column: 9
 
-    # Custom GUI slots; see here for a how-to: https://plugins.auxilor.io/all-plugins/custom-gui-slots
+    # Custom GUI slots; see here for a how-to: https://hub.auxilor.io/wiki/eco/pages#custom-gui-slots
     custom-slots: [ ]

@@ -61,7 +61,7 @@ The formula is plain math that returns the new price, evaluated whenever the pri
 | `%buys%` | Total server-wide buys of this item |
 | `%sells%` | Total server-wide sells of this item |
 
-See the [Math](https://plugins.auxilor.io/all-plugins/math) guide for the operators and functions you can use. The shipped default is:
+See the [Math](https://hub.auxilor.io/wiki/eco/math) guide for the operators and functions you can use. The shipped default is:
 
 ```text
 %base_price% * (1 + 0.0781 * log(1 + max(%buys% - %sells%, 0)) - 0.0781 * log(1 + max(%sells% - %buys%, 0)))

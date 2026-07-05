@@ -21,7 +21,7 @@ A **category** is the actual shop screen, the menu where players buy and sell; a
 
 ## Naming and IDs
 
-The file name without `.yml` is the category's ID, and that is what shops reference and what placeholders use. The `item:` icon uses the [Item Lookup System](https://plugins.auxilor.io/the-item-lookup-system) syntax. One category can sit in as many shops as you like.
+The file name without `.yml` is the category's ID, and that is what shops reference and what placeholders use. The `item:` icon uses the [Item Lookup System](https://hub.auxilor.io/wiki/eco/the-item-lookup-system-the-item-lookup-system) syntax. One category can sit in as many shops as you like.
 
 :::warning ID rules
 IDs may only contain lowercase letters, numbers, and underscores (a-z, 0-9, _). No spaces, capitals, or hyphens, or the category will not load.
@@ -116,7 +116,7 @@ Dynamic pricing is a system of its own, including decay, per-price-type formulas
 
 ### GUI
 
-The GUI block lays out the category menu itself. See [GUI Options](https://plugins.auxilor.io/all-plugins/pages) for the mask, pattern, and page fields.
+The GUI block lays out the category menu itself. See [GUI Options](https://hub.auxilor.io/wiki/eco/pages) for the mask, pattern, and page fields.
 
 ```yaml
 gui:
