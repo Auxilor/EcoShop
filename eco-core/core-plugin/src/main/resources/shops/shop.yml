@@ -1,13 +1,21 @@
-title: Shop
+title: "Shop (%page%/%max_page%)"
 command: shop
+
+page-change-sound:
+  enabled: true
+  sound: ui.button.click
+  pitch: 1.0
+  volume: 1.0
 
 forwards-arrow:
   item: arrow name:"&fNext Page"
+  item-inactive: gray_dye name:"&7Next Page"
   row: 3
   column: 6
 
 backwards-arrow:
   item: arrow name:"&fPrevious Page"
+  item-inactive: gray_dye name:"&7Previous Page"
   row: 3
   column: 4
 
@@ -79,5 +87,5 @@ pages:
         row: 2
         column: 9
 
-    # Custom GUI slots; see here for a how-to: https://plugins.auxilor.io/all-plugins/custom-gui-slots
+    # Custom GUI slots; see here for a how-to: https://hub.auxilor.io/wiki/eco/pages#custom-gui-slots
     custom-slots: [ ]

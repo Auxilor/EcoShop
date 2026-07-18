@@ -7,6 +7,7 @@ import com.willfp.ecoshop.commands.CommandEcoShop
 import com.willfp.ecoshop.commands.CommandSell
 import com.willfp.ecoshop.integrations.EcoShopAdapter
 import com.willfp.ecoshop.libreforge.EffectBuyItem
+import com.willfp.ecoshop.libreforge.EffectOpenShop
 import com.willfp.ecoshop.libreforge.FilterShopItem
 import com.willfp.ecoshop.libreforge.TriggerBuyItem
 import com.willfp.ecoshop.libreforge.TriggerSellItem
@@ -48,6 +49,7 @@ class EcoShopPlugin : LibreforgePlugin() {
         Triggers.register(TriggerBuyItem)
         Triggers.register(TriggerSellItem)
         Effects.register(EffectBuyItem)
+        Effects.register(EffectOpenShop)
     }
 
     override fun handleReload() {

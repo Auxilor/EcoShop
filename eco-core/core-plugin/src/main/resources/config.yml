@@ -88,7 +88,7 @@ buy-menu:
       column: 8
       item: lime_concrete 64 name:"&aSet to full stack"
 
-  # Custom GUI slots; see here for a how-to: https://plugins.auxilor.io/all-plugins/custom-gui-slots
+  # Custom GUI slots; see here for a how-to: https://hub.auxilor.io/wiki/eco/pages#custom-gui-slots
   custom-slots: [ ]
 
 buy-more:
@@ -147,7 +147,7 @@ buy-more:
     column: 5
     item: arrow 1 name:"&cGo Back"
 
-  # Custom GUI slots; see here for a how-to: https://plugins.auxilor.io/all-plugins/custom-gui-slots
+  # Custom GUI slots; see here for a how-to: https://hub.auxilor.io/wiki/eco/pages#custom-gui-slots
   custom-slots: [ ]
 
 sell-menu:
@@ -228,7 +228,7 @@ sell-menu:
       column: 8
       item: red_concrete 64 name:"&cSet to full stack"
 
-  # Custom GUI slots; see here for a how-to: https://plugins.auxilor.io/all-plugins/custom-gui-slots
+  # Custom GUI slots; see here for a how-to: https://hub.auxilor.io/wiki/eco/pages#custom-gui-slots
   custom-slots: [ ]
 
 sell-more:
@@ -287,7 +287,7 @@ sell-more:
     column: 5
     item: arrow 1 name:"&cGo Back"
 
-  # Custom GUI slots; see here for a how-to: https://plugins.auxilor.io/all-plugins/custom-gui-slots
+  # Custom GUI slots; see here for a how-to: https://hub.auxilor.io/wiki/eco/pages#custom-gui-slots
   custom-slots: [ ]
 
 # Options for the mass-sell gui (/sell)
@@ -295,7 +295,7 @@ sell-gui:
   rows: 6
   title: Sell Items
 
-  # Custom GUI slots; see here for a how-to: https://plugins.auxilor.io/all-plugins/custom-gui-slots
+  # Custom GUI slots; see here for a how-to: https://hub.auxilor.io/wiki/eco/pages#custom-gui-slots
   custom-slots:
     - row: 6
       column: 9
