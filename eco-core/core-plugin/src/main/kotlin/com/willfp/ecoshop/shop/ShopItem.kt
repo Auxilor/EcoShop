@@ -2,7 +2,7 @@
 
 package com.willfp.ecoshop.shop
 
-import com.github.benmanes.caffeine.cache.Caffeine
+import com.willfp.eco.core.cache.EcoCache
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.data.keys.PersistentDataKey
 import com.willfp.eco.core.data.keys.PersistentDataKeyType
@@ -41,7 +41,7 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.permissions.Permission
 import org.bukkit.permissions.PermissionDefault
 import java.util.Optional
-import java.util.concurrent.TimeUnit
+import java.time.Duration
 
 enum class BuyType {
     NORMAL,
@@ -754,9 +754,9 @@ class ShopItem(
 fun ConfiguredPrice?.getDisplay(player: Player, amount: Number): String =
     this?.getDisplay(player, amount.toDouble()) ?: ""
 
-private val itemCache = Caffeine.newBuilder()
-    .expireAfterAccess(5, TimeUnit.SECONDS)
-    .build<HashedItem, Optional<ShopItem>>()
+private val itemCache = EcoCache.builder<HashedItem, Optional<ShopItem>>()
+    .expireAfterAccess(Duration.ofSeconds(5))
+    .build()
 
 val ItemStack.shopItem: ShopItem?
     get() = itemCache.get(HashedItem.of(this)) {

@@ -20,7 +20,7 @@ A **shop** is the top-level menu a player opens with a **command**; it holds a s
 
 ## Naming and IDs
 
-The file name without `.yml` is the shop's ID. That ID is what you use in commands, effects, and placeholders. Item fields like the arrows below use the [Item Lookup System](https://hub.auxilor.io/wiki/eco/the-item-lookup-system-the-item-lookup-system) syntax.
+The file name without `.yml` is the shop's ID. That ID is what you use in commands, effects, and placeholders. Item fields like the arrows below use the [Item Lookup System](https://plugins.auxilor.io/the-item-lookup-system) syntax.
 
 :::warning ID rules
 IDs may only contain lowercase letters, numbers, and underscores (a-z, 0-9, _). No spaces, capitals, or hyphens, or the shop will not load.
@@ -41,7 +41,7 @@ Here is a complete shop with every part in place:
 
 ```yaml
 # === Shop info: name and command ===
-title: Demo Shop # The GUI title shown at the top of the shop. Supports %page% and %max_page% placeholders.
+title: Demo Shop # The GUI title shown at the top of the shop.
 command: demoshop # The command players run to open this shop.
 
 # === Navigation: page arrows ===
@@ -113,7 +113,7 @@ pages: # Add as many pages as you want.
 The title and command are the only required fields a shop must have.
 
 ```yaml
-title: Demo Shop # The GUI title shown at the top of the shop. Supports %page% and %max_page% placeholders.
+title: Demo Shop # The GUI title shown at the top of the shop.
 command: demoshop # The command players run to open this shop.
 ```
 
@@ -134,7 +134,7 @@ backwards-arrow: # Hidden on the first page.
 
 ### Broadcasts and sounds
 
-These give feedback when players act in the shop. Broadcasts go to the whole server; the three sounds play locally for the buyer. See the [Sound Configs](https://hub.auxilor.io/wiki/eco/sounds) guide for the sound fields.
+These give feedback when players act in the shop. Broadcasts go to the whole server; the three sounds play locally for the buyer. See the [Sound Configs](https://plugins.auxilor.io/all-plugins/sounds) guide for the sound fields.
 
 ```yaml
 buy-broadcasts:

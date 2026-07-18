@@ -21,7 +21,7 @@ An **item** is a single entry in a category's `items` list, the thing a player a
 
 ## Naming and IDs
 
-Unlike shops and categories, an item's ID is the `id:` field you set, not a file name. That ID is what commands and placeholders use, so keep it unique within the category. The `item:` field uses the [Item Lookup System](https://hub.auxilor.io/wiki/eco/the-item-lookup-system-the-item-lookup-system) syntax.
+Unlike shops and categories, an item's ID is the `id:` field you set, not a file name. That ID is what commands and placeholders use, so keep it unique within the category. The `item:` field uses the [Item Lookup System](https://plugins.auxilor.io/the-item-lookup-system) syntax.
 
 :::warning ID rules
 IDs may only contain lowercase letters, numbers, and underscores (a-z, 0-9, _). No spaces, capitals, or hyphens, or the item will not load.
@@ -111,7 +111,7 @@ buy:
 ```
 
 :::info Values are expressions
-`value` and `require` are evaluated as math, so you can use placeholders and arithmetic, e.g. `500 - (%player_rank% * 25)`. See the [Math](https://hub.auxilor.io/wiki/eco/math) and [Prices](https://hub.auxilor.io/wiki/eco/the-price-lookup-system) guides.
+`value` and `require` are evaluated as math, so you can use placeholders and arithmetic, e.g. `500 - (%player_rank% * 25)`. See the [Math](https://plugins.auxilor.io/all-plugins/math) and [Prices](https://plugins.auxilor.io/all-plugins/prices) guides.
 :::
 
 #### `alt-buy`
@@ -281,8 +281,8 @@ Effects run extra behaviour on a trade, and conditions gate whether the trade is
 :::danger Effects are their own system
 Effects and conditions are configured by the shared eco system, not by EcoShop, so the full list of effect and condition IDs and their arguments lives there:
 
-- [Configuring an Effect](https://hub.auxilor.io/wiki/libreforge/configuring-an-effect)
-- [Configuring an Effect Chain](https://hub.auxilor.io/wiki/libreforge/configuring-a-chain)
+- [Configuring an Effect](https://plugins.auxilor.io/effects/configuring-an-effect)
+- [Configuring an Effect Chain](https://plugins.auxilor.io/effects/configuring-a-chain)
 :::
 
 ## Internal placeholders
