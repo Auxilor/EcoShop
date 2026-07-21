@@ -15,6 +15,7 @@ object CommandEcoShop : PluginCommand(
             .addSubcommand(CommandResetBuys)
             .addSubcommand(CommandResetSells)
             .addSubcommand(CommandResetDynamicPricing)
+            .addSubcommand(CommandRotate)
     }
 
     override fun onExecute(sender: CommandSender, args: List<String>) {

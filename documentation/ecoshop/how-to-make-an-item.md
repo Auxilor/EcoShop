@@ -37,6 +37,7 @@ An item is made of four parts:
 | **Buying** | The buy price, optional alt-buy currency, and purchase limits |
 | **Selling** | The sell price and sell limits |
 | **Effects and conditions** | Effects on purchase or sale, and conditions that gate the trade |
+| **Rotation** | Optional; makes the item eligible to fill a rotating shop slot instead of a fixed one |
 
 Here is a complete item with the common parts in place:
 
@@ -285,6 +286,21 @@ Effects and conditions are configured by the shared eco system, not by EcoShop, 
 - [Configuring an Effect Chain](https://plugins.auxilor.io/effects/configuring-a-chain)
 :::
 
+### Rotation
+
+An item with a `rotation` block is eligible to fill a rotating slot (marked `r` in the category's mask `pattern`) instead of sitting in one fixed place, only in categories that have `rotation.enabled: true`. This is its own system with its own resolution order (fixed-slot, then always-show, then weighted random); see [Rotating Shops](rotating-shops) for the full reference.
+
+```yaml
+rotation:
+  enabled: true # Make this item eligible for rotation. Defaults to false.
+  weight: 10 # (Optional) Relative chance of being drawn against other weighted items. Defaults to 1.
+  always-show: false # (Optional) Fill a slot every rotation instead of competing in the weighted draw.
+```
+
+:::warning
+Weighted and always-show rotation items must omit `gui.row` / `gui.column` / `gui.page`, or place it on a cell that isn't `r` in the pattern. A `gui` position on an `r` cell turns the item into a fixed-slot item instead, which always returns to that same cell every rotation.
+:::
+
 ## Internal placeholders
 
 These placeholders are available in an item's `display`, `bottom-lore`, and price `display` fields:
@@ -315,4 +331,5 @@ These placeholders are available in an item's `display`, `bottom-lore`, and pric
 
 - **Place items in context:** [How to make a Category](how-to-make-a-category) shows the file these items live in.
 - **Make prices move:** [Dynamic Pricing](dynamic-pricing) covers the `dynamic-pricing` overrides referenced above.
+- **Rotate the stock:** [Rotating Shops](rotating-shops) covers the `rotation` block referenced above in full.
 - **Tune global menus:** [Plugin Config](plugin-config) controls the shared buy and sell GUIs.

@@ -130,6 +130,12 @@ class ShopItem(
 
     val page = config.getInt("gui.page")
 
+    val hasFixedPosition: Boolean = config.has("gui.row")
+
+    val rotationEnabled: Boolean = config.getBoolOrNull("rotation.enabled") ?: false
+    val rotationWeight: Int = config.getIntOrNull("rotation.weight") ?: 1
+    val alwaysShow: Boolean = config.getBoolOrNull("rotation.always-show") ?: false
+
     val isBuyable = config.has("buy")
 
     val isSellable = config.has("sell")

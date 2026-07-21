@@ -13,6 +13,7 @@ This page lists every EcoShop command, the permission it needs, and the extra pe
 | `/ecoshop resetbuys <player/all> <id/all>` | Resets how many times a player has bought an item | `ecoshop.command.resetbuys` |
 | `/ecoshop resetsells <player/all> <id/all>` | Resets how many times a player has sold an item | `ecoshop.command.resetsells` |
 | `/ecoshop resetdynamicpricing <id/all>` | Resets the dynamic pricing counters for an item | `ecoshop.command.resetdynamicpricing` |
+| `/ecoshop rotate <category>` | Immediately re-rolls a rotating category's slots and restarts its timer | `ecoshop.command.rotate` |
 | `/sell` | Opens the mass-sell GUI | `ecoshop.command.sell` |
 | `/sell hand` | Sells the items in the player's hand | `ecoshop.command.sell.hand` |
 | `/sell all` | Sells all sellable items in the player's inventory | `ecoshop.command.sell.all` |
@@ -31,5 +32,6 @@ This page lists every EcoShop command, the permission it needs, and the extra pe
 ## Where to go next
 
 - **Reset pricing:** [Dynamic Pricing](dynamic-pricing) explains what `resetdynamicpricing` clears.
+- **Force a rotation:** [Rotating Shops](rotating-shops) explains what `/ecoshop rotate` re-rolls.
 - **Configure /sell:** [Plugin Config](plugin-config) covers the mass-sell GUI those commands open.
 - **Build a shop:** [How to make a Shop](how-to-make-a-shop) is the place to start.
