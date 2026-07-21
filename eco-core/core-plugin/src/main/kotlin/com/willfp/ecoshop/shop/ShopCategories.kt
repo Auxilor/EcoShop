@@ -11,6 +11,9 @@ object ShopCategories : RegistrableCategory<ShopCategory>("category", "categorie
     }
 
     override fun beforeReload(plugin: LibreforgePlugin) {
+        // Persist + stop schedulers on the OLD categories before they are cleared.
+        // Runs before clear(), so values() still holds the previous instances.
+        values().forEach { it.stopRotation() }
         ShopItems.clear()
     }
 

@@ -12,6 +12,7 @@ EcoShop is a server shop plugin built around GUIs that you configure entirely in
 - **Buy, sell, or both.** Items can be buy-only, sell-only, single-purchase, or limited per player and server-wide.
 - **Effect items.** An item can run an effect or effect chain on purchase instead of giving a physical item, so a shop slot can grant a rank, a potion effect, or anything the eco effect system can do.
 - **Dynamic pricing.** Prices can rise and fall with server-wide demand, driven by math formulas you control.
+- **Rotating shops.** Fill a set of slots with a weighted, timed rotation of items instead of a fixed lineup, with a forced-rotate command and a countdown placeholder.
 - **Mass selling.** Ships with a `/sell` drop-in GUI, plus `/sell hand` and `/sell all`.
 
 Want a finished look out of the box? Official premade EcoShop designs are available on Polymart:

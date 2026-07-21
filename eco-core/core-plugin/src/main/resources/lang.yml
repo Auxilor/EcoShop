@@ -48,6 +48,14 @@ messages:
 
   invalid-shop-config: "&cYour config for shop %shop% is invalid! Check that your direct-category points to a category that exists."
 
+  rotate-success: "&fForced rotation for category &r%category%&f!"
+  rotated: "&fThe &r%category%&f shop has rotated its stock!"
+  invalid-category: "&cInvalid category: %category%"
+  must-specify-category: "&cYou must specify a category!"
+
+rotation-countdown: "%hours%h %minutes%m %seconds%s"
+rotation-ready: "Rotating soon..."
+
 lore:
   missing-requirements:
     - "&cYou can't buy this item!"
