@@ -6,7 +6,20 @@
 
 item: diamond_sword name:"&fExample Category" # The item shown in the shop.
 lore: [ ] # The lore of the item shown in the shop.
+# lore: # Lore supports placeholders, e.g. the rotation countdown (needs PlaceholderAPI + rotation.enabled below):
+#   - "&7Next rotation: &f%ecoshop_rotation_example%"
 # permission: ecoshop.category.permission1 # (Optional) The permission required to access/use the category.
+
+# Rotating shops: fill `r` slots in the mask pattern below with a rotating
+# selection of items on a timer, instead of every item having a fixed position.
+# Remove this whole block (or set enabled: false) for a normal, static category.
+rotation:
+  enabled: false
+  reset-limits: false # (Optional) Reset online players' buy/sell limits for rotating items on every rotation.
+  broadcast-message: true # (Optional) Tell every online player when this category rotates. Defaults to true.
+  rotation-time:
+    interval: 1h # Rotate every 1h. Accepts s/m/h/d. Mutually exclusive with server-time below.
+    # server-time: "04:00" # Rotate daily at this server-local time instead of a fixed interval.
 
 dynamic-pricing:
   enabled: false
@@ -60,9 +73,11 @@ gui:
         items: # The background material
           - gray_stained_glass_pane
           - black_stained_glass_pane
-        pattern: # 0 for empty, 1 for the first item, 2 for the second item, etc
+        # 0 for empty, 1 for the first item, 2 for the second item, etc.
+        # 'r' marks a rotation slot when rotation.enabled is true above; ignored otherwise.
+        pattern:
           - "222222222"
-          - "211111112"
+          - "2111r1112" # column 5 is a rotation slot, matching rotation_gold_ingot's fixed gui position below.
           - "211111112"
           - "211111112"
           - "211111112"
@@ -176,3 +191,46 @@ items:
           args:
             permission: 'group.iron'
             inverse: true
+
+  ## Example rotating items (only take effect when rotation.enabled is true above) ##
+  #####################################################################################
+  # Weighted / always-show rotation items must OMIT the `gui` section entirely (or place
+  # it on a cell that is NOT an 'r' in the mask pattern) - giving one a `gui` position on
+  # an 'r' cell silently turns it into a fixed-slot item instead (see below).
+  - id: rotation_diamond
+    item: diamond
+    rotation:
+      enabled: true
+      weight: 10 # Higher weight = more likely to be picked each rotation, relative to other weighted items.
+    buy:
+      value: 100
+      type: coins
+      display: "$%value%"
+
+  - id: rotation_emerald
+    item: emerald
+    rotation:
+      enabled: true
+      weight: 5
+      always-show: true # (Optional) Always fill a slot every rotation, before weighted items are drawn.
+    buy:
+      value: 200
+      type: coins
+      display: "$%value%"
+
+  # Fixed-slot rotation item: rotation.enabled + a `gui` position landing on an 'r' cell
+  # reserves that exact slot for this item every rotation; it always rotates back into
+  # the same place instead of a random 'r' cell.
+  - id: rotation_gold_ingot
+    item: gold_ingot
+    rotation:
+      enabled: true
+      weight: 3
+    gui:
+      row: 2
+      column: 5
+      page: 1
+    buy:
+      value: 50
+      type: coins
+      display: "$%value%"

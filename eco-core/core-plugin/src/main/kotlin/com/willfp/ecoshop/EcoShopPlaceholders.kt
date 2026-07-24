@@ -5,8 +5,11 @@ import com.willfp.eco.core.placeholder.PlayerlessPlaceholder
 import com.willfp.ecoshop.shop.BuyType
 import com.willfp.ecoshop.shop.ShopCategories
 import com.willfp.ecoshop.shop.ShopItem
+import com.willfp.ecoshop.shop.rotation.RotationPlaceholders
 
 fun registerPlaceholders(plugin: EcoShopPlugin) {
+    RotationPlaceholders.register()
+
     for (category in ShopCategories.values()) {
         for (item in category.items) {
             registerItemPlaceholders(plugin, category.id, item)

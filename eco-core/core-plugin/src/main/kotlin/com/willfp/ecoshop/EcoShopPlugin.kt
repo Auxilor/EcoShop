@@ -63,6 +63,10 @@ class EcoShopPlugin : LibreforgePlugin() {
         registerPlaceholders(this)
     }
 
+    override fun handleDisable() {
+        ShopCategories.values().forEach { it.stopRotation() }
+    }
+
     override fun loadListeners(): List<Listener> {
         return listOf(
 

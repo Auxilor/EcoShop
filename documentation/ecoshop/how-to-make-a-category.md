@@ -118,6 +118,10 @@ Dynamic pricing is a system of its own, including decay, per-price-type formulas
 
 The GUI block lays out the category menu itself. See [GUI Options](https://plugins.auxilor.io/all-plugins/pages) for the mask, pattern, and page fields.
 
+:::tip Rotating shops
+Marking a cell in a page's mask `pattern` with `r` turns it into a rotation slot, which fills with a rotating selection of items on a timer instead of holding one fixed item. This is an optional, separate `rotation` block on both the category and its items; see [Rotating Shops](rotating-shops) for the full setup.
+:::
+
 ```yaml
 gui:
   rows: 6 # Height of the menu (1-6).
@@ -167,4 +171,5 @@ Building items is a topic on its own; see [How to make an Item](how-to-make-an-i
 
 - **Stock the shelves:** [How to make an Item](how-to-make-an-item) is the next step.
 - **React to demand:** [Dynamic Pricing](dynamic-pricing) explains the pricing block above in full.
+- **Rotate the stock:** [Rotating Shops](rotating-shops) covers the optional `r` mask cells and rotation config.
 - **Wire it up:** [How to make a Shop](how-to-make-a-shop) shows how shops point at this category.

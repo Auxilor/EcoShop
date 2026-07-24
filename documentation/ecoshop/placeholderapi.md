@@ -49,10 +49,19 @@ With PlaceholderAPI installed, EcoShop exposes per-item placeholders you can use
 | `%ecoshop_<category>_<item>_sell_remaining%` | The amount the player can still sell |
 | `%ecoshop_<category>_<item>_sell_global_remaining%` | The amount remaining in the global sell limit (`-1` if unlimited) |
 
+## Rotation
+
+| Placeholder | Description |
+| --- | --- |
+| `%ecoshop_rotation_<category>%` | Countdown to that category's next rotation, or empty if the category doesn't have rotation enabled |
+
+See [Rotating Shops](rotating-shops) for how the countdown format is configured.
+
 <hr/>
 
 ## Where to go next
 
 - **Find your IDs:** [How to make an Item](how-to-make-an-item) shows where the `<item>` ID comes from.
 - **Pricing stats:** [Dynamic Pricing](dynamic-pricing) explains the base-versus-effective price split.
+- **Rotation countdown:** [Rotating Shops](rotating-shops) covers the `rotation-countdown` / `rotation-ready` lang keys behind the placeholder above.
 - **Internal placeholders:** the [How to make an Item](how-to-make-an-item) page also lists the `%value%`-style placeholders for use inside shop lore.

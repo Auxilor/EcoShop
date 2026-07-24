@@ -40,8 +40,12 @@ permissions:
       ecoshop.command.resetbuys: true
       ecoshop.command.resetsells: true
       ecoshop.command.ecoshop: true
+      ecoshop.command.rotate: true
       ecoshop.command.sell.*: true
 
+  ecoshop.command.rotate:
+    description: Allows forcing a shop category rotation
+    default: op
   ecoshop.command.ecoshop:
     description: Allows the use of /ecoshop (base command)
     default: true
