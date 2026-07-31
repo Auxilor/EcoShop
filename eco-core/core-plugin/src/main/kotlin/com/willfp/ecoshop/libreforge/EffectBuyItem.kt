@@ -49,12 +49,14 @@ object EffectBuyItem : Effect<NoCompileData>("buy_item") {
             "amount",
             description = "The number of the item to buy.",
             type = ArgType.EXPRESSION,
-            default = "1"
+            default = "1",
+            example = "1 + %level%"
         )
         optional(
             "price",
             description = "Overrides the price charged for the purchase.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "%level% * 100"
         )
         optional(
             "bypass-limits",
