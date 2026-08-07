@@ -37,7 +37,7 @@ publishing {
         // maven-releases + GitHub: full set (none, all, sources, javadoc)
         create<MavenPublication>("release") {
             artifactId = rootProject.name
-            from(components["java"])
+            from(components["shadow"])
         }
     }
     repositories {
