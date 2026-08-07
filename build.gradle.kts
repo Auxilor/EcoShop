@@ -24,20 +24,15 @@ dependencies {
     }
 }
 
-java {
-    withJavadocJar()
-}
-
 publishing {
     publications {
-        // maven-private: only the shaded jar
+        // maven-private: the libreforge jar (shaded plugin with libreforge embedded)
         create<MavenPublication>("private") {
             artifactId = rootProject.name
         }
-        // maven-releases + GitHub: full set (none, all, sources, javadoc)
-        create<MavenPublication>("release") {
+        // maven-public: the shaded jar
+        create<MavenPublication>("public") {
             artifactId = rootProject.name
-            from(components["shadow"])
         }
     }
     repositories {
@@ -50,8 +45,8 @@ publishing {
             }
         }
         maven {
-            name = "AuxilorReleases"
-            url = uri("https://repo.auxilor.io/repository/maven-releases/")
+            name = "AuxilorPublic"
+            url = uri("https://repo.auxilor.io/repository/maven-public/")
             credentials {
                 username = System.getenv("MAVEN_USERNAME")
                 password = System.getenv("MAVEN_PASSWORD")
@@ -60,9 +55,16 @@ publishing {
     }
 }
 
+// Neither publication is attached to a software component, so only the single jar
+// and its pom are published - no sources, javadoc, or classified variants.
 afterEvaluate {
     publishing.publications.named<MavenPublication>("private") {
         artifact(tasks.named("libreforgeJar"))
+    }
+    publishing.publications.named<MavenPublication>("public") {
+        artifact(tasks.named("shadowJar")) {
+            classifier = ""
+        }
     }
 }
 
@@ -72,7 +74,7 @@ tasks.matching { it.name.startsWith("generatePomFileFor") }.configureEach {
 tasks.register("publishToAuxilor") {
     dependsOn(
         "publishPrivatePublicationToAuxilorRepository",
-        "publishReleasePublicationToAuxilorReleasesRepository",
+        "publishPublicPublicationToAuxilorPublicRepository",
     )
 }
 
@@ -98,7 +100,6 @@ allprojects {
     }
 
     java {
-        withSourcesJar()
         toolchain.languageVersion.set(JavaLanguageVersion.of(21))
     }
 
