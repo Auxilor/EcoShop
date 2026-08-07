@@ -30,8 +30,8 @@ publishing {
         create<MavenPublication>("private") {
             artifactId = rootProject.name
         }
-        // maven-public: the shaded jar
-        create<MavenPublication>("public") {
+        // maven-releases (served publicly via the maven-public group): the shaded jar
+        create<MavenPublication>("release") {
             artifactId = rootProject.name
         }
     }
@@ -44,9 +44,11 @@ publishing {
                 password = System.getenv("MAVEN_PASSWORD")
             }
         }
+        // maven-public is a group repo and rejects uploads (405) - deploy to the
+        // hosted maven-releases repo, which the group serves.
         maven {
-            name = "AuxilorPublic"
-            url = uri("https://repo.auxilor.io/repository/maven-public/")
+            name = "AuxilorReleases"
+            url = uri("https://repo.auxilor.io/repository/maven-releases/")
             credentials {
                 username = System.getenv("MAVEN_USERNAME")
                 password = System.getenv("MAVEN_PASSWORD")
@@ -61,7 +63,7 @@ afterEvaluate {
     publishing.publications.named<MavenPublication>("private") {
         artifact(tasks.named("libreforgeJar"))
     }
-    publishing.publications.named<MavenPublication>("public") {
+    publishing.publications.named<MavenPublication>("release") {
         artifact(tasks.named("shadowJar")) {
             classifier = ""
         }
@@ -74,7 +76,7 @@ tasks.matching { it.name.startsWith("generatePomFileFor") }.configureEach {
 tasks.register("publishToAuxilor") {
     dependsOn(
         "publishPrivatePublicationToAuxilorRepository",
-        "publishPublicPublicationToAuxilorPublicRepository",
+        "publishReleasePublicationToAuxilorReleasesRepository",
     )
 }
 
