@@ -30,7 +30,7 @@ publishing {
         create<MavenPublication>("private") {
             artifactId = rootProject.name
         }
-        // maven-releases (served publicly via the maven-public group): the shaded jar
+        // maven-releases (served publicly via the maven-public group): the API jar
         create<MavenPublication>("release") {
             artifactId = rootProject.name
         }
@@ -63,8 +63,13 @@ afterEvaluate {
     publishing.publications.named<MavenPublication>("private") {
         artifact(tasks.named("libreforgeJar"))
     }
+    // The public artifact is what other plugins compile against, so it must be the
+    // plain jar, not shadowJar: shadowJar drops META-INF (taking the .kotlin_module
+    // with it, which hides every top-level declaration from the Kotlin compiler) and
+    // relocates kotlin.* into com.willfp.eco.libs.kotlin, which rewrites @kotlin.Metadata
+    // and makes the whole API read as Java. eco publishes its API the same way.
     publishing.publications.named<MavenPublication>("release") {
-        artifact(tasks.named("shadowJar")) {
+        artifact(project(":eco-core:core-plugin").tasks.named<Jar>("jar")) {
             classifier = ""
         }
     }
