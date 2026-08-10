@@ -13,7 +13,7 @@ object ShopLogListener : Listener {
             type = "BUY",
             itemId = event.shopItem.id,
             amount = event.amount,
-            price = event.price.getValue(event.player) * event.amount
+            price = event.price.getValue(event.player) * event.amount * event.shopItem.getEffectiveBuyMultiplier(event.buyType, event.player)
         )
     }
 
@@ -24,7 +24,7 @@ object ShopLogListener : Listener {
             type = "SELL",
             itemId = event.shopItem.id,
             amount = event.amount,
-            price = event.price.getValue(event.player) * event.amount
+            price = event.price.getValue(event.player) * event.amount * event.multiplier * event.shopItem.getEffectiveSellMultiplier(event.player)
         )
     }
 }
