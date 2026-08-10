@@ -492,7 +492,7 @@ class ShopItem(
             BuyType.ALT -> altBuyPrice
         }!!
 
-        val event = EcoShopBuyEvent(player, this, basePrice.price, buyType)
+        val event = EcoShopBuyEvent(player, this, basePrice.price, buyType, amount)
         Bukkit.getPluginManager().callEvent(event)
 
         val payAmount = if (priceValueOverride != null) {
@@ -714,7 +714,7 @@ class ShopItem(
                 left = 0
             }
 
-            val event = EcoShopSellEvent(player, this, this.sellPrice!!, itemStack)
+            val event = EcoShopSellEvent(player, this, this.sellPrice!!, itemStack, times)
             Bukkit.getPluginManager().callEvent(event)
 
             multipliers[event.multiplier] = (multipliers[event.multiplier] ?: 0) + times
@@ -806,7 +806,7 @@ fun ItemStack.sell(
     val price = item.sellPrice ?: return false
     val soldAmount = this.amount
 
-    val event = EcoShopSellEvent(player, item, price, this)
+    val event = EcoShopSellEvent(player, item, price, this, soldAmount)
     Bukkit.getPluginManager().callEvent(event)
 
     val dynamicSellMultiplier = item.getEffectiveSellMultiplier(player)
@@ -876,7 +876,7 @@ fun Collection<ItemStack>.sell(
 
         val price = item.sellPrice!!
 
-        val event = EcoShopSellEvent(player, item, price, itemStack)
+        val event = EcoShopSellEvent(player, item, price, itemStack, sellableAmount)
         Bukkit.getPluginManager().callEvent(event)
 
         val dynamicSellMultiplier = item.getEffectiveSellMultiplier(player)

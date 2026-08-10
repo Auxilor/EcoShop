@@ -11,7 +11,8 @@ class EcoShopBuyEvent(
     who: Player,
     override val shopItem: ShopItem,
     override var price: Price,
-    val buyType: BuyType
+    val buyType: BuyType,
+    val amount: Int
 ) : PlayerEvent(who), ShopEvent {
 
     // Below here is bukkit boilerplate
