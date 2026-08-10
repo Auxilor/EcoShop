@@ -16,6 +16,10 @@ Changing `use-local-storage` switches the storage backend, so it does not take e
 # local storage, disabling cross-server sync.
 use-local-storage: false
 
+logging:
+  enabled: true # Whether to log every shop buy/sell transaction to logs/shop/*.log.
+  max-history-days: 30 # How many days of log files /ecoshop history will search back through.
+
 shop-items:
   register-permissions: false # Show shop permissions in permission plugins; slows reloads, so off by default.
   sell-strict-match: true # Sold items must match the shop item exactly (name, lore, enchants); false matches only material.

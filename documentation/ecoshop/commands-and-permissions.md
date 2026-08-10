@@ -14,6 +14,7 @@ This page lists every EcoShop command, the permission it needs, and the extra pe
 | `/ecoshop resetsells <player/all> <id/all>` | Resets how many times a player has sold an item | `ecoshop.command.resetsells` |
 | `/ecoshop resetdynamicpricing <id/all>` | Resets the dynamic pricing counters for an item | `ecoshop.command.resetdynamicpricing` |
 | `/ecoshop rotate <category>` | Immediately re-rolls a rotating category's slots and restarts its timer | `ecoshop.command.rotate` |
+| `/ecoshop history <player> <amount> [buy|sell|all]` | View a player's recent shop transaction history | `ecoshop.command.history` |
 | `/sell` | Opens the mass-sell GUI | `ecoshop.command.sell` |
 | `/sell hand` | Sells the items in the player's hand | `ecoshop.command.sell.hand` |
 | `/sell all` | Sells all sellable items in the player's inventory | `ecoshop.command.sell.all` |
