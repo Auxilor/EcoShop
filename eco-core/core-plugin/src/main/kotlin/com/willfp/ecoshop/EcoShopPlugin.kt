@@ -11,6 +11,7 @@ import com.willfp.ecoshop.libreforge.EffectOpenShop
 import com.willfp.ecoshop.libreforge.FilterShopItem
 import com.willfp.ecoshop.libreforge.TriggerBuyItem
 import com.willfp.ecoshop.libreforge.TriggerSellItem
+import com.willfp.ecoshop.logging.ShopLogListener
 import com.willfp.ecoshop.shop.DynamicPricingDecayTask
 import com.willfp.ecoshop.shop.ShopCategories
 import com.willfp.ecoshop.shop.ShopItems
@@ -68,9 +69,11 @@ class EcoShopPlugin : LibreforgePlugin() {
     }
 
     override fun loadListeners(): List<Listener> {
-        return listOf(
-
-        )
+        return if (configYml.getBool("logging.enabled")) {
+            listOf(ShopLogListener)
+        } else {
+            emptyList()
+        }
     }
 
     override fun loadPluginCommands(): List<PluginCommand> {
