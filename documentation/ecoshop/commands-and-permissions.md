@@ -1,6 +1,6 @@
 ---
 title: "Commands and Permissions"
-sidebar_position: 6
+sidebar_position: 7
 ---
 
 This page lists every EcoShop command, the permission it needs, and the extra permission nodes that gate opening shops and trading specific items. Shop commands you define in shop files are separate; these are the built-in ones.

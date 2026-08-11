@@ -1,6 +1,6 @@
 ---
 title: "PlaceholderAPI"
-sidebar_position: 7
+sidebar_position: 6
 ---
 
 With PlaceholderAPI installed, EcoShop exposes per-item placeholders you can use in any plugin that reads them, e.g. scoreboards, holograms, or chat. They all follow the format `%ecoshop_<category>_<item>_<stat>%`, where `<category>` is the category ID and `<item>` is the item ID. This page lists the available stats, grouped by buy pricing, buy limits, sell pricing, and sell limits.
