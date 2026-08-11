@@ -69,11 +69,7 @@ class EcoShopPlugin : LibreforgePlugin() {
     }
 
     override fun loadListeners(): List<Listener> {
-        return if (configYml.getBool("logging.enabled")) {
-            listOf(ShopLogListener)
-        } else {
-            emptyList()
-        }
+        return listOf(ShopLogListener)
     }
 
     override fun loadPluginCommands(): List<PluginCommand> {
