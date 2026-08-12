@@ -12,6 +12,7 @@ class EcoShopSellEvent(
     override val shopItem: ShopItem,
     override var price: Price,
     val item: ItemStack,
+    val amount: Int,
     var multiplier: Double = 1.0
 ) : PlayerEvent(who), ShopEvent {
 
