@@ -104,6 +104,7 @@ object CommandHistory : Subcommand(
     override fun tabComplete(sender: CommandSender, args: List<String>): List<String> {
         return when (args.size) {
             1 -> Bukkit.getOnlinePlayers().map { it.name }
+            2 -> listOf("1", "5", "10", "25", "50")
             3 -> validTypes.toList()
             else -> emptyList()
         }

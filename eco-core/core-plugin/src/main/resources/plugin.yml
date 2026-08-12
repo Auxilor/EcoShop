@@ -41,6 +41,7 @@ permissions:
       ecoshop.command.resetsells: true
       ecoshop.command.ecoshop: true
       ecoshop.command.rotate: true
+      ecoshop.command.history: true
       ecoshop.command.sell.*: true
 
   ecoshop.command.rotate:
@@ -57,6 +58,9 @@ permissions:
     default: op
   ecoshop.command.resetsells:
     description: Allows resetting sells (for testing)
+    default: op
+  ecoshop.command.history:
+    description: Allows viewing shop transaction history
     default: op
   ecoshop.command.sell:
     description: Allows the use of /sell and the /sell GUI
