@@ -1,6 +1,6 @@
 ---
 title: "Rotating Shops"
-sidebar_position: 4.5
+sidebar_position: 5
 ---
 
 Rotating shops let a category swap out a selection of items on a timer, instead of every item sitting in a fixed slot forever. This is a global, server-wide rotation — every player sees the same active items and the same countdown, and the schedule survives restarts. This page covers turning it on, how items are picked each rotation, and how to force or track a rotation.

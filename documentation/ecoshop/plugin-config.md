@@ -1,6 +1,6 @@
 ---
 title: "Plugin Config"
-sidebar_position: 5
+sidebar_position: 8
 ---
 
 `config.yml` holds the plugin-wide settings: storage, the global shop-item lore, and the shared buy, buy-more, sell, sell-more, and mass-sell menus. It lives at `/plugins/EcoShop/config.yml`. After editing it, run `/ecoshop reload` to apply your changes.
