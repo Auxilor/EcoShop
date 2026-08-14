@@ -8,10 +8,11 @@ import java.util.regex.Pattern
 object RotationPlaceholders {
     private val placeholder = DynamicPlaceholder(
         plugin,
-        Pattern.compile("ecoshop_rotation_(.+)")
+        Pattern.compile("rotation_(.+)")
     ) { args ->
-        // args is the full matched string, e.g. "ecoshop_rotation_minerals"
-        val categoryId = args.removePrefix("ecoshop_rotation_")
+        // the plugin prefix ("ecoshop_") is stripped by eco before matching,
+        // so args is e.g. "rotation_minerals", not "ecoshop_rotation_minerals"
+        val categoryId = args.removePrefix("rotation_")
         val scheduler = ShopCategories.getByID(categoryId)?.scheduler
             ?: return@DynamicPlaceholder ""
         formatCountdown(scheduler.state.nextRotation)
