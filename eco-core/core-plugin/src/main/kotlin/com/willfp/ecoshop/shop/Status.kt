@@ -8,6 +8,7 @@ enum class BuyStatus {
     NO_PERMISSION,
     MISSING_REQUIREMENTS,
     CANNOT_AFFORD,
+    INVENTORY_FULL,
     ALLOW
 }
 
