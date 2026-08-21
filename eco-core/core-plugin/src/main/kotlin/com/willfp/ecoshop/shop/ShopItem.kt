@@ -469,7 +469,25 @@ class ShopItem(
             return BuyStatus.CANNOT_AFFORD
         }
 
+        if (item != null &&
+            plugin.configYml.getStringOrNull("shop-items.full-inventory-behaviour") == "reject-sale" &&
+            !hasInventoryRoom(player, item.item, amount)
+        ) {
+            return BuyStatus.INVENTORY_FULL
+        }
+
         return BuyStatus.ALLOW
+    }
+
+    /** Simulate adding [amount] copies of [itemStack] to a [player]'s inventory to check for space. */
+    private fun hasInventoryRoom(player: Player, itemStack: ItemStack, amount: Int): Boolean {
+        val simulated = Bukkit.createInventory(null, player.inventory.storageContents.size)
+        simulated.contents = player.inventory.storageContents.clone()
+
+        val toAdd = itemStack.clone()
+        toAdd.amount *= amount
+
+        return simulated.addItem(toAdd).isEmpty()
     }
 
     /**
