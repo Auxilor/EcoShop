@@ -7,3 +7,4 @@ options:
   bstats-id: 16978
   color: '&#76b852'
   uses-reflective-reload: false
+  eco-api-version: ${ecoApiVersion}
