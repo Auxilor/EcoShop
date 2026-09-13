@@ -36,9 +36,12 @@ class MoreMenu(
             )
         )
 
+        // Command/effect-only items have no item, so fall back to the display item's stack size.
+        val stackSize = (item.item?.item ?: item.displayItem).maxStackSize.takeIf { it > 0 } ?: 64
+
         for (config in plugin.configYml.getSubsections("$key-more.amounts")) {
             val stacks = config.getInt("stacks")
-            val amount = stacks * (item.item?.item?.maxStackSize ?: 1)
+            val amount = stacks * stackSize
 
             setSlot(
                 config.getInt("row"),
