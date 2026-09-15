@@ -12,6 +12,7 @@ import com.willfp.eco.core.fast.fast
 import com.willfp.eco.core.items.HashedItem
 import com.willfp.eco.core.items.Items
 import com.willfp.eco.core.items.builder.ItemStackBuilder
+import com.willfp.eco.core.placeholder.context.PlaceholderContext
 import com.willfp.eco.core.price.CombinedDisplayPrice
 import com.willfp.eco.core.price.ConfiguredPrice
 import com.willfp.eco.core.registry.KRegistrable
@@ -21,6 +22,9 @@ import com.willfp.eco.util.formatEco
 import com.willfp.ecoshop.event.EcoShopBuyEvent
 import com.willfp.ecoshop.event.EcoShopSellEvent
 import com.willfp.ecoshop.plugin
+import com.willfp.ecoshop.sell.SellBypass
+import com.willfp.ecoshop.sell.SellCandidate
+import com.willfp.ecoshop.sell.SellSource
 import com.willfp.ecoshop.sell.DynamicPricer
 import com.willfp.ecoshop.shop.gui.BuyMenu
 import com.willfp.ecoshop.shop.gui.SellMenu
@@ -52,8 +56,8 @@ enum class BuyType {
 class ShopItem(
     val config: Config,
     categoryDynamicPricing: DynamicPricingConfig? = null
-) : KRegistrable {
-    override val id = config.getString("id")
+) : KRegistrable, SellCandidate {
+    override val id: String = config.getString("id")
 
     val dynamicPricing: DynamicPricingConfig? = run {
         val hasBuyDp = config.has("buy") && config.getSubsection("buy").has("dynamic-pricing")
@@ -139,7 +143,7 @@ class ShopItem(
 
     val isBuyable = config.has("buy")
 
-    val isSellable = config.has("sell")
+    override val isSellable = config.has("sell")
 
     val hasAltBuy = config.has("alt-buy")
 
@@ -147,7 +151,7 @@ class ShopItem(
 
     val altBuyPrice = ConfiguredPrice.create(config.getSubsection("alt-buy"))
 
-    val sellPrice = ConfiguredPrice.create(config.getSubsection("sell"))
+    override val sellPrice = ConfiguredPrice.create(config.getSubsection("sell"))
 
     val buyConditions = Conditions.compile(
         config.getSubsections("buy.conditions"),
@@ -166,6 +170,79 @@ class ShopItem(
 
     val isStrictMatch = plugin.configYml.getBoolOrNull("shop-items.sell-strict-match") ?: true
 
+    private val _categoryIds = mutableSetOf<String>()
+
+    override val categoryIds: Set<String>
+        get() = _categoryIds
+
+    internal fun addCategory(categoryId: String) {
+        _categoryIds += categoryId
+    }
+
+    override val rawSellValueExpression: String? =
+        config.getStringOrNull("sell.value", false, StringUtils.FormatOption.WITHOUT_PLACEHOLDERS)
+
+    override val hasSellConditions: Boolean = config.getSubsections("sell.conditions").isNotEmpty()
+
+    override val sellDynamicConfig: PriceDynamicConfig?
+        get() = dynamicPricing?.sell
+
+    override fun matchesForSale(itemStack: ItemStack): Boolean {
+        val shopItem = item ?: return false
+        return if (isStrictMatch) itemStack.isSimilar(shopItem.item) else shopItem.matches(itemStack)
+    }
+
+    override fun totalSells(player: OfflinePlayer): Int = getTotalSells(player)
+
+    override fun totalGlobalSells(): Int = getTotalGlobalSells()
+
+    override fun dynamicGlobalBuys(): Int = getDynamicGlobalBuys()
+
+    override fun dynamicGlobalSells(): Int = getDynamicGlobalSells()
+
+    override fun hasSellPermission(player: Player): Boolean = player.hasPermission("ecoshop.sell.$id")
+
+    override fun sellConditionsMet(player: Player): Boolean =
+        sellConditions.areMet(player.toDispatcher(), EmptyProvidedHolder)
+
+    override fun baseSellValue(player: Player?): Double {
+        if (player != null) {
+            return sellPrice?.getValue(player) ?: 0.0
+        }
+        val expression = rawSellValueExpression ?: return 0.0
+        return NumberUtils.evaluateExpression(expression, PlaceholderContext.EMPTY)
+    }
+
+    override fun isEconomyPrice(): Boolean = sellPrice?.identifier == "eco:economy"
+
+    override fun fireSellEvent(player: Player, stack: ItemStack, units: Int, source: SellSource): Double {
+        val event = EcoShopSellEvent(player, this, sellPrice!!, stack, units, 1.0, source)
+        Bukkit.getPluginManager().callEvent(event)
+        return event.multiplier
+    }
+
+    override fun triggerSellEffects(player: Player, units: Int) {
+        sellEffects?.trigger(
+            DispatchedTrigger(
+                player.toDispatcher(),
+                TriggerBlank,
+                TriggerData(
+                    player = player,
+                    location = player.location,
+                    item = player.inventory.itemInMainHand,
+                    value = units.toDouble(),
+                    altValue = (sellPrice?.getValue(player) ?: 0.0) * units
+                )
+            ).apply {
+                addPlaceholder(NamedValue("amount", units))
+            }
+        )
+    }
+
+    override fun giveSellPayout(player: Player, multiplier: Double) {
+        sellPrice?.giveTo(player, multiplier)
+    }
+
     val slot = ShopItemSlot(this)
 
     val isShowingQuickBuySell = config.getBoolOrNull("gui.show-quick-buy-sell") ?: true
@@ -178,9 +255,9 @@ class ShopItem(
 
     val globalLimit = config.getIntOrNull("buy.global-limit") ?: Int.MAX_VALUE
 
-    val sellLimit = config.getIntOrNull("sell.limit") ?: Int.MAX_VALUE
+    override val sellLimit = config.getIntOrNull("sell.limit") ?: Int.MAX_VALUE
 
-    val globalSellLimit = config.getIntOrNull("sell.global-limit") ?: Int.MAX_VALUE
+    override val globalSellLimit = config.getIntOrNull("sell.global-limit") ?: Int.MAX_VALUE
 
     private val maxAtOnce = config.getIntOrNull("buy.max-at-once") ?: Int.MAX_VALUE
 
@@ -735,15 +812,23 @@ class ShopItem(
         player.profile.write(timesSoldKey, 0)
     }
 
-    fun recordSell(player: OfflinePlayer, amount: Int) {
+    override fun recordSell(player: OfflinePlayer, amount: Int, bypass: SellBypass) {
         if (amount <= 0) {
             return
         }
 
-        player.profile.write(timesSoldKey, getTotalSells(player) + amount)
-        Bukkit.getServer().profile.write(timesSoldKey, getTotalGlobalSells() + amount)
-        Bukkit.getServer().profile.write(dynamicSellsKey, getDynamicGlobalSells() + amount)
+        if (!bypass.playerLimits) {
+            player.profile.write(timesSoldKey, getTotalSells(player) + amount)
+        }
+        if (!bypass.globalLimits) {
+            Bukkit.getServer().profile.write(timesSoldKey, getTotalGlobalSells() + amount)
+        }
+        if (!bypass.dynamicPricing) {
+            Bukkit.getServer().profile.write(dynamicSellsKey, getDynamicGlobalSells() + amount)
+        }
     }
+
+    fun recordSell(player: OfflinePlayer, amount: Int) = recordSell(player, amount, SellBypass.NONE)
 
     fun getBuyPrice(buyType: BuyType) = when (buyType) {
         BuyType.ALT -> altBuyPrice
