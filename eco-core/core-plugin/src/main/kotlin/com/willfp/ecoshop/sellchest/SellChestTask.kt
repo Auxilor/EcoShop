@@ -11,12 +11,14 @@ import com.willfp.ecoshop.sell.Seller
 import com.willfp.ecoshop.sell.Sells
 import org.bukkit.Bukkit
 import org.bukkit.block.Container
+import java.util.UUID
 
 /** Periodically sells the contents of dirty sell chests. */
 object SellChestTask {
     private var task: EcoTask? = null
     private var tick = 0L
     private val warnedTypes = mutableSetOf<String>()
+    private val warnedOwners = mutableSetOf<UUID>()
 
     fun start() {
         stop()
@@ -83,14 +85,34 @@ object SellChestTask {
 
     /** The seller for this chest right now, or null to leave it dirty and try later. */
     private fun sellerFor(chest: IndexedChest): Seller? {
-        val online = Bukkit.getPlayer(chest.owner) ?: return null
-        return Seller.Online(online)
+        Bukkit.getPlayer(chest.owner)?.let { return Seller.Online(it) }
+
+        if (plugin.configYml.getBoolOrNull("sell-chests.offline-selling.enabled") != true) {
+            return null
+        }
+
+        val owner = Bukkit.getOfflinePlayer(chest.owner)
+        val allowed = OfflineEarnings.isAllowed(owner)
+        return Seller.Offline(owner) { OfflineEligibility.isEligible(it, allowed) }
     }
 
     private fun afterSale(chest: IndexedChest, type: SellChestType, seller: Seller, result: SellResult) {
+        if (seller is Seller.Offline) {
+            if (result.soldUnits > 0) {
+                OfflineEarnings.add(seller.owner, result.economyTotal, result.soldUnits)
+            }
+            if (result.failed.isNotEmpty() && warnedOwners.add(chest.owner)) {
+                plugin.logger.warning(
+                    "Offline payout failed for ${seller.owner.name ?: chest.owner}; " +
+                        "your economy plugin may not support offline deposits."
+                )
+            }
+            return
+        }
+
         if (result.soldUnits == 0) return
 
-        val player = (seller as? Seller.Online)?.player ?: return
+        val player = (seller as Seller.Online).player
         if (!type.notify) return
 
         chest.sellsSinceNotify++
