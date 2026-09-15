@@ -1,6 +1,6 @@
 ---
 title: "PlaceholderAPI"
-sidebar_position: 7
+sidebar_position: 8
 ---
 
 With PlaceholderAPI installed, EcoShop exposes per-item placeholders you can use in any plugin that reads them, e.g. scoreboards, holograms, or chat. They all follow the format `%ecoshop_<category>_<item>_<stat>%`, where `<category>` is the category ID and `<item>` is the item ID. This page lists the available stats, grouped by buy pricing, buy limits, sell pricing, and sell limits.
@@ -65,6 +65,15 @@ See [Rotating Shops](rotating-shops) for how the countdown format is configured.
 
 See [How to make a Sell Wand](how-to-make-a-sell-wand) for how period limits work.
 
+## Sell chests
+
+| Placeholder | Description |
+| --- | --- |
+| `%ecoshop_sellchest_count%` | How many sell chests the player has placed |
+| `%ecoshop_sellchest_limit%` | How many sell chests the player can place (`∞` if unlimited) |
+
+See [How to make a Sell Chest](how-to-make-a-sell-chest) for how limits work.
+
 <hr/>
 
 ## Where to go next
@@ -72,5 +81,6 @@ See [How to make a Sell Wand](how-to-make-a-sell-wand) for how period limits wor
 - **Find your IDs:** [How to make an Item](how-to-make-an-item) shows where the `<item>` ID comes from.
 - **Pricing stats:** [Dynamic Pricing](dynamic-pricing) explains the base-versus-effective price split.
 - **Sell wand limits:** [How to make a Sell Wand](how-to-make-a-sell-wand) covers the `period-limit` behind the sell wand placeholder.
+- **Sell chest limits:** [How to make a Sell Chest](how-to-make-a-sell-chest) covers the placement limits behind the sell chest placeholders.
 - **Rotation countdown:** [Rotating Shops](rotating-shops) covers the `rotation-countdown` / `rotation-ready` lang keys behind the placeholder above.
 - **Internal placeholders:** the [How to make an Item](how-to-make-an-item) page also lists the `%value%`-style placeholders for use inside shop lore.

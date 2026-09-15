@@ -1,6 +1,6 @@
 ---
 title: "Commands and Permissions"
-sidebar_position: 8
+sidebar_position: 9
 ---
 
 This page lists every EcoShop command, the permission it needs, and the extra permission nodes that gate opening shops and trading specific items. Shop commands you define in shop files are separate; these are the built-in ones.
@@ -16,6 +16,8 @@ This page lists every EcoShop command, the permission it needs, and the extra pe
 | `/ecoshop rotate <category>` | Immediately re-rolls a rotating category's slots and restarts its timer | `ecoshop.command.rotate` |
 | `/ecoshop history <player> <amount> [buy/sell/all]` | View a player's recent shop transaction history | `ecoshop.command.history` |
 | `/ecoshop givewand <player> <wand> [amount]` | Gives a player sell wands | `ecoshop.command.givewand` |
+| `/ecoshop givesellchest <player> <type> [amount]` | Gives a player sell chests | `ecoshop.command.givesellchest` |
+| `/ecoshop sellchestcount <player> [set <n>]` | Shows or sets how many sell chests a player has placed | `ecoshop.command.sellchestcount` |
 | `/sell` | Opens the mass-sell GUI | `ecoshop.command.sell` |
 | `/sell hand` | Sells the items in the player's hand | `ecoshop.command.sell.hand` |
 | `/sell all` | Sells all sellable items in the player's inventory | `ecoshop.command.sell.all` |
@@ -29,6 +31,10 @@ This page lists every EcoShop command, the permission it needs, and the extra pe
 | `ecoshop.buy.<id>` | Restricts buying the item with that ID to players who hold it |
 | `ecoshop.sell.<id>` | Restricts selling the item with that ID to players who hold it |
 | `ecoshop.sellwand.use` | Allows using sell wands |
+| `ecoshop.sellchest.place` | Allows placing sell chests |
+| `ecoshop.sellchest.limit.<n>` | Sets how many sell chests a player can place; the highest wins, `-1` for unlimited |
+| `ecoshop.sellchest.bypass-owner` | Allows opening and breaking other players' sell chests |
+| `ecoshop.sellchest.offline` | Allows a player's sell chests to sell while they're offline, when offline selling is enabled |
 
 <hr/>
 
@@ -37,5 +43,6 @@ This page lists every EcoShop command, the permission it needs, and the extra pe
 - **Reset pricing:** [Dynamic Pricing](dynamic-pricing) explains what `resetdynamicpricing` clears.
 - **Force a rotation:** [Rotating Shops](rotating-shops) explains what `/ecoshop rotate` re-rolls.
 - **Make a sell wand:** [How to make a Sell Wand](how-to-make-a-sell-wand) covers the wands `/ecoshop givewand` gives.
+- **Make a sell chest:** [How to make a Sell Chest](how-to-make-a-sell-chest) covers the sell chests `/ecoshop givesellchest` gives.
 - **Configure /sell:** [Plugin Config](plugin-config) covers the mass-sell GUI those commands open.
 - **Build a shop:** [How to make a Shop](how-to-make-a-shop) is the place to start.
