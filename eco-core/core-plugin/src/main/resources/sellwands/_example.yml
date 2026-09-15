@@ -11,26 +11,26 @@ lore: # Supports %uses%, %max_uses% and %multiplier%.
   - "&7Uses left: &e%uses%"
   - "&7Multiplier: &a%multiplier%x"
 
-uses: 100                 # -1 = infinite
-cooldown: 5               # seconds; 0 = none
+uses: 100 # -1 = infinite
+cooldown: 5 # seconds; 0 = none
 period-limit:
-  uses: 20                # -1 = none
-  period: 1440            # minutes
-max-items-per-use: 1728   # -1 = none
-max-value-per-use: 50000  # -1 = none; counts eco:economy prices only
-multiplier: 1.5           # stacks with event multiplier and filter multipliers
+  uses: 20 # -1 = none
+  period: 1440 # minutes
+max-items-per-use: 1728 # -1 = none
+max-value-per-use: 50000 # -1 = none; counts eco:economy prices only
+multiplier: 1.5 # stacks with event multiplier and filter multipliers
 require-sneak: false
-break-when-empty: true    # false = wand stays with 0 uses and does nothing
+break-when-empty: true # false = wand stays with 0 uses and does nothing
 
-containers:               # material names; "shulker_box" matches all colours
+containers: # material names; "shulker_box" matches all colours
   - chest
   - trapped_chest
   - barrel
   - shulker_box
 
 filters:
-  shops: [ ]              # optional shop ids; only items in these shops' categories sell. empty = all shops
-  whitelist: [ ]          # shop item ids ("diamond") or categories ("category:minerals")
+  shops: [ ] # optional shop ids; only items in these shops' categories sell. empty = all shops
+  whitelist: [ ] # shop item ids ("diamond") or categories ("category:minerals")
   blacklist: [ ]
   multipliers:
     - rule: "category:minerals"
@@ -38,9 +38,9 @@ filters:
     - rule: "cobblestone"
       multiplier: 0.5
 
-bypass:                   # a bypassed check is skipped and its counter is not written
-  dynamic-pricing: false  # pay flat base price; don't move the dynamic price
-  player-limits: false    # ignore sell.limit; don't count toward it
-  global-limits: false    # ignore sell.global-limit; don't count toward it
+bypass: # a bypassed check is skipped and its counter is not written
+  dynamic-pricing: false # pay flat base price; don't move the dynamic price
+  player-limits: false # ignore sell.limit; don't count toward it
+  global-limits: false # ignore sell.global-limit; don't count toward it
 
-conditions: [ ]           # libreforge conditions, checked against the player
+conditions: [ ] # libreforge conditions, checked against the player
