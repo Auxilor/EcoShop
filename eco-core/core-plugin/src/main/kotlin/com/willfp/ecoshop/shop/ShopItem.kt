@@ -21,6 +21,7 @@ import com.willfp.eco.util.formatEco
 import com.willfp.ecoshop.event.EcoShopBuyEvent
 import com.willfp.ecoshop.event.EcoShopSellEvent
 import com.willfp.ecoshop.plugin
+import com.willfp.ecoshop.sell.DynamicPricer
 import com.willfp.ecoshop.shop.gui.BuyMenu
 import com.willfp.ecoshop.shop.gui.SellMenu
 import com.willfp.ecoshop.shop.gui.ShopItemSlot
@@ -317,31 +318,6 @@ class ShopItem(
         return Math.round(clamped * 100) / 100.0
     }
 
-    private fun effectiveSellValue(baseValue: Double): Double {
-        val pc = dynamicPricing?.sell ?: return baseValue
-        if (!pc.enabled) return baseValue
-        val formula = pc.formula ?: return baseValue
-
-        val substituted = formula
-            .replace("%base_price%", baseValue.toString())
-            .replace("%buys%", getDynamicGlobalBuys().toString())
-            .replace("%sells%", getDynamicGlobalSells().toString())
-
-        val result = NumberUtils.evaluateExpression(substituted)
-        if (result.isNaN() || result.isInfinite() || (result == 0.0 && baseValue != 0.0)) {
-            if (warnedFormulas.add("$id:$formula")) {
-                plugin.logger.warning("[EcoShop] Dynamic pricing formula failed for item '$id': \"$formula\"")
-            }
-            return baseValue
-        }
-
-        val clamped = result.coerceIn(
-            minOf(baseValue * pc.maxDecrease, baseValue * pc.maxIncrease),
-            maxOf(baseValue * pc.maxDecrease, baseValue * pc.maxIncrease)
-        )
-        return Math.round(clamped * 100) / 100.0
-    }
-
     fun getEffectiveBuyMultiplier(buyType: BuyType, player: Player): Double {
         val baseValue = getBuyPrice(buyType)?.getValue(player) ?: return 1.0
         if (baseValue <= 0) return 1.0
@@ -350,8 +326,9 @@ class ShopItem(
 
     fun getEffectiveSellMultiplier(player: Player): Double {
         val baseValue = sellPrice?.getValue(player) ?: return 1.0
-        if (baseValue <= 0) return 1.0
-        return effectiveSellValue(baseValue) / baseValue
+        return DynamicPricer.sellFactor(
+            dynamicPricing?.sell, baseValue, getDynamicGlobalBuys(), getDynamicGlobalSells(), id
+        )
     }
 
     /** Get the max amount of times this item can be bought at a single time. */
