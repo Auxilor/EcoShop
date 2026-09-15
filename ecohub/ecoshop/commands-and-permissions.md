@@ -1,6 +1,6 @@
 ---
 title: "Commands and Permissions"
-sidebar_position: 7
+sidebar_position: 8
 ---
 
 This page lists every EcoShop command, the permission it needs, and the extra permission nodes that gate opening shops and trading specific items. Shop commands you define in shop files are separate; these are the built-in ones.
@@ -15,6 +15,7 @@ This page lists every EcoShop command, the permission it needs, and the extra pe
 | `/ecoshop resetdynamicpricing <id/all>` | Resets the dynamic pricing counters for an item | `ecoshop.command.resetdynamicpricing` |
 | `/ecoshop rotate <category>` | Immediately re-rolls a rotating category's slots and restarts its timer | `ecoshop.command.rotate` |
 | `/ecoshop history <player> <amount> [buy/sell/all]` | View a player's recent shop transaction history | `ecoshop.command.history` |
+| `/ecoshop givewand <player> <wand> [amount]` | Gives a player sell wands | `ecoshop.command.givewand` |
 | `/sell` | Opens the mass-sell GUI | `ecoshop.command.sell` |
 | `/sell hand` | Sells the items in the player's hand | `ecoshop.command.sell.hand` |
 | `/sell all` | Sells all sellable items in the player's inventory | `ecoshop.command.sell.all` |
@@ -27,6 +28,7 @@ This page lists every EcoShop command, the permission it needs, and the extra pe
 | `ecoshop.open.<id>` | Required to open the shop with that ID |
 | `ecoshop.buy.<id>` | Restricts buying the item with that ID to players who hold it |
 | `ecoshop.sell.<id>` | Restricts selling the item with that ID to players who hold it |
+| `ecoshop.sellwand.use` | Allows using sell wands |
 
 <hr/>
 
@@ -34,5 +36,6 @@ This page lists every EcoShop command, the permission it needs, and the extra pe
 
 - **Reset pricing:** [Dynamic Pricing](dynamic-pricing) explains what `resetdynamicpricing` clears.
 - **Force a rotation:** [Rotating Shops](rotating-shops) explains what `/ecoshop rotate` re-rolls.
+- **Make a sell wand:** [How to make a Sell Wand](how-to-make-a-sell-wand) covers the wands `/ecoshop givewand` gives.
 - **Configure /sell:** [Plugin Config](plugin-config) covers the mass-sell GUI those commands open.
 - **Build a shop:** [How to make a Shop](how-to-make-a-shop) is the place to start.

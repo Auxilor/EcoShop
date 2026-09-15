@@ -1,9 +1,9 @@
 ---
 title: "Plugin Config"
-sidebar_position: 8
+sidebar_position: 9
 ---
 
-`config.yml` holds the plugin-wide settings: storage, the global shop-item lore, and the shared buy, buy-more, sell, sell-more, and mass-sell menus. It lives at `/plugins/EcoShop/config.yml`. After editing it, run `/ecoshop reload` to apply your changes.
+`config.yml` holds the plugin-wide settings: storage, bulk sale pricing, the global shop-item lore, the shared buy, buy-more, sell, sell-more, and mass-sell menus, and the sell wand sound. It lives at `/plugins/EcoShop/config.yml`. After editing it, run `/ecoshop reload` to apply your changes.
 
 :::warning
 Changing `use-local-storage` switches the storage backend, so it does not take effect on a reload; restart the server after changing it, or buy and sell data may not load correctly.
@@ -19,6 +19,9 @@ use-local-storage: false
 logging:
   enabled: true # Whether to log every shop buy/sell transaction to logs/shop/*.log.
   max-history-days: 30 # How many days of log files /ecoshop history will search back through.
+
+dynamic-pricing:
+  bulk-chunk-size: 64 # Bulk sales re-price after every this-many items. Lower = sales move the price more accurately. Set very high to price whole batches at the starting price.
 
 shop-items:
   register-permissions: false # Show shop permissions in permission plugins; slows reloads, so off by default.
@@ -250,6 +253,13 @@ sell-gui:
       lore: # Everything dropped in is sold when the menu closes.
         - "&fWhen you close this menu, all"
         - "&fitems inside it will be sold!"
+
+sell-wands:
+  sound: # Played when a sell wand sells something.
+    enabled: true
+    sound: entity_experience_orb_pickup
+    pitch: 1.2
+    volume: 1
 ```
 
 <hr/>
