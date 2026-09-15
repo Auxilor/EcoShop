@@ -8,7 +8,7 @@ import org.bukkit.Location
 import org.bukkit.entity.Player
 
 object TriggerUseSellWand : Trigger("use_sell_wand") {
-    override val description = "Fires when the player sells a container's contents with a sell wand."
+    override val description = "Fires when the player sells a container's contents with a sell wand or the sell_container effect."
 
     override val categories = setOf("economy")
 
@@ -20,8 +20,9 @@ object TriggerUseSellWand : Trigger("use_sell_wand") {
     )
 
     override val parameterDescriptions = mapOf(
-        TriggerParameter.VALUE to "The money earned (economy prices only)",
-        TriggerParameter.ALT_VALUE to "The number of items sold"
+        TriggerParameter.LOCATION to "The location of the container that was sold from.",
+        TriggerParameter.VALUE to "The money earned, counting eco:economy prices only.",
+        TriggerParameter.ALT_VALUE to "The number of items sold."
     )
 
     fun fire(player: Player, location: Location, economyTotal: Double, units: Int) {
