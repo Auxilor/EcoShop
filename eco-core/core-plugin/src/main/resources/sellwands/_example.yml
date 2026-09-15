@@ -13,46 +13,46 @@ lore: # Supports %uses%, %max_uses%, %multiplier%, %sold_items% and %sold_value%
   - "&7Multiplier: &a%multiplier%x"
   - "&7Sold: &a%sold_items%&7 items for &a%sold_value%"
 
-uses: 100 # -1 = infinite
-cooldown: 5 # seconds; 0 = none
+uses: 100 # Uses before the wand is empty. -1 for infinite.
+cooldown: 5 # Seconds between uses, per player per wand type. 0 for none.
 period-limit:
-  uses: 20 # -1 = none
-  period: 1440 # minutes
-max-items-per-use: 1728 # -1 = none
-max-value-per-use: 50000 # -1 = none; counts eco:economy prices only
-multiplier: 1.5 # stacks with event multiplier and filter multipliers
-require-sneak: false
-break-when-empty: true # false = wand stays with 0 uses and does nothing
+  uses: 20 # Max uses per period, per player per wand type. -1 for none.
+  period: 1440 # Period length in minutes, starting from the first use.
+max-items-per-use: 1728 # Max items sold per use. -1 for none.
+max-value-per-use: 50000 # Max money earned per use. Only counts eco:economy prices. -1 for none.
+multiplier: 1.5 # Sell price multiplier. Stacks with booster and filter multipliers.
+require-sneak: false # Only sell when sneaking, so a normal click opens the container.
+break-when-empty: true # Remove the wand at 0 uses. If false, it stays and does nothing.
 
-containers: # material names; "shulker_box" matches all colours
+containers: # Container materials the wand works on. shulker_box matches every colour.
   - chest
   - trapped_chest
   - barrel
   - shulker_box
 
 filters:
-  shops: [ ] # optional shop ids; only items in these shops' categories sell. empty = all shops
-  whitelist: [ ] # shop item ids ("diamond") or categories ("category:minerals")
-  blacklist: [ ]
-  multipliers:
+  shops: [ ] # Only sell items from these shops' categories. Empty for all shops.
+  whitelist: [ ] # Only sell these. Shop item IDs (diamond) or categories (category:minerals). Empty for everything.
+  blacklist: [ ] # Never sell these. Wins over the whitelist.
+  multipliers: # Extra multipliers. A shop item rule wins over a category rule.
     - rule: "category:minerals"
       multiplier: 2.0
     - rule: "cobblestone"
       multiplier: 0.5
 
-bypass: # a bypassed check is skipped and its counter is not written
-  dynamic-pricing: false # pay flat base price; don't move the dynamic price
-  player-limits: false # ignore sell.limit; don't count toward it
-  global-limits: false # ignore sell.global-limit; don't count toward it
+bypass: # A bypassed check is skipped, and the sale doesn't count towards it.
+  dynamic-pricing: false # Pay the base price and don't move the dynamic price.
+  player-limits: false # Ignore sell.limit.
+  global-limits: false # Ignore sell.global-limit.
 
-conditions: [ ] # libreforge conditions, checked against the player
+conditions: [ ] # Conditions the player must meet to use the wand.
 
-inspect: # left-click a container to preview a sale
+inspect: # Left-click a container to preview a sale.
   enabled: true
-  display: message # message | hologram | both
-  duration: 60 # ticks the hologram stays (only the inspecting player sees it)
-  height: 1.5 # blocks above the container
-  lines: # %amount%, %price%, %unsold%
+  display: message # message, hologram or both.
+  duration: 60 # Ticks the hologram stays. Only the inspecting player sees it.
+  height: 1.5 # Blocks above the container.
+  lines: # Hologram lines. Supports %amount%, %price% and %unsold%.
     - "&fSells &a%amount%&f items"
     - "&ffor &a%price%"
     - "&7%unsold% stacks can't be sold"

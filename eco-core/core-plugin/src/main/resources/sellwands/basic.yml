@@ -39,9 +39,9 @@ conditions: [ ]
 
 inspect:
   enabled: true
-  display: message # message | hologram | both
-  duration: 60 # ticks the hologram stays
-  height: 1.5 # blocks above the container
+  display: message # message, hologram or both.
+  duration: 60 # Ticks the hologram stays.
+  height: 1.5 # Blocks above the container.
   lines:
     - "&fSells &a%amount%&f items"
     - "&ffor &a%price%"
