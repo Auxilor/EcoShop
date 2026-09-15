@@ -43,6 +43,9 @@ permissions:
       ecoshop.command.rotate: true
       ecoshop.command.history: true
       ecoshop.command.givewand: true
+      ecoshop.command.givesellchest: true
+      ecoshop.command.sellchestcount: true
+      ecoshop.sellchest.bypass-owner: true
       ecoshop.command.sell.*: true
 
   ecoshop.command.rotate:
@@ -68,6 +71,21 @@ permissions:
     default: op
   ecoshop.sellwand.use:
     description: Allows using sell wands
+    default: true
+  ecoshop.command.givesellchest:
+    description: Allows giving sell chests
+    default: op
+  ecoshop.command.sellchestcount:
+    description: Allows viewing and setting a player's sell chest count
+    default: op
+  ecoshop.sellchest.place:
+    description: Allows placing sell chests
+    default: true
+  ecoshop.sellchest.bypass-owner:
+    description: Allows opening and breaking other players' sell chests
+    default: op
+  ecoshop.sellchest.offline:
+    description: Allows sell chests to keep selling while offline, when offline selling is enabled
     default: true
   ecoshop.command.sell:
     description: Allows the use of /sell and the /sell GUI

@@ -1,0 +1,16 @@
+name: "&aSell Chest"
+item: chest glint name:"&aSell Chest"
+lore:
+  - "&7Automatically sells its contents."
+block: chest
+sell-interval: 100
+filters:
+  shops: [ ]
+  whitelist: [ ]
+  blacklist: [ ]
+bypass:
+  dynamic-pricing: false
+  player-limits: false
+  global-limits: false
+overflow: keep
+notify: true
