@@ -19,6 +19,7 @@ object CommandEcoShop : PluginCommand(
             .addSubcommand(CommandHistory)
             .addSubcommand(CommandGiveWand)
             .addSubcommand(CommandGiveSellChest)
+            .addSubcommand(CommandSellChestCount)
     }
 
     override fun onExecute(sender: CommandSender, args: List<String>) {
