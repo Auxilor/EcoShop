@@ -57,32 +57,10 @@ object EffectSellContainer : Effect<NoCompileData>("sell_container") {
             example = listOf("chest", "barrel", "shulker_box"),
             enumClass = Material::class
         )
-        optional(
-            "shops",
-            description = "Only sell items from these shops' categories. If omitted, items from every shop can sell.",
-            type = ArgType.STRING_LIST,
-            default = "[]",
-            example = listOf("main")
-        )
-        optional(
-            "whitelist",
-            description = "Only sell these shop item IDs or categories (category:<id>). If omitted, every item can sell.",
-            type = ArgType.STRING_LIST,
-            default = "[]",
-            example = listOf("diamond", "category:minerals")
-        )
-        optional(
-            "blacklist",
-            description = "Never sell these shop item IDs or categories (category:<id>). Wins over the whitelist.",
-            type = ArgType.STRING_LIST,
-            default = "[]",
-            example = listOf("cobblestone")
-        )
-        optional(
-            "multipliers",
-            description = "Extra multipliers for matching items. A shop item rule wins over a category rule.",
-            type = ArgType.DYNAMIC,
-            schema = SellMultiplierSpec::class
+        inherit("filters") { SellFilterArguments }
+        describeInherit(
+            "filters",
+            "Which items to sell: shops, whitelist, blacklist, and extra multipliers for matching items."
         )
         optional(
             "max-items",
@@ -98,23 +76,10 @@ object EffectSellContainer : Effect<NoCompileData>("sell_container") {
             default = "-1",
             example = "50000"
         )
-        optional(
-            "bypass-dynamic-pricing",
-            description = "Whether to pay the base price and not move the dynamic price.",
-            type = ArgType.BOOLEAN,
-            default = "false"
-        )
-        optional(
-            "bypass-player-limits",
-            description = "Whether to ignore sell.limit and not count the sale towards it.",
-            type = ArgType.BOOLEAN,
-            default = "false"
-        )
-        optional(
-            "bypass-global-limits",
-            description = "Whether to ignore sell.global-limit and not count the sale towards it.",
-            type = ArgType.BOOLEAN,
-            default = "false"
+        inherit("bypass") { SellBypassArguments }
+        describeInherit(
+            "bypass",
+            "Shop checks to skip: dynamic-pricing, player-limits and global-limits. A bypassed check is ignored, and the sale doesn't count towards it."
         )
     }
 
@@ -152,14 +117,10 @@ object EffectSellContainer : Effect<NoCompileData>("sell_container") {
             maxItems = if (maxItems < 0) Int.MAX_VALUE else maxItems,
             maxValue = if (maxValue < 0) Double.MAX_VALUE else maxValue,
             containers = ContainerTypes(containerNames),
-            filter = ItemFilter.parse(config, allowMultipliers = true) {
+            filter = ItemFilter.parse(config.getSubsection("filters"), allowMultipliers = true) {
                 plugin.logger.warning("[sell_container effect] $it")
             },
-            bypass = SellBypass(
-                dynamicPricing = config.getBoolOrNull("bypass-dynamic-pricing") ?: false,
-                playerLimits = config.getBoolOrNull("bypass-player-limits") ?: false,
-                globalLimits = config.getBoolOrNull("bypass-global-limits") ?: false
-            ),
+            bypass = SellBypass.parse(config.getSubsection("bypass")),
             conditions = null
         )
     }
