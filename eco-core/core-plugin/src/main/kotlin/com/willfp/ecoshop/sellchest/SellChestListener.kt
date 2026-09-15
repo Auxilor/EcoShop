@@ -64,6 +64,7 @@ object SellChestListener : Listener {
 
         if (type != null) {
             SellChestData.write(block, type.id, event.player.uniqueId)
+            SellChestData.writeTotals(block, SellChestItem.totalsOf(event.itemInHand))
             SellChestLimits.increment(event.player)
             SellChestIndex.add(block, SellChestInfo(type.id, event.player.uniqueId))
             forceSingleNextTick(block)
@@ -139,7 +140,9 @@ object SellChestListener : Listener {
             container.inventory.clear()
         }
 
-        SellChestTypes[info.typeId]?.let { block.world.dropItemNaturally(location, SellChestItem.create(it)) }
+        SellChestTypes[info.typeId]?.let {
+            block.world.dropItemNaturally(location, SellChestItem.create(it, SellChestData.readTotals(block)))
+        }
 
         SellChestLimits.decrement(Bukkit.getOfflinePlayer(info.owner))
         SellChestIndex.remove(ChestKey.of(block))

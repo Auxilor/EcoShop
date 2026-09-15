@@ -34,11 +34,17 @@ object SellChestIndex {
 
     fun add(block: Block, info: SellChestInfo): IndexedChest {
         val key = ChestKey.of(block)
-        return chests.getOrPut(key) { IndexedChest(key, info.typeId, info.owner) }
+        return chests.getOrPut(key) {
+            SellChestTypes[info.typeId]?.let { type ->
+                SellChestHolograms.show(key, type, info.owner, SellChestData.readTotals(block))
+            }
+            IndexedChest(key, info.typeId, info.owner)
+        }
     }
 
     fun remove(key: ChestKey) {
         chests.remove(key)
+        SellChestHolograms.remove(key)
     }
 
     fun get(key: ChestKey): IndexedChest? = chests[key]
@@ -68,11 +74,19 @@ object SellChestIndex {
 
     fun unloadChunk(chunk: Chunk) {
         val uid = chunk.world.uid
-        chests.keys.removeIf { it.world == uid && it.x shr 4 == chunk.x && it.z shr 4 == chunk.z }
+        val iterator = chests.keys.iterator()
+        while (iterator.hasNext()) {
+            val key = iterator.next()
+            if (key.world == uid && key.x shr 4 == chunk.x && key.z shr 4 == chunk.z) {
+                iterator.remove()
+                SellChestHolograms.remove(key)
+            }
+        }
     }
 
     fun rescanLoaded() {
         chests.clear()
+        SellChestHolograms.clear()
         for (world in Bukkit.getWorlds()) {
             for (chunk in world.loadedChunks) {
                 scanChunk(chunk)

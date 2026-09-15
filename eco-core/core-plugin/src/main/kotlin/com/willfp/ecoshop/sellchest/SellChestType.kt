@@ -48,6 +48,8 @@ class SellChestType(
 
     val notify = config.getBoolOrNull("notify") ?: true
 
+    val hologram = ChestHologramConfig.parse(config.getSubsection("hologram"))
+
     /** `ecoshop:sellchest_<id>` in eco item lookups. Declared last: [SellChestItem.create] reads the fields above. */
     val customItem = CustomItem(
         plugin.createNamespacedKey("sellchest_$id"),
