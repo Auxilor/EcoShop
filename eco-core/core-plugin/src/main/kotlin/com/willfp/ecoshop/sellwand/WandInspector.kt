@@ -57,7 +57,7 @@ object WandInspector {
         hologram.show(player)
         holograms[player.uniqueId] = hologram
 
-        plugin.scheduler.runLater(config.durationTicks.toLong()) {
+        plugin.scheduler.at(block.location).runLater(config.durationTicks.toLong()) {
             if (holograms.remove(player.uniqueId, hologram)) {
                 hologram.remove()
             }
