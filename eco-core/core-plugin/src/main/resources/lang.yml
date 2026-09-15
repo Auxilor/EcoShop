@@ -57,6 +57,19 @@ messages:
   invalid-category: "&cInvalid category: %category%"
   must-specify-category: "&cYou must specify a category!"
 
+  sellwand:
+    invalid: "&cThis sell wand no longer exists!"
+    no-access: "&cYou can't use a sell wand on this container!"
+    no-permission: "&cYou don't have permission to use sell wands!"
+    missing-requirements: "&cYou can't use this sell wand here!"
+    no-uses: "&cThis sell wand is out of uses!"
+    on-cooldown: "&cWait &e%time%s&c before using this again!"
+    period-limit: "&cYou've used this wand too many times recently! Resets in &e%time%&c."
+    nothing-sold: "&cNothing in this container could be sold!"
+    sold: "&fSold &a%amount%&f items for &a%price%&f! &7(%uses% uses left)"
+    given: "&fGave &a%amount%x %wand%&f to &a%player%&f!"
+    invalid-wand: "&cInvalid sell wand!"
+
 rotation-countdown: "%hours%h %minutes%m %seconds%s"
 rotation-ready: "Rotating soon..."
 

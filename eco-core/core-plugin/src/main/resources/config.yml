@@ -312,3 +312,10 @@ sell-gui:
       lore:
         - "&fWhen you close this menu, all"
         - "&fitems inside it will be sold!"
+
+sell-wands:
+  sound: # Played when a wand sells something.
+    enabled: true
+    sound: entity_experience_orb_pickup
+    pitch: 1.2
+    volume: 1

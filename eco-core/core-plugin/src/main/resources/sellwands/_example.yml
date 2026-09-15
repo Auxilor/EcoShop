@@ -1,0 +1,46 @@
+# The ID of the sell wand is the name of the .yml file,
+# for example golden.yml has the ID of golden
+# You can place sell wands anywhere in this folder,
+# including in subfolders if you want to organize your sell wand configs
+# _example.yml is not loaded.
+
+name: "&6Golden Sell Wand" # The display name used in messages.
+item: blaze_rod glint name:"&6Golden Sell Wand" # The base item. Also available as ecoshop:sellwand_<id> in item lookups.
+lore: # Supports %uses%, %max_uses% and %multiplier%.
+  - "&7Right-click a container to sell its contents."
+  - "&7Uses left: &e%uses%"
+  - "&7Multiplier: &a%multiplier%x"
+
+uses: 100                 # -1 = infinite
+cooldown: 5               # seconds; 0 = none
+period-limit:
+  uses: 20                # -1 = none
+  period: 1440            # minutes
+max-items-per-use: 1728   # -1 = none
+max-value-per-use: 50000  # -1 = none; counts eco:economy prices only
+multiplier: 1.5           # stacks with event multiplier and filter multipliers
+require-sneak: false
+break-when-empty: true    # false = wand stays with 0 uses and does nothing
+
+containers:               # material names; "shulker_box" matches all colours
+  - chest
+  - trapped_chest
+  - barrel
+  - shulker_box
+
+filters:
+  shops: [ ]              # optional shop ids; only items in these shops' categories sell. empty = all shops
+  whitelist: [ ]          # shop item ids ("diamond") or categories ("category:minerals")
+  blacklist: [ ]
+  multipliers:
+    - rule: "category:minerals"
+      multiplier: 2.0
+    - rule: "cobblestone"
+      multiplier: 0.5
+
+bypass:                   # a bypassed check is skipped and its counter is not written
+  dynamic-pricing: false  # pay flat base price; don't move the dynamic price
+  player-limits: false    # ignore sell.limit; don't count toward it
+  global-limits: false    # ignore sell.global-limit; don't count toward it
+
+conditions: [ ]           # libreforge conditions, checked against the player
