@@ -26,4 +26,10 @@ class WandItemTest {
     fun `infinite uses render as infinity`() {
         assertEquals(listOf("∞/∞"), renderWandLore(listOf("%uses%/%max_uses%"), -1, -1, 1.0))
     }
+
+    @Test
+    fun `sold stat placeholders render`() {
+        val lore = renderWandLore(listOf("Sold %sold_items% for %sold_value%"), 1, 1, 1.0, soldItems = 12345, soldValue = "$99")
+        assertEquals(listOf("Sold 12,345 for $99"), lore)
+    }
 }

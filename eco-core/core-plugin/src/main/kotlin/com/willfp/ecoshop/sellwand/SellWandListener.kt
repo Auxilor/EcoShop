@@ -7,6 +7,7 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import org.bukkit.event.block.Action
+import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.inventory.EquipmentSlot
 
@@ -14,7 +15,9 @@ object SellWandListener : Listener {
     @EventHandler(priority = EventPriority.HIGH)
     fun onInteract(event: PlayerInteractEvent) {
         if (ContainerAccess.isFiringSynthetic) return
-        if (event.action != Action.RIGHT_CLICK_BLOCK || event.hand != EquipmentSlot.HAND) return
+        if (event.hand != EquipmentSlot.HAND) return
+        val inspecting = event.action == Action.LEFT_CLICK_BLOCK
+        if (!inspecting && event.action != Action.RIGHT_CLICK_BLOCK) return
 
         val player = event.player
         val stack = player.inventory.itemInMainHand
@@ -31,6 +34,14 @@ object SellWandListener : Listener {
         }
 
         if (!wand.containers.matches(block.type)) return
+
+        if (inspecting) {
+            if (!wand.inspect.enabled) return
+            event.isCancelled = true
+            WandInspector.inspect(player, block, container, wand)
+            return
+        }
+
         if (wand.requireSneak && !player.isSneaking) return
 
         if (event.useInteractedBlock() == Event.Result.DENY) {
@@ -42,5 +53,13 @@ object SellWandListener : Listener {
         event.setUseItemInHand(Event.Result.DENY)
 
         WandSeller.use(player, block, container, WandProfile.of(wand), consumeFromHand = true)
+    }
+
+    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+    fun onBreak(event: BlockBreakEvent) {
+        val wand = WandItem.wandOf(event.player.inventory.itemInMainHand) ?: return
+        if (wand.inspect.enabled && wand.containers.matches(event.block.type)) {
+            event.isCancelled = true
+        }
     }
 }

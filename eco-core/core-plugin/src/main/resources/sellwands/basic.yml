@@ -2,8 +2,10 @@ name: "&6Sell Wand"
 item: blaze_rod glint name:"&6Sell Wand"
 lore:
   - "&7Right-click a container to sell its contents."
+  - "&7Left-click to preview."
   - "&7Uses left: &e%uses%"
   - "&7Multiplier: &a%multiplier%x"
+  - "&7Sold: &a%sold_items%&7 items for &a%sold_value%"
 
 uses: 100
 cooldown: 5
@@ -34,3 +36,13 @@ bypass:
   global-limits: false
 
 conditions: [ ]
+
+inspect:
+  enabled: true
+  display: message # message | hologram | both
+  duration: 60 # ticks the hologram stays
+  height: 1.5 # blocks above the container
+  lines:
+    - "&fSells &a%amount%&f items"
+    - "&ffor &a%price%"
+    - "&7%unsold% stacks can't be sold"

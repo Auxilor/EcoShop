@@ -64,7 +64,7 @@ class SellEngine(
                     val applied = if (request.applyEventMultiplier) eventMultiplier else 1.0
                     val multiplier = line.priceMultiplier * applied
                     candidate.giveSellPayout(player, multiplier)
-                    PaidLine(candidate, line.units, multiplier, line.economyValue?.times(applied))
+                    PaidLine(candidate, line.units, multiplier, line.economyValue?.times(applied), line.baseValue * multiplier)
                 }
 
                 is Seller.Offline -> {
@@ -73,7 +73,7 @@ class SellEngine(
                         failed += line
                         continue
                     }
-                    PaidLine(candidate, line.units, line.priceMultiplier, value)
+                    PaidLine(candidate, line.units, line.priceMultiplier, value, value)
                 }
             }
 
@@ -92,7 +92,7 @@ class SellEngine(
                     seller.owner.name ?: seller.owner.uniqueId.toString(),
                     candidate.id,
                     line.units,
-                    paidLine.economyValue ?: (line.baseValue * paidLine.multiplier),
+                    paidLine.value,
                     request.source
                 )
             )

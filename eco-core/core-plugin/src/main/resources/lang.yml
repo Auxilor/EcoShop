@@ -69,6 +69,7 @@ messages:
     sold: "&fSold &a%amount%&f items for &a%price%&f! &7(%uses% uses left)"
     given: "&fGave &a%amount%x %wand%&f to &a%player%&f!"
     invalid-wand: "&cInvalid sell wand!"
+    inspect: "&fThis would sell &a%amount%&f items for &a%price%&f. &7(%unsold% stacks can't be sold; boosters not included)"
 
 rotation-countdown: "%hours%h %minutes%m %seconds%s"
 rotation-ready: "Rotating soon..."

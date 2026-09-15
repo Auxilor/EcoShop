@@ -9,7 +9,8 @@ data class PaidLine(
     val candidate: SellCandidate,
     val units: Int,
     val multiplier: Double,
-    val economyValue: Double?
+    val economyValue: Double?,
+    val value: Double
 )
 
 /** What a commit actually did. */

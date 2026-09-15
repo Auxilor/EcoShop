@@ -61,6 +61,8 @@ class SellWand(
         context.with("conditions")
     )
 
+    val inspect = WandInspectConfig.parse(config.getSubsection("inspect"))
+
     /** `ecoshop:sellwand_<id>` in eco item lookups. Declared last: [WandItem.create] reads the fields above. */
     val customItem = CustomItem(
         plugin.createNamespacedKey("sellwand_$id"),

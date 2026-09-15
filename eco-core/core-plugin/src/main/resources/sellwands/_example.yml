@@ -6,10 +6,12 @@
 
 name: "&6Golden Sell Wand" # The display name used in messages.
 item: blaze_rod glint name:"&6Golden Sell Wand" # The base item. Also available as ecoshop:sellwand_<id> in item lookups.
-lore: # Supports %uses%, %max_uses% and %multiplier%.
+lore: # Supports %uses%, %max_uses%, %multiplier%, %sold_items% and %sold_value%.
   - "&7Right-click a container to sell its contents."
+  - "&7Left-click to preview."
   - "&7Uses left: &e%uses%"
   - "&7Multiplier: &a%multiplier%x"
+  - "&7Sold: &a%sold_items%&7 items for &a%sold_value%"
 
 uses: 100 # -1 = infinite
 cooldown: 5 # seconds; 0 = none
@@ -44,3 +46,13 @@ bypass: # a bypassed check is skipped and its counter is not written
   global-limits: false # ignore sell.global-limit; don't count toward it
 
 conditions: [ ] # libreforge conditions, checked against the player
+
+inspect: # left-click a container to preview a sale
+  enabled: true
+  display: message # message | hologram | both
+  duration: 60 # ticks the hologram stays (only the inspecting player sees it)
+  height: 1.5 # blocks above the container
+  lines: # %amount%, %price%, %unsold%
+    - "&fSells &a%amount%&f items"
+    - "&ffor &a%price%"
+    - "&7%unsold% stacks can't be sold"

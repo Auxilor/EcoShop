@@ -16,6 +16,7 @@ import com.willfp.ecoshop.sellwand.EffectSellContainer
 import com.willfp.ecoshop.sellwand.SellWandListener
 import com.willfp.ecoshop.sellwand.SellWands
 import com.willfp.ecoshop.sellwand.TriggerUseSellWand
+import com.willfp.ecoshop.sellwand.WandInspector
 import com.willfp.ecoshop.shop.DynamicPricingDecayTask
 import com.willfp.ecoshop.shop.ShopCategories
 import com.willfp.ecoshop.shop.ShopItems
@@ -62,6 +63,7 @@ class EcoShopPlugin : LibreforgePlugin() {
 
     override fun handleReload() {
         SellWands.values().forEach { it.loadFilter() }
+        WandInspector.clear()
 
         SellGUI.update()
 
@@ -74,6 +76,7 @@ class EcoShopPlugin : LibreforgePlugin() {
     }
 
     override fun handleDisable() {
+        WandInspector.clear()
         ShopCategories.values().forEach { it.stopRotation() }
     }
 

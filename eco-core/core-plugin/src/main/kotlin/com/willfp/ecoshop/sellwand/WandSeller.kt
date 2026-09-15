@@ -5,6 +5,7 @@ import com.willfp.ecoshop.plugin
 import com.willfp.ecoshop.sell.InventoryTarget
 import com.willfp.ecoshop.sell.SellRequest
 import com.willfp.ecoshop.sell.SellSource
+import com.willfp.ecoshop.sell.SellTotals
 import com.willfp.ecoshop.sell.Seller
 import com.willfp.ecoshop.sell.Sells
 import com.willfp.ecoshop.util.formatDuration
@@ -18,6 +19,18 @@ import org.bukkit.entity.Player
 /** Runs one wand use: checks, sale, and use/limit bookkeeping. Shared by the listener and the effect. */
 object WandSeller {
     val limiter by lazy { WandLimiter(ProfilePeriodStore) }
+
+    fun requestFor(player: Player, container: Container, profile: WandProfile) = SellRequest(
+        seller = Seller.Online(player),
+        source = SellSource.WAND,
+        target = InventoryTarget(container.inventory),
+        filter = profile.filter,
+        extraMultiplier = profile.multiplier,
+        applyEventMultiplier = true,
+        maxItems = profile.maxItems,
+        maxValue = profile.maxValue,
+        bypass = profile.bypass
+    )
 
     /** Returns true if anything was sold. */
     fun use(player: Player, block: Block, container: Container, profile: WandProfile, consumeFromHand: Boolean): Boolean {
@@ -63,20 +76,7 @@ object WandSeller {
             }
         }
 
-        val result = Sells.sell(
-            SellRequest(
-                seller = Seller.Online(player),
-                source = SellSource.WAND,
-                target = InventoryTarget(container.inventory),
-                filter = profile.filter,
-                extraMultiplier = profile.multiplier,
-                applyEventMultiplier = true,
-                maxItems = profile.maxItems,
-                maxValue = profile.maxValue,
-                bypass = profile.bypass
-            ),
-            location = block.location
-        )
+        val result = Sells.sell(requestFor(player, container, profile), location = block.location)
 
         if (result.soldUnits == 0) {
             player.sendMessage(plugin.langYml.getMessage("sellwand.nothing-sold"))
@@ -85,12 +85,12 @@ object WandSeller {
 
         var usesAfter = usesBefore
         val wand = profile.wand
-        if (consumeFromHand && wand != null && usesBefore >= 0) {
+        if (consumeFromHand && wand != null) {
             usesAfter = nextWandUses(usesBefore)
             if (usesAfter == 0 && wand.breakWhenEmpty) {
                 hand.amount -= 1
             } else {
-                WandItem.setUses(hand, wand, usesAfter)
+                WandItem.recordSale(hand, wand, usesAfter, SellTotals.of(result), player)
             }
             player.inventory.setItemInMainHand(hand.takeIf { it.amount > 0 })
         }
