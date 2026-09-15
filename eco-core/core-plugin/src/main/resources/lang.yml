@@ -71,6 +71,16 @@ messages:
     invalid-wand: "&cInvalid sell wand!"
     inspect: "&fThis would sell &a%amount%&f items for &a%price%&f. &7(%unsold% stacks can't be sold; boosters not included)"
 
+  sellchest:
+    limit-reached: "&cYou've placed the maximum of &e%limit%&c sell chests!"
+    not-owner: "&cThis sell chest belongs to &e%owner%&c!"
+    sold: "&fSell chest sold &a%amount%&f items for &a%price%"
+    offline-summary: "&fWhile you were away, your sell chests earned &a%price%&f for &a%amount%&f items."
+    given: "&fGave &a%amount%x %type%&f to &a%player%&f!"
+    invalid-type: "&cInvalid sell chest type!"
+    count: "&a%player%&f has &a%count%&f/&a%limit%&f sell chests."
+    count-set: "&fSet &a%player%&f's sell chest count to &a%count%&f."
+
 rotation-countdown: "%hours%h %minutes%m %seconds%s"
 rotation-ready: "Rotating soon..."
 

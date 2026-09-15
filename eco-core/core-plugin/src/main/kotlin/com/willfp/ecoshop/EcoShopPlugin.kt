@@ -14,6 +14,7 @@ import com.willfp.ecoshop.libreforge.TriggerBuyItem
 import com.willfp.ecoshop.libreforge.TriggerSellItem
 import com.willfp.ecoshop.libreforge.TriggerUseSellWand
 import com.willfp.ecoshop.logging.ShopLogListener
+import com.willfp.ecoshop.sellchest.SellChestTypes
 import com.willfp.ecoshop.sellwand.SellWandListener
 import com.willfp.ecoshop.sellwand.SellWands
 import com.willfp.ecoshop.sellwand.WandInspector
@@ -44,6 +45,7 @@ class EcoShopPlugin : LibreforgePlugin() {
     override fun loadConfigCategories(): List<ConfigCategory> {
         return listOf(
             SellWands,
+            SellChestTypes,
             ShopCategories,
             Shops
         )
@@ -63,6 +65,7 @@ class EcoShopPlugin : LibreforgePlugin() {
 
     override fun handleReload() {
         SellWands.values().forEach { it.loadFilter() }
+        SellChestTypes.values().forEach { it.loadFilter() }
         WandInspector.clear()
 
         SellGUI.update()

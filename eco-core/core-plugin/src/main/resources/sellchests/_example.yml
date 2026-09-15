@@ -1,0 +1,25 @@
+# The ID of the sell chest is the name of the .yml file,
+# for example basic.yml has the ID of basic
+# You can place sell chests anywhere in this folder,
+# including in subfolders if you want to organize your sell chest configs
+# _example.yml is not loaded.
+
+name: "&aSell Chest" # The display name used in messages.
+item: chest glint name:"&aSell Chest" # The item. Also available as ecoshop:sellchest_<id> in item lookups.
+lore: # Lore applied to the item.
+  - "&7Automatically sells its contents."
+block: chest # The placed block: chest, trapped_chest or barrel.
+sell-interval: 100 # Ticks between sells for this chest. Can't be faster than sell-chests.sweep-interval.
+
+filters:
+  shops: [ ] # Only sell items from these shops' categories. Empty for all shops.
+  whitelist: [ ] # Only sell these. Shop item IDs (diamond) or categories (category:minerals). Empty for everything.
+  blacklist: [ ] # Never sell these. Wins over the whitelist.
+
+bypass: # A bypassed check is skipped, and the sale doesn't count towards it.
+  dynamic-pricing: false # Pay the base price and don't move the dynamic price.
+  player-limits: false # Ignore sell.limit.
+  global-limits: false # Ignore sell.global-limit.
+
+overflow: keep # What happens when unsellable items are left: keep accepts more items from hoppers, stop blocks hoppers until the owner empties it.
+notify: true # Send the owner an actionbar summary while they're online.
