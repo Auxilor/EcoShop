@@ -259,4 +259,5 @@ These placeholders are available in `inspect.lines`:
 
 - **Items:** make items sellable for wands in [How to Make an Item](how-to-make-an-item).
 - **Commands:** give wands with [Commands and Permissions](commands-and-permissions).
+- **Sell chests:** sell containers automatically with [How to Make a Sell Chest](how-to-make-a-sell-chest).
 - **Defaults:** the shipped sell wands live [here](https://github.com/Auxilor/EcoShop/tree/master/eco-core/core-plugin/src/main/resources/sellwands).

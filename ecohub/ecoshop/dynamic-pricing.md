@@ -1,6 +1,6 @@
 ---
 title: "Dynamic Pricing"
-sidebar_position: 5
+sidebar_position: 6
 ---
 
 Dynamic pricing lets shop prices move on their own in response to how much players buy and sell across the whole server. By the end of this page you will understand how the system reacts to demand, how to configure it on a category, how to write and tune the formula, how decay pulls prices back over time, and how to override any of it on a single item.
