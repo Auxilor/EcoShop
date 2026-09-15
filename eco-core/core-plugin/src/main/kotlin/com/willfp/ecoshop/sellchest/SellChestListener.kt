@@ -22,6 +22,7 @@ import org.bukkit.event.inventory.InventoryMoveItemEvent
 import org.bukkit.event.inventory.InventoryOpenEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.player.PlayerJoinEvent
+import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.event.world.ChunkLoadEvent
 import org.bukkit.event.world.ChunkUnloadEvent
 import org.bukkit.entity.Player
@@ -194,7 +195,14 @@ object SellChestListener : Listener {
 
     @EventHandler
     fun onJoin(event: PlayerJoinEvent) {
+        OfflineEarnings.snapshotPermission(event.player)
+        OfflineEarnings.flush(event.player)
         SellChestIndex.markOwnerDirty(event.player.uniqueId)
+    }
+
+    @EventHandler
+    fun onQuit(event: PlayerQuitEvent) {
+        OfflineEarnings.snapshotPermission(event.player)
     }
 
     @EventHandler
