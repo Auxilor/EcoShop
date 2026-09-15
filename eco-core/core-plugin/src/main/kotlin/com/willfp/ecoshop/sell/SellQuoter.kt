@@ -10,7 +10,8 @@ class SellQuoter(
     private val resolve: (ItemStack) -> SellCandidate?,
     private val chunkSize: () -> Int
 ) {
-    fun quote(request: SellRequest): SellQuote {
+    fun quote(request: SellRequest, resolveWith: ((ItemStack) -> SellCandidate?)? = null): SellQuote {
+        val lookup = resolveWith ?: resolve
         val seller = request.seller
         val player = (seller as? Seller.Online)?.player
         val unsold = mutableListOf<UnsoldSlot>()
@@ -23,7 +24,7 @@ class SellQuoter(
             val stack = request.target.get(index) ?: continue
             if (stack.isEmpty || stack.amount <= 0) continue
 
-            val candidate = resolve(stack)
+            val candidate = lookup(stack)
             val rejection = rejection(candidate, stack, request, player)
             if (rejection != null) {
                 unsold += UnsoldSlot(index, rejection)

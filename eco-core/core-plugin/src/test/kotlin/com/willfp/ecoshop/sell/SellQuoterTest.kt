@@ -153,4 +153,13 @@ class SellQuoterTest {
         assertEquals(10, quote.lines.single().units)
         assertTrue(quote.unsold.isEmpty())
     }
+
+    @Test
+    fun `resolveWith overrides registry lookup`() {
+        val registryItem = testCandidate("registry")
+        val forced = testCandidate("forced")
+        val s = fakeStack(3)
+        val quote = quoter(mapOf(s to registryItem)).quote(request(s)) { forced }
+        assertEquals("forced", quote.lines.single().candidate.id)
+    }
 }

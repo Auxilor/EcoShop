@@ -6,6 +6,7 @@ import com.willfp.ecoshop.plugin
 import com.willfp.ecoshop.shop.shopItem
 import org.bukkit.Bukkit
 import org.bukkit.Location
+import org.bukkit.inventory.ItemStack
 
 /** Shared production instances of the sell core. */
 object Sells {
@@ -28,6 +29,9 @@ object Sells {
         )
     }
 
-    fun sell(request: SellRequest, location: Location? = null): SellResult =
-        engine.commit(quoter.quote(request), location)
+    fun sell(
+        request: SellRequest,
+        location: Location? = null,
+        resolveWith: ((ItemStack) -> SellCandidate?)? = null
+    ): SellResult = engine.commit(quoter.quote(request, resolveWith), location)
 }

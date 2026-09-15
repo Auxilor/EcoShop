@@ -1,5 +1,6 @@
 package com.willfp.ecoshop.sell
 
+import org.bukkit.entity.Player
 import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.ItemStack
 
@@ -41,3 +42,7 @@ class ListTarget(private val stacks: List<ItemStack>) : SellTarget {
         stack.amount = (stack.amount - amount).coerceAtLeast(0)
     }
 }
+
+/** The player's main storage slots (hotbar + inventory, 0–35). */
+fun playerStorageTarget(player: Player): InventoryTarget =
+    InventoryTarget(player.inventory, (0..35).toList())
