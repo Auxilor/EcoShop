@@ -10,6 +10,7 @@ import com.willfp.eco.core.gui.slot.MaskItems
 import com.willfp.eco.core.items.Items
 import com.willfp.eco.core.items.builder.modify
 import com.willfp.ecoshop.plugin
+import com.willfp.ecoshop.sell.SellMessages
 import com.willfp.ecoshop.shop.SellStatus
 import com.willfp.ecoshop.shop.ShopItem
 import com.willfp.ecoshop.shop.configKey
@@ -41,21 +42,15 @@ class SellMenu(
         }) {
             onLeftClick { player, _, _, menu ->
                 val status = item.getCurrentSellStatus(player, amount)
-                val sellDisplayMultiplier = item.getEffectiveSellMultiplier(player)
 
                 if (status == SellStatus.ALLOW) {
-                    val didSell = item.sell(
+                    val result = item.sellDetailed(
                         player,
                         amount,
                         shop = menu.parentShop[player]
                     )
 
-                    player.sendMessage(
-                        plugin.langYml.getMessage("sold-item")
-                            .replace("%amount%", didSell.toString())
-                            .replace("%item%", item.displayName)
-                            .replace("%price%", item.sellPrice.getDisplay(player, didSell * sellDisplayMultiplier))
-                    )
+                    SellMessages.soldItem(player, item.displayName, result)
                 } else {
                     player.sendMessage(
                         plugin.langYml.getMessage("sell-status.${status.configKey}")
@@ -177,21 +172,15 @@ class SellMenu(
                     val amount = menu.amountOfItem[player]
 
                     val status = item.getCurrentSellStatus(player, amount)
-                    val sellDisplayMultiplier = item.getEffectiveSellMultiplier(player)
 
                     if (status == SellStatus.ALLOW) {
-                        val didSell = item.sell(
+                        val result = item.sellDetailed(
                             player,
                             amount,
                             shop = menu.parentShop[player]
                         )
 
-                        player.sendMessage(
-                            plugin.langYml.getMessage("sold-item")
-                                .replace("%amount%", didSell.toString())
-                                .replace("%item%", item.displayName)
-                                .replace("%price%", item.sellPrice.getDisplay(player, didSell * sellDisplayMultiplier))
-                        )
+                        SellMessages.soldItem(player, item.displayName, result)
 
                         menu.kickBack(player)
                     } else {
@@ -237,16 +226,10 @@ class SellMenu(
                             return@onLeftClick
                         }
 
-                        val sellDisplayMultiplier = item.getEffectiveSellMultiplier(player)
-                        val sold = item.sell(player, maxAmount, shop = menu.parentShop[player])
+                        val result = item.sellDetailed(player, maxAmount, shop = menu.parentShop[player])
 
-                        if (sold > 0) {
-                            player.sendMessage(
-                                plugin.langYml.getMessage("sold-item")
-                                    .replace("%amount%", sold.toString())
-                                    .replace("%item%", item.displayName)
-                                    .replace("%price%", item.sellPrice.getDisplay(player, sold * sellDisplayMultiplier))
-                            )
+                        if (result.soldUnits > 0) {
+                            SellMessages.soldItem(player, item.displayName, result)
                             menu.kickBack(player)
                         } else {
                             player.sendMessage(plugin.langYml.getMessage("not-enough"))
