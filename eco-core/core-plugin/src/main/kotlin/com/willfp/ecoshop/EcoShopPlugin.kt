@@ -14,6 +14,7 @@ import com.willfp.ecoshop.libreforge.TriggerBuyItem
 import com.willfp.ecoshop.libreforge.TriggerSellItem
 import com.willfp.ecoshop.libreforge.TriggerUseSellWand
 import com.willfp.ecoshop.logging.ShopLogListener
+import com.willfp.ecoshop.sellchest.SellChestHolograms
 import com.willfp.ecoshop.sellchest.SellChestIndex
 import com.willfp.ecoshop.sellchest.SellChestListener
 import com.willfp.ecoshop.sellchest.SellChestTask
@@ -87,6 +88,7 @@ class EcoShopPlugin : LibreforgePlugin() {
 
     override fun handleDisable() {
         SellChestTask.stop()
+        SellChestHolograms.clear()
         WandInspector.clear()
         ShopCategories.values().forEach { it.stopRotation() }
     }

@@ -7,6 +7,7 @@ import com.willfp.ecoshop.sell.InventoryTarget
 import com.willfp.ecoshop.sell.SellRequest
 import com.willfp.ecoshop.sell.SellResult
 import com.willfp.ecoshop.sell.SellSource
+import com.willfp.ecoshop.sell.SellTotals
 import com.willfp.ecoshop.sell.Seller
 import com.willfp.ecoshop.sell.Sells
 import org.bukkit.Bukkit
@@ -96,7 +97,18 @@ object SellChestTask {
         return Seller.Offline(owner) { OfflineEligibility.isEligible(it, allowed) }
     }
 
+    private fun recordStats(chest: IndexedChest, type: SellChestType, result: SellResult) {
+        val block = chest.key.block() ?: return
+        val totals = SellChestData.readTotals(block) + SellTotals.of(result)
+        SellChestData.writeTotals(block, totals)
+        SellChestHolograms.show(chest.key, type, chest.owner, totals)
+    }
+
     private fun afterSale(chest: IndexedChest, type: SellChestType, seller: Seller, result: SellResult) {
+        if (result.soldUnits > 0) {
+            recordStats(chest, type, result)
+        }
+
         if (seller is Seller.Offline) {
             if (result.soldUnits > 0) {
                 OfflineEarnings.add(seller.owner, result.economyTotal, result.soldUnits)
