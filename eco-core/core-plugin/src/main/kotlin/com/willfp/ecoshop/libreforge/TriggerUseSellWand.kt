@@ -1,4 +1,4 @@
-package com.willfp.ecoshop.sellwand
+package com.willfp.ecoshop.libreforge
 
 import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.triggers.Trigger

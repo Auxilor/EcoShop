@@ -1,6 +1,7 @@
 package com.willfp.ecoshop.sellwand
 
 import com.willfp.eco.core.sound.PlayableSound
+import com.willfp.ecoshop.libreforge.TriggerUseSellWand
 import com.willfp.ecoshop.plugin
 import com.willfp.ecoshop.sell.InventoryTarget
 import com.willfp.ecoshop.sell.SellRequest
