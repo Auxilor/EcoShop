@@ -1,0 +1,24 @@
+name: "&aSell Chest"
+item: chest glint name:"&aSell Chest"
+lore:
+  - "&7Automatically sells its contents."
+  - "&7Sold: &a%sold_items%&7 items for &a%sold_value%"
+block: chest
+sell-interval: 100
+filters:
+  shops: [ ]
+  whitelist: [ ]
+  blacklist: [ ]
+bypass:
+  dynamic-pricing: false
+  player-limits: false
+  global-limits: false
+overflow: keep
+notify: true
+hologram:
+  enabled: true
+  height: 1.5 # Blocks above the chest.
+  lines: # Supports %type%, %owner%, %sold_items% and %sold_value%.
+    - "%type% &7(%owner%)"
+    - "&fSold: &a%sold_items%"
+    - "&fEarned: &a%sold_value%"
