@@ -1,0 +1,58 @@
+# The ID of the sell wand is the name of the .yml file,
+# for example golden.yml has the ID of golden
+# You can place sell wands anywhere in this folder,
+# including in subfolders if you want to organize your sell wand configs
+# _example.yml is not loaded.
+
+name: "&6Golden Sell Wand" # The display name used in messages.
+item: blaze_rod glint name:"&6Golden Sell Wand" # The base item. Also available as ecoshop:sellwand_<id> in item lookups.
+lore: # Supports %uses%, %max_uses%, %multiplier%, %sold_items% and %sold_value%.
+  - "&7Right-click a container to sell its contents."
+  - "&7Left-click to preview."
+  - "&7Uses left: &e%uses%"
+  - "&7Multiplier: &a%multiplier%x"
+  - "&7Sold: &a%sold_items%&7 items for &a%sold_value%"
+
+uses: 100 # Uses before the wand is empty. -1 for infinite.
+cooldown: 5 # Seconds between uses, per player per wand type. 0 for none.
+period-limit:
+  uses: 20 # Max uses per period, per player per wand type. -1 for none.
+  period: 1440 # Period length in minutes, starting from the first use.
+max-items-per-use: 1728 # Max items sold per use. -1 for none.
+max-value-per-use: 50000 # Max money earned per use. Only counts eco:economy prices. -1 for none.
+multiplier: 1.5 # Sell price multiplier. Stacks with booster and filter multipliers.
+require-sneak: false # Only sell when sneaking, so a normal click opens the container.
+break-when-empty: true # Remove the wand at 0 uses. If false, it stays and does nothing.
+
+containers: # Container materials the wand works on. shulker_box matches every colour.
+  - chest
+  - trapped_chest
+  - barrel
+  - shulker_box
+
+filters:
+  shops: [ ] # Only sell items from these shops' categories. Empty for all shops.
+  whitelist: [ ] # Only sell these. Shop item IDs (diamond) or categories (category:minerals). Empty for everything.
+  blacklist: [ ] # Never sell these. Wins over the whitelist.
+  multipliers: # Extra multipliers. A shop item rule wins over a category rule.
+    - rule: "category:minerals"
+      multiplier: 2.0
+    - rule: "cobblestone"
+      multiplier: 0.5
+
+bypass: # A bypassed check is skipped, and the sale doesn't count towards it.
+  dynamic-pricing: false # Pay the base price and don't move the dynamic price.
+  player-limits: false # Ignore sell.limit.
+  global-limits: false # Ignore sell.global-limit.
+
+conditions: [ ] # Conditions the player must meet to use the wand.
+
+inspect: # Left-click a container to preview a sale.
+  enabled: true
+  display: message # message, hologram or both.
+  duration: 60 # Ticks the hologram stays. Only the inspecting player sees it.
+  height: 1.5 # Blocks above the container.
+  lines: # Hologram lines. Supports %amount%, %price% and %unsold%.
+    - "&fSells &a%amount%&f items"
+    - "&ffor &a%price%"
+    - "&7%unsold% stacks can't be sold"

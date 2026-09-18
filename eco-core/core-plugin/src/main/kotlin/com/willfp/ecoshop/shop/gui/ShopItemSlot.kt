@@ -11,6 +11,7 @@ import com.willfp.eco.core.items.builder.modify
 import com.willfp.eco.util.formatEco
 import com.willfp.eco.util.toNiceString
 import com.willfp.ecoshop.plugin
+import com.willfp.ecoshop.sell.SellMessages
 import com.willfp.ecoshop.shop.BuyStatus
 import com.willfp.ecoshop.shop.BuyType
 import com.willfp.ecoshop.shop.SellStatus
@@ -130,14 +131,8 @@ class ShopItemSlot(
                         return@onShiftRightClick
                     }
 
-                    val sellDisplayMultiplier = item.getEffectiveSellMultiplier(player)
-                    val sold = item.sell(player, cappedAmount)
-                    player.sendMessage(
-                        plugin.langYml.getMessage("sold-item")
-                            .replace("%amount%", sold.toString())
-                            .replace("%item%", item.displayName)
-                            .replace("%price%", item.sellPrice.getDisplay(player, sold * sellDisplayMultiplier))
-                    )
+                    val result = item.sellDetailed(player, cappedAmount)
+                    SellMessages.soldItem(player, item.displayName, result)
                 }
             }
         }

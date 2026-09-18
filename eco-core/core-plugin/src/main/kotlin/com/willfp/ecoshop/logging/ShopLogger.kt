@@ -23,9 +23,10 @@ object ShopLogger {
      * Logs a transaction. Safe to call from the main thread; the actual
      * file write happens asynchronously.
      */
-    fun log(player: String, type: String, itemId: String, amount: Int, price: Double) {
+    fun log(player: String, type: String, itemId: String, amount: Int, price: Double, source: String? = null) {
         val now = LocalDateTime.now()
-        val line = "[${now.format(timestampFormatter)}] $player $type $itemId x$amount for $price"
+        val line = "[${now.format(timestampFormatter)}] $player $type $itemId x$amount for $price" +
+                (source?.let { " via $it" } ?: "")
 
         Bukkit.getScheduler().runTaskAsynchronously(plugin, Runnable {
             writeLine(now.toLocalDate(), line)

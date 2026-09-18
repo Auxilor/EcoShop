@@ -48,6 +48,7 @@ class ShopCategory(
     val items = config.getSubsections("items").mapNotNull {
         try {
             val item = ShopItem(it, dynamicPricing)
+            item.addCategory(id)
             ShopItems.register(item)
             item
         } catch (e: InvalidShopItemException) {

@@ -42,6 +42,7 @@ permissions:
       ecoshop.command.ecoshop: true
       ecoshop.command.rotate: true
       ecoshop.command.history: true
+      ecoshop.command.givewand: true
       ecoshop.command.sell.*: true
 
   ecoshop.command.rotate:
@@ -62,6 +63,12 @@ permissions:
   ecoshop.command.history:
     description: Allows viewing shop transaction history
     default: op
+  ecoshop.command.givewand:
+    description: Allows giving sell wands
+    default: op
+  ecoshop.sellwand.use:
+    description: Allows using sell wands
+    default: true
   ecoshop.command.sell:
     description: Allows the use of /sell and the /sell GUI
     default: true

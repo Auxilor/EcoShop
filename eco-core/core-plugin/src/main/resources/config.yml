@@ -12,6 +12,9 @@ logging:
   enabled: true # Whether to log every shop buy/sell transaction to logs/shop/*.log.
   max-history-days: 30 # How many days of log files /ecoshop history will search back through.
 
+dynamic-pricing:
+  bulk-chunk-size: 64 # Bulk sales re-price after every this-many items. Lower = sales move the price more accurately. Set very high to price whole batches at the starting price.
+
 shop-items:
   register-permissions: false # Registering permissions will show them in permission plugins, but leads to long reload times.
 
@@ -309,3 +312,10 @@ sell-gui:
       lore:
         - "&fWhen you close this menu, all"
         - "&fitems inside it will be sold!"
+
+sell-wands:
+  sound: # Played when a wand sells something.
+    enabled: true
+    sound: entity_experience_orb_pickup
+    pitch: 1.2
+    volume: 1

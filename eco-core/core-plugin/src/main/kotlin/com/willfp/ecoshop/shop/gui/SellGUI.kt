@@ -7,6 +7,7 @@ import com.willfp.eco.core.gui.menu.MenuLayer
 import com.willfp.eco.core.gui.slot
 import com.willfp.eco.core.gui.slot.ConfigSlot
 import com.willfp.ecoshop.plugin
+import com.willfp.ecoshop.sell.SellSource
 import com.willfp.ecoshop.shop.ShopItems
 import com.willfp.ecoshop.shop.sell
 import org.bukkit.Material
@@ -58,17 +59,7 @@ object SellGUI {
 
                 val items = menu.getCaptiveItems(player)
 
-                val sellableItems = if (strictSellMatch) {
-                    items.filter { captiveItem ->
-                        ShopItems.values().any { shopItem ->
-                            captiveItem.isSimilar(shopItem.item?.item)
-                        }
-                    }
-                } else {
-                    items
-                }
-
-                val unsold = sellableItems.sell(player)
+                val unsold = items.sell(player, null, SellSource.GUI)
 
                 DropQueue(player)
                     .addItems(unsold)

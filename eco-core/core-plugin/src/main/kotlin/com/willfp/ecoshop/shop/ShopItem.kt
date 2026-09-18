@@ -12,15 +12,25 @@ import com.willfp.eco.core.fast.fast
 import com.willfp.eco.core.items.HashedItem
 import com.willfp.eco.core.items.Items
 import com.willfp.eco.core.items.builder.ItemStackBuilder
-import com.willfp.eco.core.price.CombinedDisplayPrice
+import com.willfp.eco.core.placeholder.context.PlaceholderContext
 import com.willfp.eco.core.price.ConfiguredPrice
 import com.willfp.eco.core.registry.KRegistrable
 import com.willfp.eco.util.NumberUtils
 import com.willfp.eco.util.StringUtils
-import com.willfp.eco.util.formatEco
 import com.willfp.ecoshop.event.EcoShopBuyEvent
 import com.willfp.ecoshop.event.EcoShopSellEvent
 import com.willfp.ecoshop.plugin
+import com.willfp.ecoshop.sell.ListTarget
+import com.willfp.ecoshop.sell.SellBypass
+import com.willfp.ecoshop.sell.SellCandidate
+import com.willfp.ecoshop.sell.SellMessages
+import com.willfp.ecoshop.sell.SellRequest
+import com.willfp.ecoshop.sell.SellResult
+import com.willfp.ecoshop.sell.SellSource
+import com.willfp.ecoshop.sell.Seller
+import com.willfp.ecoshop.sell.Sells
+import com.willfp.ecoshop.sell.playerStorageTarget
+import com.willfp.ecoshop.sell.DynamicPricer
 import com.willfp.ecoshop.shop.gui.BuyMenu
 import com.willfp.ecoshop.shop.gui.SellMenu
 import com.willfp.ecoshop.shop.gui.ShopItemSlot
@@ -51,8 +61,8 @@ enum class BuyType {
 class ShopItem(
     val config: Config,
     categoryDynamicPricing: DynamicPricingConfig? = null
-) : KRegistrable {
-    override val id = config.getString("id")
+) : KRegistrable, SellCandidate {
+    override val id: String = config.getString("id")
 
     val dynamicPricing: DynamicPricingConfig? = run {
         val hasBuyDp = config.has("buy") && config.getSubsection("buy").has("dynamic-pricing")
@@ -138,7 +148,7 @@ class ShopItem(
 
     val isBuyable = config.has("buy")
 
-    val isSellable = config.has("sell")
+    override val isSellable = config.has("sell")
 
     val hasAltBuy = config.has("alt-buy")
 
@@ -146,7 +156,7 @@ class ShopItem(
 
     val altBuyPrice = ConfiguredPrice.create(config.getSubsection("alt-buy"))
 
-    val sellPrice = ConfiguredPrice.create(config.getSubsection("sell"))
+    override val sellPrice = ConfiguredPrice.create(config.getSubsection("sell"))
 
     val buyConditions = Conditions.compile(
         config.getSubsections("buy.conditions"),
@@ -165,6 +175,79 @@ class ShopItem(
 
     val isStrictMatch = plugin.configYml.getBoolOrNull("shop-items.sell-strict-match") ?: true
 
+    private val _categoryIds = mutableSetOf<String>()
+
+    override val categoryIds: Set<String>
+        get() = _categoryIds
+
+    internal fun addCategory(categoryId: String) {
+        _categoryIds += categoryId
+    }
+
+    override val rawSellValueExpression: String? =
+        config.getStringOrNull("sell.value", false, StringUtils.FormatOption.WITHOUT_PLACEHOLDERS)
+
+    override val hasSellConditions: Boolean = config.getSubsections("sell.conditions").isNotEmpty()
+
+    override val sellDynamicConfig: PriceDynamicConfig?
+        get() = dynamicPricing?.sell
+
+    override fun matchesForSale(itemStack: ItemStack): Boolean {
+        val shopItem = item ?: return false
+        return if (isStrictMatch) itemStack.isSimilar(shopItem.item) else shopItem.matches(itemStack)
+    }
+
+    override fun totalSells(player: OfflinePlayer): Int = getTotalSells(player)
+
+    override fun totalGlobalSells(): Int = getTotalGlobalSells()
+
+    override fun dynamicGlobalBuys(): Int = getDynamicGlobalBuys()
+
+    override fun dynamicGlobalSells(): Int = getDynamicGlobalSells()
+
+    override fun hasSellPermission(player: Player): Boolean = player.hasPermission("ecoshop.sell.$id")
+
+    override fun sellConditionsMet(player: Player): Boolean =
+        sellConditions.areMet(player.toDispatcher(), EmptyProvidedHolder)
+
+    override fun baseSellValue(player: Player?): Double {
+        if (player != null) {
+            return sellPrice?.getValue(player) ?: 0.0
+        }
+        val expression = rawSellValueExpression ?: return 0.0
+        return NumberUtils.evaluateExpression(expression, PlaceholderContext.EMPTY)
+    }
+
+    override fun isEconomyPrice(): Boolean = sellPrice?.identifier == "eco:economy"
+
+    override fun fireSellEvent(player: Player, stack: ItemStack, units: Int, source: SellSource): Double {
+        val event = EcoShopSellEvent(player, this, sellPrice!!, stack, units, 1.0, source)
+        Bukkit.getPluginManager().callEvent(event)
+        return event.multiplier
+    }
+
+    override fun triggerSellEffects(player: Player, units: Int) {
+        sellEffects?.trigger(
+            DispatchedTrigger(
+                player.toDispatcher(),
+                TriggerBlank,
+                TriggerData(
+                    player = player,
+                    location = player.location,
+                    item = player.inventory.itemInMainHand,
+                    value = units.toDouble(),
+                    altValue = (sellPrice?.getValue(player) ?: 0.0) * units
+                )
+            ).apply {
+                addPlaceholder(NamedValue("amount", units))
+            }
+        )
+    }
+
+    override fun giveSellPayout(player: Player, multiplier: Double) {
+        sellPrice?.giveTo(player, multiplier)
+    }
+
     val slot = ShopItemSlot(this)
 
     val isShowingQuickBuySell = config.getBoolOrNull("gui.show-quick-buy-sell") ?: true
@@ -177,9 +260,9 @@ class ShopItem(
 
     val globalLimit = config.getIntOrNull("buy.global-limit") ?: Int.MAX_VALUE
 
-    val sellLimit = config.getIntOrNull("sell.limit") ?: Int.MAX_VALUE
+    override val sellLimit = config.getIntOrNull("sell.limit") ?: Int.MAX_VALUE
 
-    val globalSellLimit = config.getIntOrNull("sell.global-limit") ?: Int.MAX_VALUE
+    override val globalSellLimit = config.getIntOrNull("sell.global-limit") ?: Int.MAX_VALUE
 
     private val maxAtOnce = config.getIntOrNull("buy.max-at-once") ?: Int.MAX_VALUE
 
@@ -317,31 +400,6 @@ class ShopItem(
         return Math.round(clamped * 100) / 100.0
     }
 
-    private fun effectiveSellValue(baseValue: Double): Double {
-        val pc = dynamicPricing?.sell ?: return baseValue
-        if (!pc.enabled) return baseValue
-        val formula = pc.formula ?: return baseValue
-
-        val substituted = formula
-            .replace("%base_price%", baseValue.toString())
-            .replace("%buys%", getDynamicGlobalBuys().toString())
-            .replace("%sells%", getDynamicGlobalSells().toString())
-
-        val result = NumberUtils.evaluateExpression(substituted)
-        if (result.isNaN() || result.isInfinite() || (result == 0.0 && baseValue != 0.0)) {
-            if (warnedFormulas.add("$id:$formula")) {
-                plugin.logger.warning("[EcoShop] Dynamic pricing formula failed for item '$id': \"$formula\"")
-            }
-            return baseValue
-        }
-
-        val clamped = result.coerceIn(
-            minOf(baseValue * pc.maxDecrease, baseValue * pc.maxIncrease),
-            maxOf(baseValue * pc.maxDecrease, baseValue * pc.maxIncrease)
-        )
-        return Math.round(clamped * 100) / 100.0
-    }
-
     fun getEffectiveBuyMultiplier(buyType: BuyType, player: Player): Double {
         val baseValue = getBuyPrice(buyType)?.getValue(player) ?: return 1.0
         if (baseValue <= 0) return 1.0
@@ -350,8 +408,9 @@ class ShopItem(
 
     fun getEffectiveSellMultiplier(player: Player): Double {
         val baseValue = sellPrice?.getValue(player) ?: return 1.0
-        if (baseValue <= 0) return 1.0
-        return effectiveSellValue(baseValue) / baseValue
+        return DynamicPricer.sellFactor(
+            dynamicPricing?.sell, baseValue, getDynamicGlobalBuys(), getDynamicGlobalSells(), id
+        )
     }
 
     /** Get the max amount of times this item can be bought at a single time. */
@@ -615,64 +674,39 @@ class ShopItem(
     /**
      * Make a [player] sell the item up to a certain [amount] of times.
      *
-     * Returns the actual amount of times the item was sold, for example if a
-     * player doesn't have a certain amount of items it will sell as many as
-     * possible.
+     * Returns the actual amount of times the item was sold.
      */
     fun sell(
         player: Player,
         amount: Int,
         shop: Shop? = null
-    ): Int {
-        if (sellPrice == null) {
-            return 0
+    ): Int = sellDetailed(player, amount, shop).soldUnits
+
+    /** Like [sell], but returns the full [SellResult] for price display. */
+    fun sellDetailed(
+        player: Player,
+        amount: Int,
+        shop: Shop? = null
+    ): SellResult {
+        if (sellPrice == null || item == null || getSellStatus(player) != SellStatus.ALLOW) {
+            return SellResult.EMPTY
         }
 
-        if (item == null) {
-            return 0
-        }
-
-        if (getSellStatus(player) != SellStatus.ALLOW) {
-            return 0
-        }
-
-        val amountSold = amount
-            .coerceAtMost(getAmountInPlayerInventory(player))
-            .coerceAtMost(getSellsLeft(player))
-            .coerceAtMost(globalSellLimit - getTotalGlobalSells())
-
-        if (amountSold <= 0) {
-            return 0
-        }
-
-        val priceMultipliers = deductItems(player, amountSold)
-
-        val dynamicSellMultiplier = getEffectiveSellMultiplier(player)
-        for ((multiplier, times) in priceMultipliers) {
-            sellPrice.giveTo(player, multiplier * dynamicSellMultiplier * times)
-        }
-
-        shop?.sellSound?.playTo(player)
-
-        sellEffects?.trigger(
-            DispatchedTrigger(
-                player.toDispatcher(),
-                TriggerBlank,
-                TriggerData(
-                    player = player,
-                    location = player.location,
-                    item = player.inventory.itemInMainHand,
-                    value = amountSold.toDouble(),
-                    altValue = sellPrice.getValue(player) * amountSold
-                )
-            ).apply {
-                addPlaceholder(NamedValue("amount", amountSold))
-            }
+        val result = Sells.sell(
+            SellRequest(
+                seller = Seller.Online(player),
+                source = SellSource.MENU,
+                target = playerStorageTarget(player),
+                maxItems = amount
+            ),
+            resolveWith = { stack -> this.takeIf { it.matchesForSale(stack) } }
         )
 
-        recordSell(player, amountSold)
+        if (result.soldUnits > 0) {
+            shop?.sellSound?.playTo(player)
+        }
 
-        return amountSold
+        return result
     }
 
     fun getAmountInPlayerInventory(player: Player): Int {
@@ -697,55 +731,6 @@ class ShopItem(
         return amountOfItems
     }
 
-    /**
-     * Deducts items, calls events, and returns a map of how many times each
-     * multiplier is given.
-     *
-     * Map maps multipliers to amounts of times.
-     */
-    private fun deductItems(player: Player, amount: Int): Map<Double, Int> {
-        val multipliers = mutableMapOf<Double, Int>()
-
-        var left = amount
-
-        if (item == null) {
-            return emptyMap()
-        }
-
-        // Using slots because of some freakish bug that prevented clearing the item?
-        for (i in 0..35) {
-            val itemStack = player.inventory.getItem(i) ?: continue
-            val matches = if (isStrictMatch) itemStack.isSimilar(item.item) else item.matches(itemStack)
-            if (!matches) {
-                continue
-            }
-
-
-            var times = 0
-
-            if (itemStack.amount <= left) {
-                left -= itemStack.amount
-                times += itemStack.amount
-                player.inventory.clear(i)
-            } else {
-                itemStack.amount -= left
-                times += left
-                left = 0
-            }
-
-            val event = EcoShopSellEvent(player, this, this.sellPrice!!, itemStack, times)
-            Bukkit.getPluginManager().callEvent(event)
-
-            multipliers[event.multiplier] = (multipliers[event.multiplier] ?: 0) + times
-
-            if (left == 0) {
-                break
-            }
-        }
-
-        return multipliers
-    }
-
     fun resetTimesBought(player: OfflinePlayer) {
         val totalBuysForPlayer = getTotalBuys(player)
         Bukkit.getServer().profile.write(timesBoughtKey, getTotalGlobalBuys() - totalBuysForPlayer)
@@ -758,15 +743,23 @@ class ShopItem(
         player.profile.write(timesSoldKey, 0)
     }
 
-    fun recordSell(player: OfflinePlayer, amount: Int) {
+    override fun recordSell(player: OfflinePlayer, amount: Int, bypass: SellBypass) {
         if (amount <= 0) {
             return
         }
 
-        player.profile.write(timesSoldKey, getTotalSells(player) + amount)
-        Bukkit.getServer().profile.write(timesSoldKey, getTotalGlobalSells() + amount)
-        Bukkit.getServer().profile.write(dynamicSellsKey, getDynamicGlobalSells() + amount)
+        if (!bypass.playerLimits) {
+            player.profile.write(timesSoldKey, getTotalSells(player) + amount)
+        }
+        if (!bypass.globalLimits) {
+            Bukkit.getServer().profile.write(timesSoldKey, getTotalGlobalSells() + amount)
+        }
+        if (!bypass.dynamicPricing) {
+            Bukkit.getServer().profile.write(dynamicSellsKey, getDynamicGlobalSells() + amount)
+        }
     }
+
+    fun recordSell(player: OfflinePlayer, amount: Int) = recordSell(player, amount, SellBypass.NONE)
 
     fun getBuyPrice(buyType: BuyType) = when (buyType) {
         BuyType.ALT -> altBuyPrice
@@ -818,31 +811,24 @@ fun ItemStack.sell(
     shop: Shop? = null
 ): Boolean {
     val item = this.shopItem ?: return false
-    if (item.getCurrentSellStatus(player, this.amount) != SellStatus.ALLOW) {
+    if (item.getSellStatus(player, this.amount) != SellStatus.ALLOW) {
         return false
     }
 
-    val price = item.sellPrice ?: return false
-    val soldAmount = this.amount
-
-    val event = EcoShopSellEvent(player, item, price, this, soldAmount)
-    Bukkit.getPluginManager().callEvent(event)
-
-    val dynamicSellMultiplier = item.getEffectiveSellMultiplier(player)
-    price.giveTo(player, soldAmount.toDouble() * event.multiplier * dynamicSellMultiplier)
-    item.recordSell(player, soldAmount)
-
-    player.sendMessage(
-        plugin.langYml.getMessage("sold-item")
-            .replace("%amount%", soldAmount.toString())
-            .replace("%item%", item.displayName)
-            .replace("%price%", price.getDisplay(player, soldAmount.toDouble() * event.multiplier * dynamicSellMultiplier))
+    val result = Sells.sell(
+        SellRequest(Seller.Online(player), SellSource.ADAPTER, ListTarget(listOf(this)))
     )
 
+    if (result.soldUnits == 0) {
+        return false
+    }
+
+    SellMessages.soldItem(player, item.displayName, result)
     shop?.sellSound?.playTo(player)
 
-    this.amount = 0
-    this.type = Material.AIR
+    if (this.amount <= 0) {
+        this.type = Material.AIR
+    }
 
     return true
 }
@@ -867,69 +853,30 @@ fun Collection<String>.formatMultiple(): String {
 fun Collection<ItemStack>.sell(
     player: Player,
     shop: Shop? = null
+): Collection<ItemStack> = sell(player, shop, SellSource.COMMAND)
+
+fun Collection<ItemStack>.sell(
+    player: Player,
+    shop: Shop?,
+    source: SellSource
 ): Collection<ItemStack> {
-    val unsold = mutableListOf<ItemStack>()
-    var amountSold = 0
-    val displayBuilder = CombinedDisplayPrice.builder(player)
+    val stacks = this.toList()
+    val result = Sells.sell(SellRequest(Seller.Online(player), source, ListTarget(stacks)))
 
-    for (itemStack in this) {
-        val item = itemStack.shopItem
-        if (item == null) {
-            unsold += itemStack
-            continue
-        }
-
-        if (item.getSellStatus(player, itemStack.amount) != SellStatus.ALLOW) {
-            unsold += itemStack
-            continue
-        }
-
-        val sellableAmount = itemStack.amount
-            .coerceAtMost(item.getSellsLeft(player))
-            .coerceAtMost(item.globalSellLimit - item.getTotalGlobalSells())
-
-        if (sellableAmount <= 0) {
-            unsold += itemStack
-            continue
-        }
-
-        val price = item.sellPrice!!
-
-        val event = EcoShopSellEvent(player, item, price, itemStack, sellableAmount)
-        Bukkit.getPluginManager().callEvent(event)
-
-        val dynamicSellMultiplier = item.getEffectiveSellMultiplier(player)
-        price.giveTo(player, sellableAmount.toDouble() * event.multiplier * dynamicSellMultiplier)
-        item.recordSell(player, sellableAmount)
-
-        displayBuilder.add(
-            price,
-            sellableAmount.toDouble() * event.multiplier * dynamicSellMultiplier
-        )
-
-        amountSold += sellableAmount
-
-        if (sellableAmount >= itemStack.amount) {
-            itemStack.amount = 0
-            itemStack.type = Material.AIR
-        } else {
-            itemStack.amount -= sellableAmount
-            unsold += itemStack
+    for (stack in stacks) {
+        if (stack.amount <= 0) {
+            stack.type = Material.AIR
         }
     }
 
-    // If none sold.
-    if (amountSold == 0) {
+    val unsold = stacks.filter { !it.type.isAir && it.amount > 0 }
+
+    if (result.soldUnits == 0) {
         return unsold
     }
 
     shop?.sellSound?.playTo(player)
-
-    player.sendMessage(
-        plugin.langYml.getMessage("sold-multiple")
-            .replace("%amount%", amountSold.toString())
-            .replace("%price%", displayBuilder.build().displayStrings.toList().formatMultiple().formatEco(player))
-    )
+    SellMessages.soldMultiple(player, result)
 
     return unsold
 }

@@ -8,10 +8,15 @@ import com.willfp.ecoshop.commands.CommandSell
 import com.willfp.ecoshop.integrations.EcoShopAdapter
 import com.willfp.ecoshop.libreforge.EffectBuyItem
 import com.willfp.ecoshop.libreforge.EffectOpenShop
+import com.willfp.ecoshop.libreforge.EffectSellContainer
 import com.willfp.ecoshop.libreforge.FilterShopItem
 import com.willfp.ecoshop.libreforge.TriggerBuyItem
 import com.willfp.ecoshop.libreforge.TriggerSellItem
+import com.willfp.ecoshop.libreforge.TriggerUseSellWand
 import com.willfp.ecoshop.logging.ShopLogListener
+import com.willfp.ecoshop.sellwand.SellWandListener
+import com.willfp.ecoshop.sellwand.SellWands
+import com.willfp.ecoshop.sellwand.WandInspector
 import com.willfp.ecoshop.shop.DynamicPricingDecayTask
 import com.willfp.ecoshop.shop.ShopCategories
 import com.willfp.ecoshop.shop.ShopItems
@@ -38,6 +43,7 @@ class EcoShopPlugin : LibreforgePlugin() {
 
     override fun loadConfigCategories(): List<ConfigCategory> {
         return listOf(
+            SellWands,
             ShopCategories,
             Shops
         )
@@ -49,11 +55,16 @@ class EcoShopPlugin : LibreforgePlugin() {
         Filters.register(FilterShopItem)
         Triggers.register(TriggerBuyItem)
         Triggers.register(TriggerSellItem)
+        Triggers.register(TriggerUseSellWand)
         Effects.register(EffectBuyItem)
         Effects.register(EffectOpenShop)
+        Effects.register(EffectSellContainer)
     }
 
     override fun handleReload() {
+        SellWands.values().forEach { it.loadFilter() }
+        WandInspector.clear()
+
         SellGUI.update()
 
         decayTask?.cancel()
@@ -65,11 +76,12 @@ class EcoShopPlugin : LibreforgePlugin() {
     }
 
     override fun handleDisable() {
+        WandInspector.clear()
         ShopCategories.values().forEach { it.stopRotation() }
     }
 
     override fun loadListeners(): List<Listener> {
-        return listOf(ShopLogListener)
+        return listOf(ShopLogListener, SellWandListener)
     }
 
     override fun loadPluginCommands(): List<PluginCommand> {

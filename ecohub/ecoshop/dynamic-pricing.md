@@ -1,6 +1,6 @@
 ---
 title: "Dynamic Pricing"
-sidebar_position: 4
+sidebar_position: 5
 ---
 
 Dynamic pricing lets shop prices move on their own in response to how much players buy and sell across the whole server. By the end of this page you will understand how the system reacts to demand, how to configure it on a category, how to write and tune the formula, how decay pulls prices back over time, and how to override any of it on a single item.
@@ -99,6 +99,23 @@ dynamic-pricing:
 ```
 
 Because both counters shrink proportionally, equal buying and selling still cancels out, but a long quiet spell always pulls the price back to base. Decay is category-level only: it is inherited by every item in the category, including items with their own pricing overrides, and cannot be set per item. To wipe an item's counters immediately, run `/ecoshop resetdynamicpricing <id/all>`.
+
+## Bulk sales
+
+When a lot of one item is sold at once, e.g. with `/sell all` or a [sell wand](how-to-make-a-sell-wand), the price is worked out in chunks instead of all at the starting price. After every `bulk-chunk-size` items, the sell counter moves on and the next chunk is priced again, so one huge sale can't get the starting price for every item.
+
+```yaml
+dynamic-pricing:
+  bulk-chunk-size: 64 # Bulk sales re-price after every this-many items.
+```
+
+This lives in `config.yml`; see [Plugin Config](plugin-config). For example, with a base price of `100`, the formula `%base_price% - %sells%`, and `bulk-chunk-size: 2`, selling 4 items pays:
+
+```text
+2 × 100 (sells = 0) + 2 × 98 (sells = 2) = 396
+```
+
+A lower chunk size tracks the price more closely. Set it very high to price a whole sale at its starting price.
 
 ## Overriding pricing per item
 

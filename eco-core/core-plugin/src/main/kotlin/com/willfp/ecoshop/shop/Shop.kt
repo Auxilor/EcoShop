@@ -56,6 +56,16 @@ class Shop(
     val directCategory: ShopCategory?
         get() = ShopCategories.getByID(config.getString("direct-category"))
 
+    /** Ids of every category placed in this shop, used by sell filter `shops` scoping. */
+    val categoryIds: Set<String> = buildSet {
+        config.getStringOrNull("direct-category")?.let { add(it) }
+        for (page in config.getSubsections("pages")) {
+            for (category in page.getSubsections("categories")) {
+                add(category.getString("id"))
+            }
+        }
+    }
+
     val menu = if (config.has("pages")) menu(config.getInt("rows")) {
         val pages = config.getSubsections("pages")
 
