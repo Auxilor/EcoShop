@@ -4,6 +4,7 @@ import com.willfp.eco.core.command.impl.Subcommand
 import com.willfp.eco.util.StringUtils
 import com.willfp.eco.util.toNiceString
 import com.willfp.ecoshop.plugin
+import com.willfp.ecoshop.runOnGlobalRegion
 import com.willfp.ecoshop.shop.ShopCategories
 import com.willfp.ecoshop.shop.Shops
 import org.bukkit.command.CommandSender
@@ -14,7 +15,7 @@ object CommandReload: Subcommand(
     "ecoshop.command.reload",
     false
 ) {
-    override fun onExecute(sender: CommandSender, args: List<String>) {
+    override fun onExecute(sender: CommandSender, args: List<String>) = runOnGlobalRegion {
         sender.sendMessage(
             plugin.langYml.getMessage("reloaded", StringUtils.FormatOption.WITHOUT_PLACEHOLDERS)
                 .replace("%time%", plugin.reloadWithTime().toNiceString())

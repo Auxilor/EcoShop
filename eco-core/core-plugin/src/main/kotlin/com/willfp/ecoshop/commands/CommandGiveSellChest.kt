@@ -3,6 +3,7 @@ package com.willfp.ecoshop.commands
 import com.willfp.eco.core.command.impl.Subcommand
 import com.willfp.eco.core.drops.DropQueue
 import com.willfp.ecoshop.plugin
+import com.willfp.ecoshop.runOwned
 import com.willfp.ecoshop.sellchest.SellChestItem
 import com.willfp.ecoshop.sellchest.SellChestTypes
 import org.bukkit.Bukkit
@@ -35,22 +36,24 @@ object CommandGiveSellChest : Subcommand(
 
         val amount = args.getOrNull(2)?.toIntOrNull()?.coerceAtLeast(1) ?: 1
 
-        val queue = DropQueue(player).forceTelekinesis()
-        var left = amount
-        while (left > 0) {
-            val stack = SellChestItem.create(type)
-            stack.amount = left.coerceAtMost(stack.maxStackSize)
-            left -= stack.amount
-            queue.addItem(stack)
-        }
-        queue.push()
+        player.runOwned {
+            val queue = DropQueue(player).forceTelekinesis()
+            var left = amount
+            while (left > 0) {
+                val stack = SellChestItem.create(type)
+                stack.amount = left.coerceAtMost(stack.maxStackSize)
+                left -= stack.amount
+                queue.addItem(stack)
+            }
+            queue.push()
 
-        sender.sendMessage(
-            plugin.langYml.getMessage("sellchest.given")
-                .replace("%amount%", amount.toString())
-                .replace("%type%", type.displayName)
-                .replace("%player%", player.name)
-        )
+            sender.sendMessage(
+                plugin.langYml.getMessage("sellchest.given")
+                    .replace("%amount%", amount.toString())
+                    .replace("%type%", type.displayName)
+                    .replace("%player%", player.name)
+            )
+        }
     }
 
     override fun tabComplete(sender: CommandSender, args: List<String>): List<String> {

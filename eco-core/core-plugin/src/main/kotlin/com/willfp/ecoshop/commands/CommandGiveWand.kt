@@ -3,6 +3,7 @@ package com.willfp.ecoshop.commands
 import com.willfp.eco.core.command.impl.Subcommand
 import com.willfp.eco.core.drops.DropQueue
 import com.willfp.ecoshop.plugin
+import com.willfp.ecoshop.runOwned
 import com.willfp.ecoshop.sellwand.SellWands
 import com.willfp.ecoshop.sellwand.WandItem
 import org.bukkit.Bukkit
@@ -35,18 +36,20 @@ object CommandGiveWand : Subcommand(
 
         val amount = args.getOrNull(2)?.toIntOrNull()?.coerceAtLeast(1) ?: 1
 
-        val queue = DropQueue(player).forceTelekinesis()
-        repeat(amount) {
-            queue.addItem(WandItem.create(wand))
-        }
-        queue.push()
+        player.runOwned {
+            val queue = DropQueue(player).forceTelekinesis()
+            repeat(amount) {
+                queue.addItem(WandItem.create(wand))
+            }
+            queue.push()
 
-        sender.sendMessage(
-            plugin.langYml.getMessage("sellwand.given")
-                .replace("%amount%", amount.toString())
-                .replace("%wand%", wand.displayName)
-                .replace("%player%", player.name)
-        )
+            sender.sendMessage(
+                plugin.langYml.getMessage("sellwand.given")
+                    .replace("%amount%", amount.toString())
+                    .replace("%wand%", wand.displayName)
+                    .replace("%player%", player.name)
+            )
+        }
     }
 
     override fun tabComplete(sender: CommandSender, args: List<String>): List<String> {

@@ -3,13 +3,14 @@ package com.willfp.ecoshop.sell
 import com.willfp.eco.util.NumberUtils
 import com.willfp.ecoshop.plugin
 import com.willfp.ecoshop.shop.PriceDynamicConfig
+import java.util.concurrent.ConcurrentHashMap
 
 /** Player-free dynamic sell pricing, shared by every sell path. */
 object DynamicPricer {
     internal var evaluator: (String) -> Double = { NumberUtils.evaluateExpression(it) }
     internal var warn: (String) -> Unit = { plugin.logger.warning(it) }
 
-    private val warned = mutableSetOf<String>()
+    private val warned: MutableSet<String> = ConcurrentHashMap.newKeySet()
 
     /** The unit sell value after dynamic pricing, given simulated [buys] and [sells] counters. */
     fun sellValue(config: PriceDynamicConfig?, baseValue: Double, buys: Int, sells: Int, warnKey: String): Double {

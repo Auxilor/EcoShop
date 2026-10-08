@@ -1,5 +1,6 @@
 package com.willfp.ecoshop.libreforge
 
+import com.willfp.eco.core.Eco
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.ecoshop.plugin
 import com.willfp.ecoshop.sell.ItemFilter
@@ -85,7 +86,9 @@ object EffectSellContainer : Effect<NoCompileData>("sell_container") {
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
         val player = data.player ?: return false
-        val block = data.location?.block ?: return false
+        val location = data.location ?: return false
+        if (!Eco.get().isOwnedByCurrentRegion(location)) return false
+        val block = location.block
         val container = block.getState(false) as? Container ?: return false
 
         val wandId = config.getStringOrNull("wand")

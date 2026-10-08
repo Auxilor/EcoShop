@@ -1,7 +1,6 @@
 package com.willfp.ecoshop.logging
 
 import com.willfp.ecoshop.plugin
-import org.bukkit.Bukkit
 import java.io.BufferedWriter
 import java.io.File
 import java.io.FileWriter
@@ -28,9 +27,9 @@ object ShopLogger {
         val line = "[${now.format(timestampFormatter)}] $player $type $itemId x$amount for $price" +
                 (source?.let { " via $it" } ?: "")
 
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, Runnable {
+        plugin.scheduler.async().run {
             writeLine(now.toLocalDate(), line)
-        })
+        }
     }
 
     @Synchronized

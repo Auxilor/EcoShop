@@ -5,17 +5,18 @@ import com.willfp.eco.core.data.keys.PersistentDataKeyType
 import com.willfp.eco.core.data.profile
 import com.willfp.ecoshop.plugin
 import org.bukkit.OfflinePlayer
+import java.util.concurrent.ConcurrentHashMap
 
 /** Stores wand period state in the player profile, so it survives restarts and syncs across servers. */
 object ProfilePeriodStore : PeriodStore {
-    private val usesKeys = HashMap<String, PersistentDataKey<Int>>()
-    private val startKeys = HashMap<String, PersistentDataKey<Int>>()
+    private val usesKeys = ConcurrentHashMap<String, PersistentDataKey<Int>>()
+    private val startKeys = ConcurrentHashMap<String, PersistentDataKey<Int>>()
 
-    private fun usesKey(id: String) = usesKeys.getOrPut(id) {
+    private fun usesKey(id: String) = usesKeys.computeIfAbsent(id) {
         PersistentDataKey(plugin.createNamespacedKey("sellwand_${id}_period_uses"), PersistentDataKeyType.INT, 0)
     }
 
-    private fun startKey(id: String) = startKeys.getOrPut(id) {
+    private fun startKey(id: String) = startKeys.computeIfAbsent(id) {
         PersistentDataKey(plugin.createNamespacedKey("sellwand_${id}_period_start"), PersistentDataKeyType.INT, 0)
     }
 

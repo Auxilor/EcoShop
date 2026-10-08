@@ -2,6 +2,7 @@ package com.willfp.ecoshop.sellwand
 
 import org.bukkit.OfflinePlayer
 import java.util.UUID
+import java.util.concurrent.ConcurrentHashMap
 
 data class PeriodState(val uses: Int, val startSeconds: Int)
 
@@ -24,7 +25,7 @@ class WandLimiter(
     private val store: PeriodStore,
     private val clock: () -> Long = System::currentTimeMillis
 ) {
-    private val lastUse = HashMap<UUID, HashMap<String, Long>>()
+    private val lastUse = ConcurrentHashMap<UUID, ConcurrentHashMap<String, Long>>()
 
     fun check(player: OfflinePlayer, limits: WandLimits): LimitCheck {
         val now = clock()
@@ -50,7 +51,7 @@ class WandLimiter(
 
     fun recordUse(player: OfflinePlayer, limits: WandLimits) {
         val now = clock()
-        lastUse.getOrPut(player.uniqueId) { HashMap() }[limits.id] = now
+        lastUse.computeIfAbsent(player.uniqueId) { ConcurrentHashMap() }[limits.id] = now
 
         if (limits.periodUses >= 0) {
             val state = currentPeriod(player, limits, now)

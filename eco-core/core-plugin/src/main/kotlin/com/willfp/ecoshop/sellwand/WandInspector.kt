@@ -12,10 +12,11 @@ import org.bukkit.block.Block
 import org.bukkit.block.Container
 import org.bukkit.entity.Player
 import java.util.UUID
+import java.util.concurrent.ConcurrentHashMap
 
 /** Previews what a wand would sell, without selling. No uses, cooldown, period use or counters. */
 object WandInspector {
-    private val holograms = HashMap<UUID, Hologram>()
+    private val holograms = ConcurrentHashMap<UUID, Hologram>()
 
     fun inspect(player: Player, block: Block, container: Container, wand: SellWand) {
         if (!player.hasPermission("ecoshop.sellwand.use")) {
@@ -65,7 +66,8 @@ object WandInspector {
     }
 
     fun clear() {
-        holograms.values.forEach { it.remove() }
-        holograms.clear()
+        for (key in holograms.keys) {
+            holograms.remove(key)?.remove()
+        }
     }
 }

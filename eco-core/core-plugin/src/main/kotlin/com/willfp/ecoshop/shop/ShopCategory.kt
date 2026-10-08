@@ -21,6 +21,7 @@ import com.willfp.eco.util.formatEco
 import com.willfp.eco.util.openMenu
 import com.willfp.ecomponent.menuStateVar
 import com.willfp.ecoshop.plugin
+import com.willfp.ecoshop.runOwned
 import com.willfp.ecoshop.shop.gui.RotationSlot
 import com.willfp.ecoshop.shop.rotation.RotationScheduler
 import org.bukkit.Bukkit
@@ -189,20 +190,22 @@ class ShopCategory(
                 // `menu` property is fully assigned (start() may rotate() synchronously
                 // during construction, before `menu` is set).
                 onRotate = {
-                    Bukkit.getScheduler().runTask(plugin, Runnable {
+                    plugin.scheduler.global().run {
                         val message = if (broadcastOnRotate) {
                             plugin.langYml.getMessage("rotated").replace("%category%", id)
                         } else null
 
                         for (player in Bukkit.getOnlinePlayers()) {
-                            if (message != null) {
-                                player.sendMessage(message)
-                            }
-                            if (player.openMenu === menu) {
-                                menu.refresh(player)
+                            player.runOwned {
+                                if (message != null) {
+                                    player.sendMessage(message)
+                                }
+                                if (player.isOnline && player.openMenu === menu) {
+                                    menu.refresh(player)
+                                }
                             }
                         }
-                    })
+                    }
                 }
             ).also { it.start() }
         }

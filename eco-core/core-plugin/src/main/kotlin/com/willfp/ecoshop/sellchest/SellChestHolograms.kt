@@ -10,6 +10,7 @@ import com.willfp.ecoshop.sell.SellValueFormat
 import org.bukkit.Bukkit
 import java.util.Locale
 import java.util.UUID
+import java.util.concurrent.ConcurrentHashMap
 
 internal fun renderChestLines(
     template: List<String>,
@@ -26,7 +27,7 @@ internal fun renderChestLines(
 
 /** One hologram per indexed sell chest whose type has holograms enabled. */
 object SellChestHolograms {
-    private val holograms = HashMap<ChestKey, Hologram>()
+    private val holograms = ConcurrentHashMap<ChestKey, Hologram>()
 
     private val globallyEnabled: Boolean
         get() = plugin.configYml.getBoolOrNull("sell-chests.holograms") ?: true
@@ -57,7 +58,8 @@ object SellChestHolograms {
     }
 
     fun clear() {
-        holograms.values.forEach { it.remove() }
-        holograms.clear()
+        for (key in holograms.keys) {
+            holograms.remove(key)?.remove()
+        }
     }
 }
