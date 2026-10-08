@@ -3,6 +3,7 @@ package com.willfp.ecoshop
 import com.willfp.eco.core.bstats.EcoMetricsChart
 import com.willfp.eco.core.command.impl.PluginCommand
 import com.willfp.eco.core.integrations.shop.ShopManager
+import com.willfp.eco.core.scheduling.EcoTask
 import com.willfp.ecoshop.commands.CommandEcoShop
 import com.willfp.ecoshop.commands.CommandSell
 import com.willfp.ecoshop.integrations.EcoShopAdapter
@@ -38,7 +39,7 @@ internal lateinit var plugin: EcoShopPlugin
     private set
 
 class EcoShopPlugin : LibreforgePlugin() {
-    private var decayTask: DynamicPricingDecayTask? = null
+    private var decayTask: EcoTask? = null
 
     init {
         plugin = this
@@ -75,9 +76,7 @@ class EcoShopPlugin : LibreforgePlugin() {
         SellGUI.update()
 
         decayTask?.cancel()
-        decayTask = DynamicPricingDecayTask().also {
-            it.runTaskTimer(this, 1200L, 1200L)
-        }
+        decayTask = scheduler.global().runTimer(DynamicPricingDecayTask(), 1200L, 1200L)
 
         registerPlaceholders(this)
 

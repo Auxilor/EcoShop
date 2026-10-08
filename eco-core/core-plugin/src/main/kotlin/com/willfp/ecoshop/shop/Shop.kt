@@ -15,6 +15,7 @@ import com.willfp.eco.util.StringUtils
 import com.willfp.eco.util.formatEco
 import com.willfp.eco.util.savedDisplayName
 import com.willfp.ecoshop.commands.CommandShop
+import com.willfp.ecoshop.runOwned
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 
@@ -126,8 +127,9 @@ class Shop(
                 .formatEco(player)
         )
 
+        val sound = broadcastSound ?: return
         for (p in Bukkit.getOnlinePlayers()) {
-            broadcastSound?.playTo(p)
+            p.runOwned { sound.playTo(p) }
         }
     }
 

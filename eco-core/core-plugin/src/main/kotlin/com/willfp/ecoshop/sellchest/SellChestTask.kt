@@ -1,5 +1,6 @@
 package com.willfp.ecoshop.sellchest
 
+import com.willfp.eco.core.Eco
 import com.willfp.eco.core.scheduling.EcoTask
 import com.willfp.eco.util.StringUtils
 import com.willfp.ecoshop.plugin
@@ -13,13 +14,15 @@ import com.willfp.ecoshop.sell.Sells
 import org.bukkit.Bukkit
 import org.bukkit.block.Container
 import java.util.UUID
+import java.util.concurrent.ConcurrentHashMap
 
 /** Periodically sells the contents of dirty sell chests. */
 object SellChestTask {
+    @Volatile
     private var task: EcoTask? = null
     private var tick = 0L
-    private val warnedTypes = mutableSetOf<String>()
-    private val warnedOwners = mutableSetOf<UUID>()
+    private val warnedTypes: MutableSet<String> = ConcurrentHashMap.newKeySet()
+    private val warnedOwners: MutableSet<UUID> = ConcurrentHashMap.newKeySet()
 
     fun start() {
         stop()
@@ -52,36 +55,56 @@ object SellChestTask {
 
             if (nowTick - chest.lastSoldTick < type.sellInterval) continue
 
-            val block = chest.key.block()
-            val container = block?.getState(false) as? Container
-            if (block == null || container == null || SellChestData.read(container) == null) {
+            val location = chest.key.location()
+            if (location == null) {
                 SellChestIndex.remove(chest.key)
                 continue
             }
 
-            val seller = sellerFor(chest) ?: continue
+            if (Eco.get().isOwnedByCurrentRegion(location)) {
+                if (sellChest(chest, type, nowTick)) budget--
+                continue
+            }
 
+            if (chest.queued) continue
+            chest.queued = true
             budget--
-
-            val result = Sells.sell(
-                SellRequest(
-                    seller = seller,
-                    source = SellSource.CHEST,
-                    target = InventoryTarget(container.inventory),
-                    filter = type.filter,
-                    extraMultiplier = 1.0,
-                    applyEventMultiplier = false,
-                    bypass = type.bypass
-                ),
-                location = block.location
-            )
-
-            chest.lastSoldTick = nowTick
-            chest.dirty = false
-            chest.blockedByUnsellable = type.overflow == Overflow.STOP && result.unsold.isNotEmpty()
-
-            afterSale(chest, type, seller, result)
+            plugin.scheduler.at(location).run {
+                chest.queued = false
+                if (chest.dirty) sellChest(chest, type, nowTick)
+            }
         }
+    }
+
+    private fun sellChest(chest: IndexedChest, type: SellChestType, nowTick: Long): Boolean {
+        val block = chest.key.block()
+        val container = block?.getState(false) as? Container
+        if (block == null || container == null || SellChestData.read(container) == null) {
+            SellChestIndex.remove(chest.key)
+            return false
+        }
+
+        val seller = sellerFor(chest) ?: return false
+
+        val result = Sells.sell(
+            SellRequest(
+                seller = seller,
+                source = SellSource.CHEST,
+                target = InventoryTarget(container.inventory),
+                filter = type.filter,
+                extraMultiplier = 1.0,
+                applyEventMultiplier = false,
+                bypass = type.bypass
+            ),
+            location = block.location
+        )
+
+        chest.lastSoldTick = nowTick
+        chest.dirty = false
+        chest.blockedByUnsellable = type.overflow == Overflow.STOP && result.unsold.isNotEmpty()
+
+        afterSale(chest, type, seller, result)
+        return true
     }
 
     /** The seller for this chest right now, or null to leave it dirty and try later. */

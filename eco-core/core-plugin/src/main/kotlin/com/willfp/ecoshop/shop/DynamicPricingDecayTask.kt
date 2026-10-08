@@ -1,8 +1,6 @@
 package com.willfp.ecoshop.shop
 
-import org.bukkit.scheduler.BukkitRunnable
-
-class DynamicPricingDecayTask : BukkitRunnable() {
+class DynamicPricingDecayTask : Runnable {
     override fun run() {
         for (item in ShopItems.values()) {
             if (item.hasDynamicActivity()) item.applyDecay()

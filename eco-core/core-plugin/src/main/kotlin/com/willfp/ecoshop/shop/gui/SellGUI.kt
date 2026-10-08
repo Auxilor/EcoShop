@@ -15,7 +15,10 @@ import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 
 object SellGUI {
+    @Volatile
     private lateinit var menu: Menu
+
+    @Volatile
     private var strictSellMatch = false
 
     @JvmStatic

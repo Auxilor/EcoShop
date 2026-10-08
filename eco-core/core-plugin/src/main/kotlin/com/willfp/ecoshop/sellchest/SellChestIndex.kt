@@ -1,15 +1,24 @@
 package com.willfp.ecoshop.sellchest
 
+import com.willfp.eco.core.Prerequisite
+import com.willfp.ecoshop.plugin
 import org.bukkit.Bukkit
 import org.bukkit.Chunk
+import org.bukkit.Location
 import org.bukkit.block.Block
 import java.util.UUID
+import java.util.concurrent.ConcurrentHashMap
 
 data class ChestKey(val world: UUID, val x: Int, val y: Int, val z: Int) {
     fun block(): Block? {
         val world = Bukkit.getWorld(world) ?: return null
         if (!world.isChunkLoaded(x shr 4, z shr 4)) return null
         return world.getBlockAt(x, y, z)
+    }
+
+    fun location(): Location? {
+        val world = Bukkit.getWorld(world) ?: return null
+        return Location(world, x.toDouble(), y.toDouble(), z.toDouble())
     }
 
     companion object {
@@ -22,19 +31,30 @@ class IndexedChest(
     val typeId: String,
     val owner: UUID
 ) {
+    @Volatile
     var dirty = true
+
+    @Volatile
     var lastSoldTick = Long.MIN_VALUE / 2
+
+    @Volatile
     var sellsSinceNotify = 0
+
+    @Volatile
     var blockedByUnsellable = false
+
+    @Volatile
+    var queued = false
 }
 
 /** Sell chests in loaded chunks. Rebuilt from block data on chunk load, so nothing is persisted. */
 object SellChestIndex {
-    private val chests = LinkedHashMap<ChestKey, IndexedChest>()
+    private val chests: MutableMap<ChestKey, IndexedChest> =
+        if (Prerequisite.HAS_FOLIA.isMet) ConcurrentHashMap() else LinkedHashMap()
 
     fun add(block: Block, info: SellChestInfo): IndexedChest {
         val key = ChestKey.of(block)
-        return chests.getOrPut(key) {
+        return chests.computeIfAbsent(key) {
             SellChestTypes[info.typeId]?.let { type ->
                 SellChestHolograms.show(key, type, info.owner, SellChestData.readTotals(block))
             }
@@ -85,11 +105,30 @@ object SellChestIndex {
     }
 
     fun rescanLoaded() {
+        if (Prerequisite.HAS_FOLIA.isMet) {
+            rescanIndexed()
+            return
+        }
+
         chests.clear()
         SellChestHolograms.clear()
         for (world in Bukkit.getWorlds()) {
             for (chunk in world.loadedChunks) {
                 scanChunk(chunk)
+            }
+        }
+    }
+
+    private fun rescanIndexed() {
+        val indexedChunks = chests.keys.map { Triple(it.world, it.x shr 4, it.z shr 4) }.toSet()
+        chests.clear()
+        SellChestHolograms.clear()
+        for ((worldId, chunkX, chunkZ) in indexedChunks) {
+            val world = Bukkit.getWorld(worldId) ?: continue
+            plugin.scheduler.at(world, chunkX, chunkZ).run {
+                if (world.isChunkLoaded(chunkX, chunkZ)) {
+                    scanChunk(world.getChunkAt(chunkX, chunkZ))
+                }
             }
         }
     }

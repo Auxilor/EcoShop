@@ -6,7 +6,7 @@ import com.willfp.ecoshop.logging.ShopLogger
 import com.willfp.ecoshop.plugin
 import org.bukkit.Bukkit
 import org.bukkit.command.CommandSender
-import org.bukkit.scheduler.BukkitRunnable
+import org.bukkit.entity.Player
 
 object CommandHistory : Subcommand(
     plugin,
@@ -38,30 +38,29 @@ object CommandHistory : Subcommand(
 
         val maxDays = plugin.configYml.getInt("logging.max-history-days")
 
-        object : BukkitRunnable() {
-            override fun run() {
-                val matches = scanHistory(playerName, amount, type, maxDays)
+        plugin.scheduler.async().run {
+            val matches = scanHistory(playerName, amount, type, maxDays)
 
-                Bukkit.getScheduler().runTask(plugin, Runnable {
-                    if (matches.isEmpty()) {
-                        sender.sendMessage(
-                            plugin.langYml.getMessage("no-history-found", StringUtils.FormatOption.WITHOUT_PLACEHOLDERS)
-                                .replace("%player%", playerName)
-                        )
-                        return@Runnable
-                    }
-
+            val replyContext = (sender as? Player)?.let { plugin.scheduler.on(it) } ?: plugin.scheduler.global()
+            replyContext.run {
+                if (matches.isEmpty()) {
                     sender.sendMessage(
-                        plugin.langYml.getMessage("history-header", StringUtils.FormatOption.WITHOUT_PLACEHOLDERS)
-                            .replace("%amount%", matches.size.toString())
+                        plugin.langYml.getMessage("no-history-found", StringUtils.FormatOption.WITHOUT_PLACEHOLDERS)
                             .replace("%player%", playerName)
                     )
-                    for (line in matches) {
-                        sender.sendMessage(line)
-                    }
-                })
+                    return@run
+                }
+
+                sender.sendMessage(
+                    plugin.langYml.getMessage("history-header", StringUtils.FormatOption.WITHOUT_PLACEHOLDERS)
+                        .replace("%amount%", matches.size.toString())
+                        .replace("%player%", playerName)
+                )
+                for (line in matches) {
+                    sender.sendMessage(line)
+                }
             }
-        }.runTaskAsynchronously(plugin)
+        }
     }
 
     /** Scans log files newest-day-first, returns up to [amount] matching lines. */

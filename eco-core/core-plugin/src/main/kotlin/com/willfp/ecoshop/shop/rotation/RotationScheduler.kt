@@ -1,11 +1,12 @@
 package com.willfp.ecoshop.shop.rotation
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.eco.core.scheduling.EcoTask
 import com.willfp.eco.util.NumberUtils
 import com.willfp.ecoshop.plugin
+import com.willfp.ecoshop.runOnGlobalRegion
 import com.willfp.ecoshop.shop.ShopItem
 import org.bukkit.Bukkit
-import org.bukkit.scheduler.BukkitTask
 import java.io.File
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -28,7 +29,8 @@ class RotationScheduler(
     var state: CategoryRotationState = CategoryRotationState(categoryId, emptyList(), 0L)
         private set
 
-    private var task: BukkitTask? = null
+    @Volatile
+    private var task: EcoTask? = null
 
     fun start() {
         state = CategoryRotationState.load(categoryId, stateDir)
@@ -41,7 +43,7 @@ class RotationScheduler(
         }
     }
 
-    fun forceRotate() {
+    fun forceRotate() = runOnGlobalRegion {
         task?.cancel()
         rotate()
     }
@@ -73,7 +75,7 @@ class RotationScheduler(
     }
 
     private fun scheduleRotation(delayTicks: Long) {
-        task = Bukkit.getScheduler().runTaskLater(plugin, Runnable { rotate() }, delayTicks)
+        task = plugin.scheduler.global().runLater(delayTicks) { rotate() }
     }
 
     private fun computeNextRotationMs(): Long {

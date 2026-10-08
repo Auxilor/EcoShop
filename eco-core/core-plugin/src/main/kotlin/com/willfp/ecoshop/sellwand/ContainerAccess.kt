@@ -11,8 +11,10 @@ import org.bukkit.inventory.EquipmentSlot
 
 /** Asks protection plugins whether a player may open a container, via a synthetic interact event. */
 object ContainerAccess {
-    var isFiringSynthetic = false
-        private set
+    private val firingSynthetic = ThreadLocal.withInitial { false }
+
+    val isFiringSynthetic: Boolean
+        get() = firingSynthetic.get()
 
     fun canAccess(player: Player, block: Block): Boolean {
         val event = PlayerInteractEvent(
@@ -24,11 +26,11 @@ object ContainerAccess {
             EquipmentSlot.HAND
         )
 
-        isFiringSynthetic = true
+        firingSynthetic.set(true)
         try {
             Bukkit.getPluginManager().callEvent(event)
         } finally {
-            isFiringSynthetic = false
+            firingSynthetic.set(false)
         }
 
         return event.useInteractedBlock() != Event.Result.DENY

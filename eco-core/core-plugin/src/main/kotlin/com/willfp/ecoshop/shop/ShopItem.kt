@@ -52,6 +52,7 @@ import org.bukkit.permissions.Permission
 import org.bukkit.permissions.PermissionDefault
 import java.util.Optional
 import java.time.Duration
+import java.util.concurrent.ConcurrentHashMap
 
 enum class BuyType {
     NORMAL,
@@ -96,7 +97,7 @@ class ShopItem(
         )
     }
 
-    private val warnedFormulas = mutableSetOf<String>()
+    private val warnedFormulas: MutableSet<String> = ConcurrentHashMap.newKeySet()
 
     private val context = ViolationContext(plugin, "shop item $id")
 
