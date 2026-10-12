@@ -4,6 +4,7 @@ package com.willfp.ecoshop.shop
 
 import com.willfp.eco.core.cache.EcoCache
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.eco.core.data.Profile
 import com.willfp.eco.core.data.keys.PersistentDataKey
 import com.willfp.eco.core.data.keys.PersistentDataKeyType
 import com.willfp.eco.core.data.profile
@@ -738,10 +739,26 @@ class ShopItem(
         player.profile.write(timesBoughtKey, 0)
     }
 
+    fun resetTimesBought(profile: Profile) {
+        profile.write(timesBoughtKey, 0)
+    }
+
+    fun resetGlobalTimesBought() {
+        Bukkit.getServer().profile.write(timesBoughtKey, 0)
+    }
+
     fun resetTimesSold(player: OfflinePlayer) {
         val totalSellsForPlayer = getTotalSells(player)
         Bukkit.getServer().profile.write(timesSoldKey, getTotalGlobalSells() - totalSellsForPlayer)
         player.profile.write(timesSoldKey, 0)
+    }
+
+    fun resetTimesSold(profile: Profile) {
+        profile.write(timesSoldKey, 0)
+    }
+
+    fun resetGlobalTimesSold() {
+        Bukkit.getServer().profile.write(timesSoldKey, 0)
     }
 
     override fun recordSell(player: OfflinePlayer, amount: Int, bypass: SellBypass) {
