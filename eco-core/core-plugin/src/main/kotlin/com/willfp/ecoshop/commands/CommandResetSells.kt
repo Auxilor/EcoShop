@@ -1,9 +1,12 @@
 package com.willfp.ecoshop.commands
 
 import com.willfp.eco.core.command.impl.Subcommand
+import com.willfp.eco.core.data.PlayerProfile
+import com.willfp.eco.core.data.forEachSavedProfile
 import com.willfp.eco.util.StringUtils
 import com.willfp.eco.util.savedDisplayName
 import com.willfp.ecoshop.plugin
+import com.willfp.ecoshop.shop.ShopItem
 import com.willfp.ecoshop.shop.ShopItems
 import org.bukkit.Bukkit
 import org.bukkit.command.CommandSender
@@ -25,20 +28,10 @@ object CommandResetSells : Subcommand(
             return
         }
 
-        val players = if (args[0].equals("all", true)) {
-            val targets = LinkedHashMap<String, org.bukkit.OfflinePlayer>()
+        val allPlayers = args[0].equals("all", true)
 
-            for (offline in Bukkit.getOfflinePlayers()) {
-                if (offline.hasPlayedBefore() || offline.isOnline) {
-                    targets[offline.uniqueId.toString()] = offline
-                }
-            }
-
-            for (online in Bukkit.getOnlinePlayers()) {
-                targets[online.uniqueId.toString()] = online
-            }
-
-            targets.values.toList()
+        val players = if (allPlayers) {
+            emptyList()
         } else {
             @Suppress("DEPRECATION")
             val player = Bukkit.getOfflinePlayer(args[0])
@@ -63,13 +56,13 @@ object CommandResetSells : Subcommand(
             listOf(item)
         }
 
-        if (players.isEmpty()) {
-            sender.sendMessage(plugin.langYml.getMessage("invalid-player"))
+        if (items.isEmpty()) {
+            sender.sendMessage(plugin.langYml.getMessage("invalid-item"))
             return
         }
 
-        if (items.isEmpty()) {
-            sender.sendMessage(plugin.langYml.getMessage("invalid-item"))
+        if (allPlayers) {
+            resetAllPlayers(sender, items)
             return
         }
 
@@ -97,6 +90,30 @@ object CommandResetSells : Subcommand(
                 .replace("%items%", items.size.toString())
                 .replace("%resets%", (players.size * items.size).toString())
         )
+    }
+
+    private fun resetAllPlayers(sender: CommandSender, items: List<ShopItem>) {
+        items.forEach { it.resetGlobalTimesSold() }
+
+        var playerCount = 0
+
+        forEachSavedProfile(plugin, onProgress = { _, total -> playerCount = total }) { uuid ->
+            PlayerProfile.load(uuid).let { profile -> items.forEach { it.resetTimesSold(profile) } }
+        }.thenRun {
+            plugin.scheduler.global().run {
+                if (playerCount == 0) {
+                    sender.sendMessage(plugin.langYml.getMessage("invalid-player"))
+                    return@run
+                }
+
+                sender.sendMessage(
+                    plugin.langYml.getMessage("reset-sells-batch", StringUtils.FormatOption.WITHOUT_PLACEHOLDERS)
+                        .replace("%players%", playerCount.toString())
+                        .replace("%items%", items.size.toString())
+                        .replace("%resets%", (playerCount * items.size).toString())
+                )
+            }
+        }
     }
 
     override fun tabComplete(sender: CommandSender, args: List<String>): List<String> {
