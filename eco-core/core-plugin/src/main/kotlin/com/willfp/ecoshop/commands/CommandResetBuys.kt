@@ -28,20 +28,18 @@ object CommandResetBuys : Subcommand(
             return
         }
 
-        val allPlayers = args[0].equals("all", true)
-
-        val players = if (allPlayers) {
-            emptyList()
+        val player = if (args[0].equals("all", true)) {
+            null
         } else {
             @Suppress("DEPRECATION")
-            val player = Bukkit.getOfflinePlayer(args[0])
+            val offlinePlayer = Bukkit.getOfflinePlayer(args[0])
 
-            if (!player.hasPlayedBefore() && !player.isOnline) {
+            if (!offlinePlayer.hasPlayedBefore() && !offlinePlayer.isOnline) {
                 sender.sendMessage(plugin.langYml.getMessage("invalid-player"))
                 return
             }
 
-            listOf(player)
+            offlinePlayer
         }
 
         val items = if (args[1].equals("all", true)) {
@@ -61,34 +59,27 @@ object CommandResetBuys : Subcommand(
             return
         }
 
-        if (allPlayers) {
+        if (player == null) {
             resetAllPlayers(sender, items)
             return
         }
 
-        for (player in players) {
-            for (item in items) {
-                item.resetTimesBought(player)
-            }
-        }
+        items.forEach { it.resetTimesBought(player) }
 
-        if (players.size == 1 && items.size == 1) {
-            val player = players.first()
-            val item = items.first()
-
+        if (items.size == 1) {
             sender.sendMessage(
                 plugin.langYml.getMessage("reset-buys", StringUtils.FormatOption.WITHOUT_PLACEHOLDERS)
                     .replace("%player%", player.savedDisplayName)
-                    .replace("%item%", item.displayName)
+                    .replace("%item%", items.first().displayName)
             )
             return
         }
 
         sender.sendMessage(
             plugin.langYml.getMessage("reset-buys-batch", StringUtils.FormatOption.WITHOUT_PLACEHOLDERS)
-                .replace("%players%", players.size.toString())
+                .replace("%players%", "1")
                 .replace("%items%", items.size.toString())
-                .replace("%resets%", (players.size * items.size).toString())
+                .replace("%resets%", items.size.toString())
         )
     }
 
