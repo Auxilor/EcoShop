@@ -1,9 +1,12 @@
 package com.willfp.ecoshop.commands
 
 import com.willfp.eco.core.command.impl.Subcommand
+import com.willfp.eco.core.data.PlayerProfile
+import com.willfp.eco.core.data.forEachSavedProfile
 import com.willfp.eco.util.StringUtils
 import com.willfp.eco.util.savedDisplayName
 import com.willfp.ecoshop.plugin
+import com.willfp.ecoshop.shop.ShopItem
 import com.willfp.ecoshop.shop.ShopItems
 import org.bukkit.Bukkit
 import org.bukkit.command.CommandSender
@@ -25,30 +28,18 @@ object CommandResetBuys : Subcommand(
             return
         }
 
-        val players = if (args[0].equals("all", true)) {
-            val targets = LinkedHashMap<String, org.bukkit.OfflinePlayer>()
-
-            for (offline in Bukkit.getOfflinePlayers()) {
-                if (offline.hasPlayedBefore() || offline.isOnline) {
-                    targets[offline.uniqueId.toString()] = offline
-                }
-            }
-
-            for (online in Bukkit.getOnlinePlayers()) {
-                targets[online.uniqueId.toString()] = online
-            }
-
-            targets.values.toList()
+        val player = if (args[0].equals("all", true)) {
+            null
         } else {
             @Suppress("DEPRECATION")
-            val player = Bukkit.getOfflinePlayer(args[0])
+            val offlinePlayer = Bukkit.getOfflinePlayer(args[0])
 
-            if (!player.hasPlayedBefore() && !player.isOnline) {
+            if (!offlinePlayer.hasPlayedBefore() && !offlinePlayer.isOnline) {
                 sender.sendMessage(plugin.langYml.getMessage("invalid-player"))
                 return
             }
 
-            listOf(player)
+            offlinePlayer
         }
 
         val items = if (args[1].equals("all", true)) {
@@ -63,40 +54,57 @@ object CommandResetBuys : Subcommand(
             listOf(item)
         }
 
-        if (players.isEmpty()) {
-            sender.sendMessage(plugin.langYml.getMessage("invalid-player"))
-            return
-        }
-
         if (items.isEmpty()) {
             sender.sendMessage(plugin.langYml.getMessage("invalid-item"))
             return
         }
 
-        for (player in players) {
-            for (item in items) {
-                item.resetTimesBought(player)
-            }
+        if (player == null) {
+            resetAllPlayers(sender, items)
+            return
         }
 
-        if (players.size == 1 && items.size == 1) {
-            val player = players.first()
-            val item = items.first()
+        items.forEach { it.resetTimesBought(player) }
 
+        if (items.size == 1) {
             sender.sendMessage(
                 plugin.langYml.getMessage("reset-buys", StringUtils.FormatOption.WITHOUT_PLACEHOLDERS)
                     .replace("%player%", player.savedDisplayName)
-                    .replace("%item%", item.displayName)
+                    .replace("%item%", items.first().displayName)
             )
             return
         }
 
         sender.sendMessage(
             plugin.langYml.getMessage("reset-buys-batch", StringUtils.FormatOption.WITHOUT_PLACEHOLDERS)
-                .replace("%players%", players.size.toString())
+                .replace("%players%", "1")
                 .replace("%items%", items.size.toString())
-                .replace("%resets%", (players.size * items.size).toString())
+                .replace("%resets%", items.size.toString())
         )
+    }
+
+    private fun resetAllPlayers(sender: CommandSender, items: List<ShopItem>) {
+        items.forEach { it.resetGlobalTimesBought() }
+
+        var playerCount = 0
+
+        forEachSavedProfile(plugin, onProgress = { _, total -> playerCount = total }) { uuid ->
+            PlayerProfile.load(uuid).let { profile -> items.forEach { it.resetTimesBought(profile) } }
+        }.thenRun {
+            plugin.scheduler.global().run {
+                if (playerCount == 0) {
+                    sender.sendMessage(plugin.langYml.getMessage("invalid-player"))
+                    return@run
+                }
+
+                sender.sendMessage(
+                    plugin.langYml.getMessage("reset-buys-batch", StringUtils.FormatOption.WITHOUT_PLACEHOLDERS)
+                        .replace("%players%", playerCount.toString())
+                        .replace("%items%", items.size.toString())
+                        .replace("%resets%", (playerCount * items.size).toString())
+                )
+            }
+        }
     }
 
     override fun tabComplete(sender: CommandSender, args: List<String>): List<String> {
