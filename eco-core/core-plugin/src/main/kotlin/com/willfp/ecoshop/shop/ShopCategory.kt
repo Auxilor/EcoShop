@@ -4,6 +4,8 @@ import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.gui.addCustomSlots
 import com.willfp.eco.core.gui.addPage
 import com.willfp.eco.core.gui.addPageChanger
+import com.willfp.eco.core.gui.component.ConfigButton
+import com.willfp.eco.core.gui.component.addComponent
 import com.willfp.eco.core.gui.getSlotLocations
 import com.willfp.eco.core.gui.menu
 import com.willfp.eco.core.gui.menu.Menu
@@ -214,17 +216,11 @@ class ShopCategory(
             addPage(pageNumber) {
                 setMask(pageConfig)
 
-                for (location in config.getSlotLocations("gui.backwards-arrow")) {
-                    setSlot(
-                        location.row,
-                        location.column,
-                        slot(backwardsActive) {
-                            onLeftClick { player, _, _, menu ->
-                                menu.kickBack(player)
-                            }
-                        }
-                    )
-                }
+                addComponent(
+                    ConfigButton(config.getSubsection("gui.backwards-arrow")) { player, _, _, menu ->
+                        menu.kickBack(player)
+                    }
+                )
 
                 for (item in staticItems) {
                     if (item.page != pageNumber) {

@@ -92,18 +92,12 @@ class SellMenu(
             )
         }
 
-        for (location in plugin.configYml.getSlotLocations("sell-menu.sell-more")) {
-            addComponent(
-                location.row,
-                location.column,
-                slot(Items.lookup(plugin.configYml.getString("sell-menu.sell-more.item"))) {
-                    onLeftClick { player, _, _, menu ->
-                        menu.parentShop[player]?.clickSound?.playTo(player)
-                        sellMoreMenu.open(player, menu)
-                    }
-                }
-            )
-        }
+        addComponent(
+            ConfigButton(plugin.configYml.getSubsection("sell-menu.sell-more")) { player, _, _, menu ->
+                menu.parentShop[player]?.clickSound?.playTo(player)
+                sellMoreMenu.open(player, menu)
+            }
+        )
 
         for (config in plugin.configYml.getSubsections("sell-menu.add-buttons")) {
             for (location in config.getSlotLocations()) {

@@ -101,18 +101,12 @@ class BuyMenu(
             )
         }
 
-        for (location in plugin.configYml.getSlotLocations("buy-menu.buy-more")) {
-            addComponent(
-                location.row,
-                location.column,
-                slot(Items.lookup(plugin.configYml.getString("buy-menu.buy-more.item"))) {
-                    onLeftClick { player, _, _, menu ->
-                        menu.parentShop[player]?.clickSound?.playTo(player)
-                        buyMoreMenu.open(player, menu)
-                    }
-                }
-            )
-        }
+        addComponent(
+            ConfigButton(plugin.configYml.getSubsection("buy-menu.buy-more")) { player, _, _, menu ->
+                menu.parentShop[player]?.clickSound?.playTo(player)
+                buyMoreMenu.open(player, menu)
+            }
+        )
 
         for (config in plugin.configYml.getSubsections("buy-menu.add-buttons")) {
             for (location in config.getSlotLocations()) {
