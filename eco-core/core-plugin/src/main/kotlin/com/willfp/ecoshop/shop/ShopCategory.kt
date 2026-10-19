@@ -6,7 +6,6 @@ import com.willfp.eco.core.gui.addPage
 import com.willfp.eco.core.gui.addPageChanger
 import com.willfp.eco.core.gui.component.ConfigButton
 import com.willfp.eco.core.gui.component.addComponent
-import com.willfp.eco.core.gui.getSlotLocations
 import com.willfp.eco.core.gui.menu
 import com.willfp.eco.core.gui.menu.Menu
 import com.willfp.eco.core.gui.menuStateVar
@@ -104,18 +103,7 @@ class ShopCategory(
 
         addPageChanger(config, "gui.forwards-arrow", PageChanger.Direction.FORWARDS, pageChangeSound)
 
-        val backwardsActive = Items.lookup(config.getString("gui.backwards-arrow.item")).item
-
-        for (location in config.getSlotLocations("gui.backwards-arrow")) {
-            addPageChanger(
-                PageChanger.Direction.BACKWARDS,
-                backwardsActive,
-                null,
-                pageChangeSound,
-                location.row,
-                location.column
-            )
-        }
+        addPageChanger(config, "gui.backwards-arrow", PageChanger.Direction.BACKWARDS, pageChangeSound, hideInactive = true)
 
         // (page, row, column) -> r-slot index, scanned from every page's mask pattern.
         val rSlotPositions = mutableMapOf<Triple<Int, Int, Int>, Int>()
