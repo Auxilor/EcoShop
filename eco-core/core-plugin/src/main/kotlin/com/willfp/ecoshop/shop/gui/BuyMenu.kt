@@ -1,6 +1,8 @@
 package com.willfp.ecoshop.shop.gui
 
 import com.willfp.eco.core.gui.addCustomSlots
+import com.willfp.eco.core.gui.component.ConfigButton
+import com.willfp.eco.core.gui.component.addComponent
 import com.willfp.eco.core.gui.getSlotLocations
 import com.willfp.eco.core.gui.menu
 import com.willfp.eco.core.gui.menu.Menu
@@ -148,17 +150,11 @@ class BuyMenu(
             }
         }
 
-        for (location in plugin.configYml.getSlotLocations("buy-menu.cancel")) {
-            setSlot(
-                location.row,
-                location.column,
-                slot(Items.lookup(plugin.configYml.getString("buy-menu.cancel.item"))) {
-                    onLeftClick { player, _, _, menu ->
-                        menu.kickBack(player)
-                    }
-                }
-            )
-        }
+        addComponent(
+            ConfigButton(plugin.configYml.getSubsection("buy-menu.cancel")) { player, _, _, menu ->
+                menu.kickBack(player)
+            }
+        )
 
         for (location in plugin.configYml.getSlotLocations("buy-menu.confirm")) {
             setSlot(

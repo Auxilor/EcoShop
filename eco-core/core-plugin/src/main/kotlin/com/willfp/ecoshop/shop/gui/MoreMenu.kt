@@ -1,14 +1,14 @@
 package com.willfp.ecoshop.shop.gui
 
 import com.willfp.eco.core.gui.addCustomSlots
+import com.willfp.eco.core.gui.component.ConfigButton
+import com.willfp.eco.core.gui.component.addComponent
 import com.willfp.eco.core.gui.getSlotLocations
 import com.willfp.eco.core.gui.menu
 import com.willfp.eco.core.gui.menu.Menu
-import com.willfp.eco.core.gui.onLeftClick
 import com.willfp.eco.core.gui.setMask
 import com.willfp.eco.core.gui.slot
 import com.willfp.eco.core.gui.slot.Slot
-import com.willfp.eco.core.items.Items
 import com.willfp.ecoshop.plugin
 import com.willfp.ecoshop.shop.ShopItem
 import com.willfp.ecoshop.shop.kickBack
@@ -41,17 +41,11 @@ class MoreMenu(
             }
         }
 
-        for (location in plugin.configYml.getSlotLocations("$key-more.back")) {
-            setSlot(
-                location.row,
-                location.column,
-                slot(Items.lookup(plugin.configYml.getString("$key-more.back.item"))) {
-                    onLeftClick { player, _, _, menu ->
-                        menu.kickBack(player)
-                    }
-                }
-            )
-        }
+        addComponent(
+            ConfigButton(plugin.configYml.getSubsection("$key-more.back")) { player, _, _, menu ->
+                menu.kickBack(player)
+            }
+        )
 
         addCustomSlots(plugin.configYml, "$key-more")
     }
