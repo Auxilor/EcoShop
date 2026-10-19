@@ -3,11 +3,11 @@ package com.willfp.ecoshop.shop.gui
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.gui.GUIComponent
 import com.willfp.eco.core.gui.menu.Menu
+import com.willfp.eco.core.gui.menuStateVar
 import com.willfp.eco.core.gui.onLeftClick
 import com.willfp.eco.core.gui.slot
 import com.willfp.eco.core.gui.slot.Slot
 import com.willfp.eco.core.items.Items
-import com.willfp.ecomponent.menuStateVar
 import com.willfp.ecoshop.shop.ShopItem
 import com.willfp.ecoshop.shop.parentShop
 import org.bukkit.entity.Player
