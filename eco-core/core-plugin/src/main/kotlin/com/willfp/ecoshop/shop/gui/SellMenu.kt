@@ -1,12 +1,12 @@
 package com.willfp.ecoshop.shop.gui
 
+import com.willfp.eco.core.gui.addCustomSlots
 import com.willfp.eco.core.gui.getSlotLocations
 import com.willfp.eco.core.gui.menu
 import com.willfp.eco.core.gui.menu.Menu
 import com.willfp.eco.core.gui.onLeftClick
 import com.willfp.eco.core.gui.setMask
 import com.willfp.eco.core.gui.slot
-import com.willfp.eco.core.gui.slot.ConfigSlot
 import com.willfp.eco.core.items.Items
 import com.willfp.eco.core.items.builder.modify
 import com.willfp.ecoshop.plugin
@@ -246,11 +246,7 @@ class SellMenu(
             }
         }
 
-        for (config in plugin.configYml.getSubsections("sell-menu.custom-slots")) {
-            for (location in config.getSlotLocations()) {
-                setSlot(location.row, location.column, ConfigSlot(config))
-            }
-        }
+        addCustomSlots(plugin.configYml, "sell-menu")
 
         onOpen { player, menu ->
             menu.amountOfItem[player] = 1

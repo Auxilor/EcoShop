@@ -1,6 +1,7 @@
 package com.willfp.ecoshop.shop
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.eco.core.gui.addCustomSlots
 import com.willfp.eco.core.gui.addPage
 import com.willfp.eco.core.gui.addPageChanger
 import com.willfp.eco.core.gui.getSlotLocations
@@ -10,7 +11,6 @@ import com.willfp.eco.core.gui.onLeftClick
 import com.willfp.eco.core.gui.page.PageChanger
 import com.willfp.eco.core.gui.setMask
 import com.willfp.eco.core.gui.slot
-import com.willfp.eco.core.gui.slot.ConfigSlot
 import com.willfp.eco.core.gui.slot.Slot
 import com.willfp.eco.core.items.Items
 import com.willfp.eco.core.items.builder.modify
@@ -247,11 +247,7 @@ class ShopCategory(
                     }
                 }
 
-                for (config in pageConfig.getSubsections("custom-slots")) {
-                    for (location in config.getSlotLocations()) {
-                        setSlot(location.row, location.column, ConfigSlot(config))
-                    }
-                }
+                addCustomSlots(pageConfig, "")
             }
         }
     }
