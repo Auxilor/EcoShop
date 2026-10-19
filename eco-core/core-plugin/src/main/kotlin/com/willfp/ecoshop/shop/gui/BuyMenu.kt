@@ -92,11 +92,11 @@ class BuyMenu(
                 slot { player, menu ->
                     item.displayItem.modify {
                         val amount = menu.amountOfItem[player]
-                
+
                         setAmount(amount)
-                
+
                         setDisplayName(item.displayName)
-                
+
                         addLoreLines(
                             plugin.langYml.getStrings("confirm-buy-price")
                                 .replaceIn("%price%", item.getBuyPrice(buyType).getDisplay(player, amount * item.getEffectiveBuyMultiplier(buyType, player)))
@@ -183,10 +183,10 @@ class BuyMenu(
                 }) {
                     onLeftClick { player, _, _, menu ->
                         val amount = menu.amountOfItem[player]
-                
+
                         val status = item.getBuyStatus(player, amount, buyType)
                         val buyDisplayMultiplier = item.getEffectiveBuyMultiplier(buyType, player)
-                
+
                         if (status == BuyStatus.ALLOW) {
                             item.buy(
                                 player,
@@ -194,14 +194,14 @@ class BuyMenu(
                                 buyType,
                                 menu.parentShop[player]
                             )
-                
+
                             player.sendMessage(
                                 plugin.langYml.getMessage("bought-item-multiple")
                                     .replace("%amount%", amount.toString())
                                     .replace("%item%", item.displayName)
                                     .replace("%price%", item.getBuyPrice(buyType).getDisplay(player, amount * buyDisplayMultiplier))
                             )
-                
+
                             menu.kickBack(player)
                         } else {
                             player.sendMessage(

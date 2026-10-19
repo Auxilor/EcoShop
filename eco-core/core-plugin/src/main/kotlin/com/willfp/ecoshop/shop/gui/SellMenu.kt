@@ -83,11 +83,11 @@ class SellMenu(
                 slot { player, menu ->
                     item.displayItem.modify {
                         val amount = menu.amountOfItem[player]
-                
+
                         setAmount(amount)
-                
+
                         setDisplayName(item.displayName)
-                
+
                         addLoreLines(
                             plugin.langYml.getStrings("confirm-sell-price")
                                 .replaceIn("%price%", item.sellPrice.getDisplay(player, amount * item.getEffectiveSellMultiplier(player)))
@@ -140,7 +140,7 @@ class SellMenu(
                                 item.globalSellLimit - item.getTotalGlobalSells()
                             )
                         )
-                    
+
                         min(
                             maxSellable,
                             item.item?.item?.type?.maxStackSize ?: Int.MAX_VALUE
@@ -182,18 +182,18 @@ class SellMenu(
                 }) {
                     onLeftClick { player, _, _, menu ->
                         val amount = menu.amountOfItem[player]
-                
+
                         val status = item.getCurrentSellStatus(player, amount)
-                
+
                         if (status == SellStatus.ALLOW) {
                             val result = item.sellDetailed(
                                 player,
                                 amount,
                                 shop = menu.parentShop[player]
                             )
-                
+
                             SellMessages.soldItem(player, item.displayName, result)
-                
+
                             menu.kickBack(player)
                         } else {
                             player.sendMessage(
@@ -214,9 +214,9 @@ class SellMenu(
                     slot({ player, _ ->
                         val maxAmount = item.getAmountInPlayerInventory(player)
                         val priceDisplay = item.sellPrice?.getDisplay(player, maxAmount * item.getEffectiveSellMultiplier(player)) ?: "0"
-                    
+
                         val baseItem = Items.lookup(sellAllConfig.getString("item"))
-                    
+
                         baseItem.modify {
                             addLoreLines(
                                 sellAllConfig.getStrings("lore").map { line ->
@@ -229,19 +229,19 @@ class SellMenu(
                         onLeftClick { player, _, _, menu ->
                             val maxAmount = item.getAmountInPlayerInventory(player)
                             val status = item.getCurrentSellStatus(player)
-                    
+
                             if (status != SellStatus.ALLOW) {
                                 player.sendMessage(plugin.langYml.getMessage("sell-status.${status.configKey}"))
                                 return@onLeftClick
                             }
-                    
+
                             if (maxAmount <= 0) {
                                 player.sendMessage(plugin.langYml.getMessage("no-sellable"))
                                 return@onLeftClick
                             }
-                    
+
                             val result = item.sellDetailed(player, maxAmount, shop = menu.parentShop[player])
-                    
+
                             if (result.soldUnits > 0) {
                                 SellMessages.soldItem(player, item.displayName, result)
                                 menu.kickBack(player)
