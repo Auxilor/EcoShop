@@ -4,10 +4,9 @@ import com.willfp.eco.core.gui.getSlotLocations
 import com.willfp.eco.core.gui.menu
 import com.willfp.eco.core.gui.menu.Menu
 import com.willfp.eco.core.gui.onLeftClick
+import com.willfp.eco.core.gui.setMask
 import com.willfp.eco.core.gui.slot
 import com.willfp.eco.core.gui.slot.ConfigSlot
-import com.willfp.eco.core.gui.slot.FillerMask
-import com.willfp.eco.core.gui.slot.MaskItems
 import com.willfp.eco.core.gui.slot.Slot
 import com.willfp.eco.core.items.Items
 import com.willfp.ecoshop.plugin
@@ -28,14 +27,7 @@ class MoreMenu(
 
         allowChangingHeldItem()
 
-        setMask(
-            FillerMask(
-                MaskItems.fromItemNames(
-                    plugin.configYml.getStrings("$key-more.mask.items")
-                ),
-                *plugin.configYml.getStrings("$key-more.mask.pattern").toTypedArray()
-            )
-        )
+        setMask(plugin.configYml, "$key-more")
 
         // Command/effect-only items have no item, so fall back to the display item's stack size.
         val stackSize = (item.item?.item ?: item.displayItem).maxStackSize.takeIf { it > 0 } ?: 64

@@ -4,10 +4,9 @@ import com.willfp.eco.core.gui.getSlotLocations
 import com.willfp.eco.core.gui.menu
 import com.willfp.eco.core.gui.menu.Menu
 import com.willfp.eco.core.gui.onLeftClick
+import com.willfp.eco.core.gui.setMask
 import com.willfp.eco.core.gui.slot
 import com.willfp.eco.core.gui.slot.ConfigSlot
-import com.willfp.eco.core.gui.slot.FillerMask
-import com.willfp.eco.core.gui.slot.MaskItems
 import com.willfp.eco.core.items.Items
 import com.willfp.eco.core.items.builder.modify
 import com.willfp.ecoshop.plugin
@@ -67,14 +66,7 @@ class SellMenu(
 
         allowChangingHeldItem()
 
-        setMask(
-            FillerMask(
-                MaskItems.fromItemNames(
-                    plugin.configYml.getStrings("sell-menu.mask.items")
-                ),
-                *plugin.configYml.getStrings("sell-menu.mask.pattern").toTypedArray()
-            )
-        )
+        setMask(plugin.configYml, "sell-menu")
 
         for (location in plugin.configYml.getSlotLocations("sell-menu.item")) {
             setSlot(

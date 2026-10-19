@@ -7,9 +7,8 @@ import com.willfp.eco.core.gui.getSlotLocations
 import com.willfp.eco.core.gui.menu
 import com.willfp.eco.core.gui.menu.Menu
 import com.willfp.eco.core.gui.page.PageChanger
+import com.willfp.eco.core.gui.setMask
 import com.willfp.eco.core.gui.slot.ConfigSlot
-import com.willfp.eco.core.gui.slot.FillerMask
-import com.willfp.eco.core.gui.slot.MaskItems
 import com.willfp.eco.core.registry.KRegistrable
 import com.willfp.eco.core.sound.PlayableSound
 import com.willfp.eco.util.StringUtils
@@ -86,12 +85,7 @@ class Shop(
             val pageNumber = pageConfig.getInt("page")
 
             addPage(pageNumber) {
-                setMask(
-                    FillerMask(
-                        MaskItems.fromItemNames(pageConfig.getStrings("mask.items")),
-                        *pageConfig.getStrings("mask.pattern").toTypedArray()
-                    )
-                )
+                setMask(pageConfig)
 
                 for (config in pageConfig.getSubsections("categories")) {
                     val category = ShopCategories.getByID(config.getString("id")) ?: continue
