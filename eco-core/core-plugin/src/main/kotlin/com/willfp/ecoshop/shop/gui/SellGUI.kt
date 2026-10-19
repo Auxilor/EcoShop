@@ -1,6 +1,7 @@
 package com.willfp.ecoshop.shop.gui
 
 import com.willfp.eco.core.drops.DropQueue
+import com.willfp.eco.core.gui.getSlotLocations
 import com.willfp.eco.core.gui.menu
 import com.willfp.eco.core.gui.menu.Menu
 import com.willfp.eco.core.gui.menu.MenuLayer
@@ -71,11 +72,9 @@ object SellGUI {
             }
 
             for (config in plugin.configYml.getSubsections("sell-gui.custom-slots")) {
-                setSlot(
-                    config.getInt("row"),
-                    config.getInt("column"),
-                    ConfigSlot(config)
-                )
+                for (location in config.getSlotLocations()) {
+                    setSlot(location.row, location.column, ConfigSlot(config))
+                }
             }
         }
     }

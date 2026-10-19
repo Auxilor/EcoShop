@@ -3,6 +3,7 @@ package com.willfp.ecoshop.shop
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.gui.addPage
 import com.willfp.eco.core.gui.addPageChanger
+import com.willfp.eco.core.gui.getSlotLocations
 import com.willfp.eco.core.gui.menu
 import com.willfp.eco.core.gui.menu.Menu
 import com.willfp.eco.core.gui.page.PageChanger
@@ -95,19 +96,15 @@ class Shop(
                 for (config in pageConfig.getSubsections("categories")) {
                     val category = ShopCategories.getByID(config.getString("id")) ?: continue
 
-                    setSlot(
-                        config.getInt("row"),
-                        config.getInt("column"),
-                        category.slot
-                    )
+                    for (location in config.getSlotLocations()) {
+                        setSlot(location.row, location.column, category.slot)
+                    }
                 }
 
                 for (config in pageConfig.getSubsections("custom-slots")) {
-                    setSlot(
-                        config.getInt("row"),
-                        config.getInt("column"),
-                        ConfigSlot(config)
-                    )
+                    for (location in config.getSlotLocations()) {
+                        setSlot(location.row, location.column, ConfigSlot(config))
+                    }
                 }
             }
         }

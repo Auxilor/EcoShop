@@ -1,5 +1,6 @@
 package com.willfp.ecoshop.shop.gui
 
+import com.willfp.eco.core.gui.getSlotLocations
 import com.willfp.eco.core.gui.menu
 import com.willfp.eco.core.gui.menu.Menu
 import com.willfp.eco.core.gui.onLeftClick
@@ -43,29 +44,27 @@ class MoreMenu(
             val stacks = config.getInt("stacks")
             val amount = stacks * stackSize
 
+            for (location in config.getSlotLocations()) {
+                setSlot(location.row, location.column, slotBuilder(amount, stacks))
+            }
+        }
+
+        for (location in plugin.configYml.getSlotLocations("$key-more.back")) {
             setSlot(
-                config.getInt("row"),
-                config.getInt("column"),
-                slotBuilder(amount, stacks)
+                location.row,
+                location.column,
+                slot(Items.lookup(plugin.configYml.getString("$key-more.back.item"))) {
+                    onLeftClick { player, _, _, menu ->
+                        menu.kickBack(player)
+                    }
+                }
             )
         }
 
-        setSlot(
-            plugin.configYml.getInt("$key-more.back.row"),
-            plugin.configYml.getInt("$key-more.back.column"),
-            slot(Items.lookup(plugin.configYml.getString("$key-more.back.item"))) {
-                onLeftClick { player, _, _, menu ->
-                    menu.kickBack(player)
-                }
-            }
-        )
-
         for (config in plugin.configYml.getSubsections("$key-more.custom-slots")) {
-            setSlot(
-                config.getInt("row"),
-                config.getInt("column"),
-                ConfigSlot(config)
-            )
+            for (location in config.getSlotLocations()) {
+                setSlot(location.row, location.column, ConfigSlot(config))
+            }
         }
     }
 

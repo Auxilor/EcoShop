@@ -3,6 +3,7 @@ package com.willfp.ecoshop.shop
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.gui.addPage
 import com.willfp.eco.core.gui.addPageChanger
+import com.willfp.eco.core.gui.getSlotLocations
 import com.willfp.eco.core.gui.menu
 import com.willfp.eco.core.gui.menu.Menu
 import com.willfp.eco.core.gui.onLeftClick
@@ -103,19 +104,17 @@ class ShopCategory(
         addPageChanger(config, "gui.forwards-arrow", PageChanger.Direction.FORWARDS, pageChangeSound)
 
         val backwardsActive = Items.lookup(config.getString("gui.backwards-arrow.item")).item
-        val backwardsRow = config.getIntOrNull("gui.backwards-arrow.location.row")
-            ?: config.getInt("gui.backwards-arrow.row")
-        val backwardsColumn = config.getIntOrNull("gui.backwards-arrow.location.column")
-            ?: config.getInt("gui.backwards-arrow.column")
 
-        addPageChanger(
-            PageChanger.Direction.BACKWARDS,
-            backwardsActive,
-            null,
-            pageChangeSound,
-            backwardsRow,
-            backwardsColumn
-        )
+        for (location in config.getSlotLocations("gui.backwards-arrow")) {
+            addPageChanger(
+                PageChanger.Direction.BACKWARDS,
+                backwardsActive,
+                null,
+                pageChangeSound,
+                location.row,
+                location.column
+            )
+        }
 
         // (page, row, column) -> r-slot index, scanned from every page's mask pattern.
         val rSlotPositions = mutableMapOf<Triple<Int, Int, Int>, Int>()
@@ -221,15 +220,17 @@ class ShopCategory(
                     )
                 )
 
-                setSlot(
-                    backwardsRow,
-                    backwardsColumn,
-                    slot(backwardsActive) {
-                        onLeftClick { player, _, _, menu ->
-                            menu.kickBack(player)
+                for (location in config.getSlotLocations("gui.backwards-arrow")) {
+                    setSlot(
+                        location.row,
+                        location.column,
+                        slot(backwardsActive) {
+                            onLeftClick { player, _, _, menu ->
+                                menu.kickBack(player)
+                            }
                         }
-                    }
-                )
+                    )
+                }
 
                 for (item in staticItems) {
                     if (item.page != pageNumber) {
@@ -253,11 +254,9 @@ class ShopCategory(
                 }
 
                 for (config in pageConfig.getSubsections("custom-slots")) {
-                    setSlot(
-                        config.getInt("row"),
-                        config.getInt("column"),
-                        ConfigSlot(config)
-                    )
+                    for (location in config.getSlotLocations()) {
+                        setSlot(location.row, location.column, ConfigSlot(config))
+                    }
                 }
             }
         }

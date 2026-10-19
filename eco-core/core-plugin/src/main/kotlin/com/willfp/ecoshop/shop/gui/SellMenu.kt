@@ -1,5 +1,6 @@
 package com.willfp.ecoshop.shop.gui
 
+import com.willfp.eco.core.gui.getSlotLocations
 import com.willfp.eco.core.gui.menu
 import com.willfp.eco.core.gui.menu.Menu
 import com.willfp.eco.core.gui.onLeftClick
@@ -75,176 +76,188 @@ class SellMenu(
             )
         )
 
-        setSlot(
-            plugin.configYml.getInt("sell-menu.item.row"),
-            plugin.configYml.getInt("sell-menu.item.column"),
-            slot { player, menu ->
-                item.displayItem.modify {
-                    val amount = menu.amountOfItem[player]
-
-                    setAmount(amount)
-
-                    setDisplayName(item.displayName)
-
-                    addLoreLines(
-                        plugin.langYml.getStrings("confirm-sell-price")
-                            .replaceIn("%price%", item.sellPrice.getDisplay(player, amount * item.getEffectiveSellMultiplier(player)))
-                            .replaceIn("%amount%", amount.toString())
-                    )
-                }
-            }
-        )
-
-        addComponent(
-            plugin.configYml.getInt("sell-menu.sell-more.row"),
-            plugin.configYml.getInt("sell-menu.sell-more.column"),
-            slot(Items.lookup(plugin.configYml.getString("sell-menu.sell-more.item"))) {
-                onLeftClick { player, _, _, menu ->
-                    menu.parentShop[player]?.clickSound?.playTo(player)
-                    sellMoreMenu.open(player, menu)
-                }
-            }
-        )
-
-        for (config in plugin.configYml.getSubsections("sell-menu.add-buttons")) {
-            addComponent(
-                config.getInt("row"),
-                config.getInt("column"),
-                AmountAdjustSelector(
-                    item,
-                    config.getInt("add"),
-                    config
-                )
-            )
-        }
-
-        for (config in plugin.configYml.getSubsections("sell-menu.set-buttons")) {
-            addComponent(
-                config.getInt("row"),
-                config.getInt("column"),
-                AmountSetSelector(
-                    config
-                ) {
-                    val maxSellable = min(
-                        item.getAmountInPlayerInventory(it),
-                        min(
-                            item.getSellsLeft(it),
-                            item.globalSellLimit - item.getTotalGlobalSells()
-                        )
-                    )
-
-                    min(
-                        maxSellable,
-                        item.item?.item?.type?.maxStackSize ?: Int.MAX_VALUE
-                    ).coerceAtMost(
-                        min(
-                            64,
-                            config.getInt("set")
-                        )
-                    )
-                }
-            )
-        }
-
-        setSlot(
-            plugin.configYml.getInt("sell-menu.cancel.row"),
-            plugin.configYml.getInt("sell-menu.cancel.column"),
-            slot(Items.lookup(plugin.configYml.getString("sell-menu.cancel.item"))) {
-                onLeftClick { player, _, _, menu ->
-                    menu.kickBack(player)
-                }
-            }
-        )
-
-        setSlot(
-            plugin.configYml.getInt("sell-menu.confirm.row"),
-            plugin.configYml.getInt("sell-menu.confirm.column"),
-            slot({ player, menu ->
-                Items.lookup(plugin.configYml.getString("sell-menu.confirm.item")).modify {
-                    addLoreLines(
-                        plugin.langYml.getStrings("confirm-sell-price")
-                            .replaceIn("%price%", item.sellPrice.getDisplay(player, menu.amountOfItem[player] * item.getEffectiveSellMultiplier(player)))
-                            .replaceIn("%amount%", menu.amountOfItem[player].toString())
-                    )
-                }
-            }) {
-                onLeftClick { player, _, _, menu ->
-                    val amount = menu.amountOfItem[player]
-
-                    val status = item.getCurrentSellStatus(player, amount)
-
-                    if (status == SellStatus.ALLOW) {
-                        val result = item.sellDetailed(
-                            player,
-                            amount,
-                            shop = menu.parentShop[player]
-                        )
-
-                        SellMessages.soldItem(player, item.displayName, result)
-
-                        menu.kickBack(player)
-                    } else {
-                        player.sendMessage(
-                            plugin.langYml.getMessage("sell-status.${status.configKey}")
+        for (location in plugin.configYml.getSlotLocations("sell-menu.item")) {
+            setSlot(
+                location.row,
+                location.column,
+                slot { player, menu ->
+                    item.displayItem.modify {
+                        val amount = menu.amountOfItem[player]
+                
+                        setAmount(amount)
+                
+                        setDisplayName(item.displayName)
+                
+                        addLoreLines(
+                            plugin.langYml.getStrings("confirm-sell-price")
+                                .replaceIn("%price%", item.sellPrice.getDisplay(player, amount * item.getEffectiveSellMultiplier(player)))
+                                .replaceIn("%amount%", amount.toString())
                         )
                     }
                 }
+            )
+        }
+
+        for (location in plugin.configYml.getSlotLocations("sell-menu.sell-more")) {
+            addComponent(
+                location.row,
+                location.column,
+                slot(Items.lookup(plugin.configYml.getString("sell-menu.sell-more.item"))) {
+                    onLeftClick { player, _, _, menu ->
+                        menu.parentShop[player]?.clickSound?.playTo(player)
+                        sellMoreMenu.open(player, menu)
+                    }
+                }
+            )
+        }
+
+        for (config in plugin.configYml.getSubsections("sell-menu.add-buttons")) {
+            for (location in config.getSlotLocations()) {
+                addComponent(
+                    location.row,
+                    location.column,
+                    AmountAdjustSelector(
+                        item,
+                        config.getInt("add"),
+                        config
+                    )
+                )
             }
-        )
+        }
 
-        val sellAllConfig = plugin.configYml.getSubsection("sell-menu.sell-all-button")
-        if (sellAllConfig.getBool("enabled")) {
+        for (config in plugin.configYml.getSubsections("sell-menu.set-buttons")) {
+            for (location in config.getSlotLocations()) {
+                addComponent(
+                    location.row,
+                    location.column,
+                    AmountSetSelector(
+                        config
+                    ) {
+                        val maxSellable = min(
+                            item.getAmountInPlayerInventory(it),
+                            min(
+                                item.getSellsLeft(it),
+                                item.globalSellLimit - item.getTotalGlobalSells()
+                            )
+                        )
+                    
+                        min(
+                            maxSellable,
+                            item.item?.item?.type?.maxStackSize ?: Int.MAX_VALUE
+                        ).coerceAtMost(
+                            min(
+                                64,
+                                config.getInt("set")
+                            )
+                        )
+                    }
+                )
+            }
+        }
+
+        for (location in plugin.configYml.getSlotLocations("sell-menu.cancel")) {
             setSlot(
-                sellAllConfig.getInt("row", 3),
-                sellAllConfig.getInt("column", 5),
-                slot({ player, _ ->
-                    val maxAmount = item.getAmountInPlayerInventory(player)
-                    val priceDisplay = item.sellPrice?.getDisplay(player, maxAmount * item.getEffectiveSellMultiplier(player)) ?: "0"
+                location.row,
+                location.column,
+                slot(Items.lookup(plugin.configYml.getString("sell-menu.cancel.item"))) {
+                    onLeftClick { player, _, _, menu ->
+                        menu.kickBack(player)
+                    }
+                }
+            )
+        }
 
-                    val baseItem = Items.lookup(sellAllConfig.getString("item"))
-
-                    baseItem.modify {
+        for (location in plugin.configYml.getSlotLocations("sell-menu.confirm")) {
+            setSlot(
+                location.row,
+                location.column,
+                slot({ player, menu ->
+                    Items.lookup(plugin.configYml.getString("sell-menu.confirm.item")).modify {
                         addLoreLines(
-                            sellAllConfig.getStrings("lore").map { line ->
-                                line.replace("%amount%", maxAmount.toString())
-                                    .replace("%price%", priceDisplay)
-                            }
+                            plugin.langYml.getStrings("confirm-sell-price")
+                                .replaceIn("%price%", item.sellPrice.getDisplay(player, menu.amountOfItem[player] * item.getEffectiveSellMultiplier(player)))
+                                .replaceIn("%amount%", menu.amountOfItem[player].toString())
                         )
                     }
                 }) {
                     onLeftClick { player, _, _, menu ->
-                        val maxAmount = item.getAmountInPlayerInventory(player)
-                        val status = item.getCurrentSellStatus(player)
-
-                        if (status != SellStatus.ALLOW) {
-                            player.sendMessage(plugin.langYml.getMessage("sell-status.${status.configKey}"))
-                            return@onLeftClick
-                        }
-
-                        if (maxAmount <= 0) {
-                            player.sendMessage(plugin.langYml.getMessage("no-sellable"))
-                            return@onLeftClick
-                        }
-
-                        val result = item.sellDetailed(player, maxAmount, shop = menu.parentShop[player])
-
-                        if (result.soldUnits > 0) {
+                        val amount = menu.amountOfItem[player]
+                
+                        val status = item.getCurrentSellStatus(player, amount)
+                
+                        if (status == SellStatus.ALLOW) {
+                            val result = item.sellDetailed(
+                                player,
+                                amount,
+                                shop = menu.parentShop[player]
+                            )
+                
                             SellMessages.soldItem(player, item.displayName, result)
+                
                             menu.kickBack(player)
                         } else {
-                            player.sendMessage(plugin.langYml.getMessage("not-enough"))
+                            player.sendMessage(
+                                plugin.langYml.getMessage("sell-status.${status.configKey}")
+                            )
                         }
                     }
                 }
             )
         }
 
+        val sellAllConfig = plugin.configYml.getSubsection("sell-menu.sell-all-button")
+        if (sellAllConfig.getBool("enabled")) {
+            for (location in sellAllConfig.getSlotLocations()) {
+                setSlot(
+                    location.row,
+                    location.column,
+                    slot({ player, _ ->
+                        val maxAmount = item.getAmountInPlayerInventory(player)
+                        val priceDisplay = item.sellPrice?.getDisplay(player, maxAmount * item.getEffectiveSellMultiplier(player)) ?: "0"
+                    
+                        val baseItem = Items.lookup(sellAllConfig.getString("item"))
+                    
+                        baseItem.modify {
+                            addLoreLines(
+                                sellAllConfig.getStrings("lore").map { line ->
+                                    line.replace("%amount%", maxAmount.toString())
+                                        .replace("%price%", priceDisplay)
+                                }
+                            )
+                        }
+                    }) {
+                        onLeftClick { player, _, _, menu ->
+                            val maxAmount = item.getAmountInPlayerInventory(player)
+                            val status = item.getCurrentSellStatus(player)
+                    
+                            if (status != SellStatus.ALLOW) {
+                                player.sendMessage(plugin.langYml.getMessage("sell-status.${status.configKey}"))
+                                return@onLeftClick
+                            }
+                    
+                            if (maxAmount <= 0) {
+                                player.sendMessage(plugin.langYml.getMessage("no-sellable"))
+                                return@onLeftClick
+                            }
+                    
+                            val result = item.sellDetailed(player, maxAmount, shop = menu.parentShop[player])
+                    
+                            if (result.soldUnits > 0) {
+                                SellMessages.soldItem(player, item.displayName, result)
+                                menu.kickBack(player)
+                            } else {
+                                player.sendMessage(plugin.langYml.getMessage("not-enough"))
+                            }
+                        }
+                    }
+                )
+            }
+        }
+
         for (config in plugin.configYml.getSubsections("sell-menu.custom-slots")) {
-            setSlot(
-                config.getInt("row"),
-                config.getInt("column"),
-                ConfigSlot(config)
-            )
+            for (location in config.getSlotLocations()) {
+                setSlot(location.row, location.column, ConfigSlot(config))
+            }
         }
 
         onOpen { player, menu ->
