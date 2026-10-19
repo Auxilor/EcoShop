@@ -64,10 +64,12 @@ gui:
     item: arrow name:"&fNext Page"
     row: 6
     column: 6
+    locations: [ ] # Optional list of row/column slots; if set, the button shows in each of them instead of row/column
   backwards-arrow:
     item: arrow name:"&fPrevious Page"
     row: 6
     column: 4
+    locations: [ ] # Optional list of row/column slots; if set, the button shows in each of them instead of row/column
   pages:
     - page: 1
       mask: # Decorative background.
@@ -130,10 +132,12 @@ gui:
     item: arrow name:"&fNext Page"
     row: 6
     column: 6
+    locations: [ ] # Optional list of row/column slots; if set, the button shows in each of them instead of row/column
   backwards-arrow: # Hidden on the first page.
     item: arrow name:"&fPrevious Page"
     row: 6
     column: 4
+    locations: [ ] # Optional list of row/column slots; if set, the button shows in each of them instead of row/column
   pages:
     - page: 1
       custom-slots: [ ] # Add as many pages as you want by appending to this list.

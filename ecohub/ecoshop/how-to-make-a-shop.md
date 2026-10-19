@@ -49,10 +49,12 @@ forwards-arrow: # Shown on every page except the last.
   item: arrow name:"&fNext Page" # Item syntax comes from the Item Lookup System.
   row: 6
   column: 6
+  locations: [ ] # Optional list of row/column slots; if set, the button shows in each of them instead of row/column
 backwards-arrow: # Shown on every page except the first.
   item: arrow name:"&fPrevious Page"
   row: 6
   column: 4
+  locations: [ ] # Optional list of row/column slots; if set, the button shows in each of them instead of row/column
 
 # === Broadcasts and sounds: feedback on actions ===
 buy-broadcasts: # Announce purchases to the whole server; good for /buy menus.
@@ -126,10 +128,12 @@ forwards-arrow: # Hidden on the last page.
   item: arrow name:"&fNext Page"
   row: 6
   column: 6
+  locations: [ ] # Optional list of row/column slots; if set, the button shows in each of them instead of row/column
 backwards-arrow: # Hidden on the first page.
   item: arrow name:"&fPrevious Page"
   row: 6
   column: 4
+  locations: [ ] # Optional list of row/column slots; if set, the button shows in each of them instead of row/column
 ```
 
 ### Broadcasts and sounds

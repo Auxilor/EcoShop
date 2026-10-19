@@ -48,17 +48,21 @@ buy-menu:
   item: # Where the item being bought is shown.
     row: 2
     column: 5
+    locations: [ ] # Optional list of row/column slots; if set, the button shows in each of them instead of row/column
   buy-more: # Button to open the buy-more menu.
     row: 6
     column: 5
+    locations: [ ] # Optional list of row/column slots; if set, the button shows in each of them instead of row/column
     item: emerald 64 unbreaking:1 hide_enchants name:"&aBuy More"
   cancel: # Button to close without buying.
     row: 5
     column: 4
+    locations: [ ] # Optional list of row/column slots; if set, the button shows in each of them instead of row/column
     item: barrier name:"&cCancel"
   confirm: # Button to confirm the purchase.
     row: 5
     column: 6
+    locations: [ ] # Optional list of row/column slots; if set, the button shows in each of them instead of row/column
     item: diamond unbreaking:1 hide_enchants name:"&aConfirm"
   add-buttons: # Buttons that change the amount by a fixed step.
     - add: 1 # +1 button.
@@ -129,6 +133,7 @@ buy-more:
   back: # Button back to the buy menu.
     row: 2
     column: 5
+    locations: [ ] # Optional list of row/column slots; if set, the button shows in each of them instead of row/column
     item: arrow 1 name:"&cGo Back"
   custom-slots: [ ] # Extra decorative or command slots.
 
@@ -149,17 +154,21 @@ sell-menu:
   item: # Where the item being sold is shown.
     row: 2
     column: 5
+    locations: [ ] # Optional list of row/column slots; if set, the button shows in each of them instead of row/column
   sell-more: # Button to open the sell-more menu.
     row: 6
     column: 5
+    locations: [ ] # Optional list of row/column slots; if set, the button shows in each of them instead of row/column
     item: emerald 64 unbreaking:1 hide_enchants name:"&aSell More"
   cancel: # Button to close without selling.
     row: 5
     column: 4
+    locations: [ ] # Optional list of row/column slots; if set, the button shows in each of them instead of row/column
     item: barrier name:"&cCancel"
   confirm: # Button to confirm the sale.
     row: 5
     column: 6
+    locations: [ ] # Optional list of row/column slots; if set, the button shows in each of them instead of row/column
     item: diamond unbreaking:1 hide_enchants name:"&aConfirm"
   sell-all-button: # Button that sells every matching item the player holds.
     enabled: true
@@ -170,6 +179,7 @@ sell-menu:
       - "&7Price: &e%price%"
     row: 3
     column: 5
+    locations: [ ] # Optional list of row/column slots; if set, the button shows in each of them instead of row/column
   add-buttons: # Buttons that change the amount by a fixed step.
     - add: 1 # +1 button.
       row: 4
@@ -239,6 +249,7 @@ sell-more:
   back: # Button back to the sell menu.
     row: 2
     column: 5
+    locations: [ ] # Optional list of row/column slots; if set, the button shows in each of them instead of row/column
     item: arrow 1 name:"&cGo Back"
   custom-slots: [ ] # Extra decorative or command slots.
 
