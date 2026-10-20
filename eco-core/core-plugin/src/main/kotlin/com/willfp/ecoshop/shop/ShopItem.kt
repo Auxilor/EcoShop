@@ -505,6 +505,14 @@ class ShopItem(
             return BuyStatus.GLOBAL_BOUGHT_TOO_MANY
         }
 
+        if (amount < 1) {
+            return BuyStatus.CANNOT_BUY
+        }
+
+        if (amount > maxAtOnce) {
+            return BuyStatus.TOO_MANY_AT_ONCE
+        }
+
         if (!player.hasPermission("ecoshop.buy.$id")) {
             return BuyStatus.NO_PERMISSION
         }
@@ -564,7 +572,9 @@ class ShopItem(
         bypassLimits: Boolean = false,
         priceValueOverride: Double? = null
     ) {
-        require(if (bypassLimits) amount >= 1 else amount in 1..getMaxBuysAtOnce(player))
+        if (if (bypassLimits) amount < 1 else amount !in 1..getMaxBuysAtOnce(player)) {
+            return
+        }
 
         val basePrice = when (buyType) {
             BuyType.NORMAL -> buyPrice

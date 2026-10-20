@@ -9,6 +9,7 @@ enum class BuyStatus {
     MISSING_REQUIREMENTS,
     CANNOT_AFFORD,
     INVENTORY_FULL,
+    TOO_MANY_AT_ONCE,
     ALLOW
 }
 

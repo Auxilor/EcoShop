@@ -38,6 +38,7 @@ messages:
     cannot-afford: "&cYou need &a%price%&r&c to buy this!"
     global-bought-too-many: "&cThe server has no more stock!"
     inventory-full: "&cYour inventory is full!"
+    too-many-at-once: "&cYou can't buy that many at once!"
 
   bought-item: "&fYou bought %item%&r&f for %price%&r&f!"
   bought-item-multiple: "&fYou bought %amount%x&r %item%&r&f for %price%&r&f!"
