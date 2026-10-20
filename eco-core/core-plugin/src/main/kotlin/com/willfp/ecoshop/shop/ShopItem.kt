@@ -53,6 +53,7 @@ import org.bukkit.permissions.Permission
 import org.bukkit.permissions.PermissionDefault
 import java.util.Optional
 import java.time.Duration
+import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
 
 enum class BuyType {
@@ -298,6 +299,14 @@ class ShopItem(
         0
     )
 
+    private val counterLock = Any()
+
+    @Volatile
+    private var pendingBuyReset: MutableSet<UUID>? = null
+
+    @Volatile
+    private var pendingSellReset: MutableSet<UUID>? = null
+
     init {
         if (this.item != null && this.item.item.amount != 1) {
             throw InvalidShopItemException(
@@ -427,6 +436,7 @@ class ShopItem(
 
     /** Get the total amount of times a player has bought this item. */
     fun getTotalBuys(player: OfflinePlayer): Int {
+        pendingBuyReset?.let { claimReset(it, timesBoughtKey, player.uniqueId, player.profile) }
         return player.profile.read(timesBoughtKey)
     }
 
@@ -482,6 +492,7 @@ class ShopItem(
 
     /** Get the total amount of times a player has sold this item. */
     fun getTotalSells(player: OfflinePlayer): Int {
+        pendingSellReset?.let { claimReset(it, timesSoldKey, player.uniqueId, player.profile) }
         return player.profile.read(timesSoldKey)
     }
 
@@ -497,7 +508,7 @@ class ShopItem(
             BuyType.ALT -> altBuyPrice ?: return BuyStatus.CANNOT_BUY
         }
 
-        if (player.profile.read(timesBoughtKey) + amount > limit) {
+        if (getTotalBuys(player) + amount > limit) {
             return BuyStatus.BOUGHT_TOO_MANY
         }
 
@@ -610,9 +621,11 @@ class ShopItem(
             }
         )
 
-        player.profile.write(timesBoughtKey, getTotalBuys(player) + amount)
-        Bukkit.getServer().profile.write(timesBoughtKey, getTotalGlobalBuys() + amount)
-        Bukkit.getServer().profile.write(dynamicBuysKey, getDynamicGlobalBuys() + amount)
+        synchronized(counterLock) {
+            player.profile.write(timesBoughtKey, getTotalBuys(player) + amount)
+            Bukkit.getServer().profile.write(timesBoughtKey, getTotalGlobalBuys() + amount)
+            Bukkit.getServer().profile.write(dynamicBuysKey, getDynamicGlobalBuys() + amount)
+        }
 
         if (shop?.isBroadcasting == true) {
             shop.broadcastPurchase(player, this, amount)
@@ -734,31 +747,67 @@ class ShopItem(
     }
 
     fun resetTimesBought(player: OfflinePlayer) {
-        val totalBuysForPlayer = getTotalBuys(player)
-        Bukkit.getServer().profile.write(timesBoughtKey, getTotalGlobalBuys() - totalBuysForPlayer)
-        player.profile.write(timesBoughtKey, 0)
+        synchronized(counterLock) {
+            Bukkit.getServer().profile.write(timesBoughtKey, getTotalGlobalBuys() - getTotalBuys(player))
+            player.profile.write(timesBoughtKey, 0)
+        }
     }
 
-    fun resetTimesBought(profile: Profile) {
-        profile.write(timesBoughtKey, 0)
-    }
-
-    fun resetGlobalTimesBought() {
+    /**
+     * Start resetting buys for every player. Players are reset with [resetTimesBought] as the
+     * scan reaches them, or on their first buy before that, so no buy is lost during the scan.
+     */
+    fun startResetAllTimesBought(): MutableSet<UUID> = synchronized(counterLock) {
         Bukkit.getServer().profile.write(timesBoughtKey, 0)
+        mutableSetOf<UUID>().also { pendingBuyReset = it }
+    }
+
+    fun resetTimesBought(uuid: UUID, profile: Profile, reset: MutableSet<UUID>) {
+        if (pendingBuyReset === reset) {
+            claimReset(reset, timesBoughtKey, uuid, profile)
+        }
+    }
+
+    fun finishResetAllTimesBought(reset: MutableSet<UUID>) = synchronized(counterLock) {
+        if (pendingBuyReset === reset) {
+            pendingBuyReset = null
+        }
     }
 
     fun resetTimesSold(player: OfflinePlayer) {
-        val totalSellsForPlayer = getTotalSells(player)
-        Bukkit.getServer().profile.write(timesSoldKey, getTotalGlobalSells() - totalSellsForPlayer)
-        player.profile.write(timesSoldKey, 0)
+        synchronized(counterLock) {
+            Bukkit.getServer().profile.write(timesSoldKey, getTotalGlobalSells() - getTotalSells(player))
+            player.profile.write(timesSoldKey, 0)
+        }
     }
 
-    fun resetTimesSold(profile: Profile) {
-        profile.write(timesSoldKey, 0)
-    }
-
-    fun resetGlobalTimesSold() {
+    /**
+     * Start resetting sells for every player. Players are reset with [resetTimesSold] as the
+     * scan reaches them, or on their first sell before that, so no sell is lost during the scan.
+     */
+    fun startResetAllTimesSold(): MutableSet<UUID> = synchronized(counterLock) {
         Bukkit.getServer().profile.write(timesSoldKey, 0)
+        mutableSetOf<UUID>().also { pendingSellReset = it }
+    }
+
+    fun resetTimesSold(uuid: UUID, profile: Profile, reset: MutableSet<UUID>) {
+        if (pendingSellReset === reset) {
+            claimReset(reset, timesSoldKey, uuid, profile)
+        }
+    }
+
+    fun finishResetAllTimesSold(reset: MutableSet<UUID>) = synchronized(counterLock) {
+        if (pendingSellReset === reset) {
+            pendingSellReset = null
+        }
+    }
+
+    private fun claimReset(reset: MutableSet<UUID>, key: PersistentDataKey<Int>, uuid: UUID, profile: Profile) {
+        synchronized(counterLock) {
+            if (reset.add(uuid)) {
+                profile.write(key, 0)
+            }
+        }
     }
 
     override fun recordSell(player: OfflinePlayer, amount: Int, bypass: SellBypass) {
@@ -766,14 +815,16 @@ class ShopItem(
             return
         }
 
-        if (!bypass.playerLimits) {
-            player.profile.write(timesSoldKey, getTotalSells(player) + amount)
-        }
-        if (!bypass.globalLimits) {
-            Bukkit.getServer().profile.write(timesSoldKey, getTotalGlobalSells() + amount)
-        }
-        if (!bypass.dynamicPricing) {
-            Bukkit.getServer().profile.write(dynamicSellsKey, getDynamicGlobalSells() + amount)
+        synchronized(counterLock) {
+            if (!bypass.playerLimits) {
+                player.profile.write(timesSoldKey, getTotalSells(player) + amount)
+            }
+            if (!bypass.globalLimits) {
+                Bukkit.getServer().profile.write(timesSoldKey, getTotalGlobalSells() + amount)
+            }
+            if (!bypass.dynamicPricing) {
+                Bukkit.getServer().profile.write(dynamicSellsKey, getDynamicGlobalSells() + amount)
+            }
         }
     }
 
