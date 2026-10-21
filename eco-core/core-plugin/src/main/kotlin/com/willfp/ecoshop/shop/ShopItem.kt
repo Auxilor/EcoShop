@@ -793,6 +793,8 @@ private val itemCache = EcoCache.builder<HashedItem, Optional<ShopItem>>()
     .expireAfterAccess(Duration.ofSeconds(5))
     .build()
 
+internal fun clearShopItemCache() = itemCache.invalidateAll()
+
 val ItemStack.shopItem: ShopItem?
     get() = itemCache.get(HashedItem.of(this)) {
         for (item in ShopItems.values()) {
