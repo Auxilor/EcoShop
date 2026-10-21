@@ -87,7 +87,7 @@ coefficient = 0.5 / ln(1001), i.e. about 0.0724
 
 ## Decay
 
-Decay slowly returns prices toward base when activity dies down. Without it, the buy and sell counters persist forever, so a price stays elevated or depressed until enough opposite transactions arrive. Decay multiplies both counters by `(1 - rate)` every period, shrinking net demand and drifting the price home.
+Decay slowly returns prices toward base when activity dies down. Without it, the buy and sell counters persist forever, so a price stays elevated or depressed until enough opposite transactions arrive. Decay multiplies both counters by `(1 - rate)` every period, shrinking net demand and drifting the price home. Periods missed while the server was offline are applied together when it starts again.
 
 ```yaml
 dynamic-pricing:
