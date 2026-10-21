@@ -70,7 +70,7 @@ See [How to make a Sell Wand](how-to-make-a-sell-wand) for how period limits wor
 | Placeholder | Description |
 | --- | --- |
 | `%ecoshop_sellchest_count%` | How many sell chests the player has placed |
-| `%ecoshop_sellchest_limit%` | How many sell chests the player can place (`∞` if unlimited) |
+| `%ecoshop_sellchest_limit%` | How many sell chests the player can place (the `infinite` lang key, `∞` by default, if unlimited) |
 
 See [How to make a Sell Chest](how-to-make-a-sell-chest) for how limits work.
 

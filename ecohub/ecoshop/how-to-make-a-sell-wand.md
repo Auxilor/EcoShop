@@ -232,8 +232,8 @@ These placeholders are available in the wand's `lore`:
 
 | Placeholder | Value |
 | --- | --- |
-| `%uses%` | The wand's remaining uses, or `∞` if infinite |
-| `%max_uses%` | The wand type's `uses`, or `∞` if infinite |
+| `%uses%` | The wand's remaining uses, or the `infinite` lang key (`∞` by default) if infinite |
+| `%max_uses%` | The wand type's `uses`, or the `infinite` lang key (`∞` by default) if infinite |
 | `%multiplier%` | The wand's `multiplier` |
 | `%sold_items%` | The number of items this wand has sold |
 | `%sold_value%` | The value this wand has sold, shown with each price's display, e.g. `$1,500 and 6 Crystals` |
