@@ -27,15 +27,7 @@ object CommandSellHand : PluginCommand(
             return
         }
 
-        val isStrict = plugin.configYml.getBoolOrNull("shop-items.sell-strict-match") ?: false
-
-        val matches = if (isStrict) {
-            itemStack.isSimilar(shopItem.item!!.item)
-        } else {
-            shopItem.item!!.matches(itemStack)
-        }
-
-        if (!matches || !shopItem.isSellable) {
+        if (!shopItem.matchesForSale(itemStack) || !shopItem.isSellable) {
             player.sendMessage(plugin.langYml.getMessage("not-sellable"))
             return
         }

@@ -722,8 +722,7 @@ class ShopItem(
             if (itemStack == null) {
                 continue
             }
-            val matches = if (isStrictMatch) itemStack.isSimilar(item.item) else item.matches(itemStack)
-            if (!matches) {
+            if (!matchesForSale(itemStack)) {
                 continue
             }
 
