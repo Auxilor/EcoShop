@@ -83,6 +83,7 @@ messages:
 
 rotation-countdown: "%hours%h %minutes%m %seconds%s"
 rotation-ready: "Rotating soon..."
+infinite: "∞"
 
 lore:
   missing-requirements:
