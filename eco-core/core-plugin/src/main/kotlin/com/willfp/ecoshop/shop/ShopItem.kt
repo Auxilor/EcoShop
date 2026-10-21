@@ -571,17 +571,17 @@ class ShopItem(
             BuyType.ALT -> altBuyPrice
         }!!
 
-        val payAmount = if (priceValueOverride != null) {
-            val baseValue = basePrice.getValue(player)
-            if (baseValue > 0) amount.toDouble() * (priceValueOverride / baseValue) else 0.0
-        } else {
-            amount.toDouble() * getEffectiveBuyMultiplier(buyType, player)
+        val event = EcoShopBuyEvent(player, this, basePrice.price, buyType, amount) { price ->
+            if (priceValueOverride != null) {
+                val baseValue = price.getValue(player)
+                if (baseValue > 0) amount.toDouble() * (priceValueOverride / baseValue) else 0.0
+            } else {
+                amount.toDouble() * getEffectiveBuyMultiplier(buyType, player)
+            }
         }
-
-        val event = EcoShopBuyEvent(player, this, basePrice.price, buyType, amount, payAmount)
         Bukkit.getPluginManager().callEvent(event)
 
-        event.price.pay(player, payAmount)
+        event.price.pay(player, event.payAmount)
 
         if (item != null) {
             val queue = DropQueue(player)
