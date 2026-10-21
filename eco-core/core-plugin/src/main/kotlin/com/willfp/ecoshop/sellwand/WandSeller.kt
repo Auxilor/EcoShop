@@ -10,6 +10,7 @@ import com.willfp.ecoshop.sell.SellTotals
 import com.willfp.ecoshop.sell.Seller
 import com.willfp.ecoshop.sell.Sells
 import com.willfp.ecoshop.util.formatDuration
+import com.willfp.ecoshop.util.infiniteDisplay
 import com.willfp.libreforge.EmptyProvidedHolder
 import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.triggers.TriggerData
@@ -108,7 +109,7 @@ object WandSeller {
             plugin.langYml.getMessage("sellwand.sold")
                 .replace("%amount%", result.soldUnits.toString())
                 .replace("%price%", result.display(player))
-                .replace("%uses%", if (usesAfter < 0) "∞" else usesAfter.toString())
+                .replace("%uses%", if (usesAfter < 0) infiniteDisplay else usesAfter.toString())
         )
 
         return true

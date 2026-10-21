@@ -9,6 +9,7 @@ import com.willfp.ecoshop.shop.BuyType
 import com.willfp.ecoshop.shop.ShopCategories
 import com.willfp.ecoshop.shop.ShopItem
 import com.willfp.ecoshop.shop.rotation.RotationPlaceholders
+import com.willfp.ecoshop.util.infiniteDisplay
 
 fun registerPlaceholders(plugin: EcoShopPlugin) {
     RotationPlaceholders.register()
@@ -24,7 +25,7 @@ fun registerPlaceholders(plugin: EcoShopPlugin) {
     }.register()
 
     PlayerPlaceholder(plugin, "sellchest_limit") { player ->
-        SellChestLimits.limitFor(player).let { if (it < 0) "∞" else it.toString() }
+        SellChestLimits.limitFor(player).let { if (it < 0) infiniteDisplay else it.toString() }
     }.register()
 
     for (category in ShopCategories.values()) {
