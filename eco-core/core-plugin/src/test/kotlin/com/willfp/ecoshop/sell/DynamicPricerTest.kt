@@ -65,6 +65,25 @@ class DynamicPricerTest {
         assertEquals(1.0, DynamicPricer.sellFactor(cfg, 0.0, 0, 2, "x"))
     }
 
+    @Test
+    fun `elapsed periods counts whole periods only`() {
+        assertEquals(0L, DynamicPricer.elapsedDecayPeriods(59, 60))
+        assertEquals(1L, DynamicPricer.elapsedDecayPeriods(60, 60))
+        assertEquals(10L, DynamicPricer.elapsedDecayPeriods(659, 60))
+        assertEquals(1L, DynamicPricer.elapsedDecayPeriods(5, 0))
+    }
+
+    @Test
+    fun `single period decay matches one step`() {
+        assertEquals(90, DynamicPricer.decay(100, 0.1, 1))
+    }
+
+    @Test
+    fun `missed periods compound`() {
+        assertEquals(34, DynamicPricer.decay(100, 0.1, 10))
+        assertEquals(0, DynamicPricer.decay(100, 0.5, 1000))
+    }
+
     private fun evalSimple(expr: String): Double {
         val e = expr.trim()
         e.toDoubleOrNull()?.let { return it }
