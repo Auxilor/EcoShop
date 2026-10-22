@@ -4,6 +4,7 @@ import com.willfp.eco.util.NumberUtils
 import com.willfp.ecoshop.plugin
 import com.willfp.ecoshop.shop.PriceDynamicConfig
 import java.util.concurrent.ConcurrentHashMap
+import kotlin.math.pow
 
 /** Player-free dynamic sell pricing, shared by every sell path. */
 object DynamicPricer {
@@ -43,6 +44,14 @@ object DynamicPricer {
         if (baseValue <= 0) return 1.0
         return sellValue(config, baseValue, buys, sells, warnKey) / baseValue
     }
+
+    /** Whole decay periods in [elapsedSeconds]; a non-positive [periodSeconds] decays once per check. */
+    fun elapsedDecayPeriods(elapsedSeconds: Long, periodSeconds: Long): Long =
+        if (periodSeconds > 0) elapsedSeconds / periodSeconds else 1L
+
+    /** [counter] after [periods] compounded decay steps of [rate]. */
+    fun decay(counter: Int, rate: Double, periods: Long): Int =
+        (counter * (1.0 - rate).pow(periods.toDouble())).toInt()
 
     internal fun resetWarnings() = warned.clear()
 
