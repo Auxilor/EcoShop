@@ -11,8 +11,9 @@ import com.willfp.ecoshop.shop.ShopCategories
 import com.willfp.ecoshop.shop.ShopItem
 import com.willfp.ecoshop.shop.rotation.RotationPlaceholders
 import com.willfp.ecoshop.util.infiniteDisplay
+import java.util.concurrent.CopyOnWriteArrayList
 
-private val registeredPlaceholders = mutableListOf<RegistrablePlaceholder>()
+private val registeredPlaceholders = CopyOnWriteArrayList<RegistrablePlaceholder>()
 
 private fun RegistrablePlaceholder.registerTracked() {
     registeredPlaceholders += register()
