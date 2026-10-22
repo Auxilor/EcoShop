@@ -61,8 +61,9 @@ class AmountSetSelector(
 
     override fun getSlotAt(row: Int, column: Int, player: Player, menu: Menu): Slot? {
         val currentAmount = menu.amountOfItem[player]
+        val setAmount = amount(player)
 
-        return if (currentAmount == amount(player)) {
+        return if (setAmount < 1 || currentAmount == setAmount) {
             null
         } else {
             slot

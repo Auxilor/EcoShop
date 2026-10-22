@@ -17,6 +17,10 @@ object ShopCategories : RegistrableCategory<ShopCategory>("category", "categorie
         ShopItems.clear()
     }
 
+    override fun afterReload(plugin: LibreforgePlugin) {
+        clearShopItemCache()
+    }
+
     override fun acceptConfig(plugin: LibreforgePlugin, id: String, config: Config) {
         registry.register(ShopCategory(id, config))
     }

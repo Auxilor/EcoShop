@@ -293,7 +293,7 @@ class ShopItem(
         0
     )
 
-    private val lastDecayTimeKey = PersistentDataKey(
+    private val legacyLastDecayTimeKey = PersistentDataKey(
         plugin.createNamespacedKey("${id}_dp_last_decay"),
         PersistentDataKeyType.INT,
         0
@@ -304,6 +304,12 @@ class ShopItem(
     private val buyReset = GlobalCounterReset(lock = counterLock, key = timesBoughtKey)
 
     private val sellReset = GlobalCounterReset(lock = counterLock, key = timesSoldKey)
+
+    private val lastDecayTimeKey = PersistentDataKey(
+        plugin.createNamespacedKey("${id}_dp_last_decay_time"),
+        PersistentDataKeyType.DOUBLE,
+        0.0
+    )
 
     init {
         if (this.item != null && this.item.item.amount != 1) {
@@ -455,32 +461,39 @@ class ShopItem(
     fun resetDynamicPricing() {
         Bukkit.getServer().profile.write(dynamicBuysKey, 0)
         Bukkit.getServer().profile.write(dynamicSellsKey, 0)
-        Bukkit.getServer().profile.write(lastDecayTimeKey, 0)
+        Bukkit.getServer().profile.write(lastDecayTimeKey, 0.0)
+        Bukkit.getServer().profile.write(legacyLastDecayTimeKey, 0)
     }
+
+    private fun getLastDecayTime(): Long =
+        Bukkit.getServer().profile.read(lastDecayTimeKey).toLong().takeIf { it > 0 }
+            ?: Bukkit.getServer().profile.read(legacyLastDecayTimeKey).toLong()
 
     fun applyDecay() {
         val dp = dynamicPricing ?: return
         if (!dp.decayEnabled || dp.decayRate <= 0.0) return
 
-        val nowSeconds = (System.currentTimeMillis() / 1000L).toInt()
-        val lastDecay = Bukkit.getServer().profile.read(lastDecayTimeKey)
+        val nowSeconds = System.currentTimeMillis() / 1000L
+        val lastDecay = getLastDecayTime()
 
-        if (lastDecay == 0) {
-            Bukkit.getServer().profile.write(lastDecayTimeKey, nowSeconds)
+        if (lastDecay == 0L) {
+            Bukkit.getServer().profile.write(lastDecayTimeKey, nowSeconds.toDouble())
             return
         }
 
-        if (nowSeconds - lastDecay < dp.decayPeriodMinutes * 60) return
+        val periodSeconds = dp.decayPeriodMinutes * 60L
+        val periods = DynamicPricer.elapsedDecayPeriods(nowSeconds - lastDecay, periodSeconds)
+        if (periods < 1) return
 
-        val oldBuys = getDynamicGlobalBuys()
-        val oldSells = getDynamicGlobalSells()
-        val newBuys = (oldBuys * (1.0 - dp.decayRate)).toInt()
-        val newSells = (oldSells * (1.0 - dp.decayRate)).toInt()
-
-        Bukkit.getServer().profile.write(dynamicBuysKey, newBuys)
-        Bukkit.getServer().profile.write(dynamicSellsKey, newSells)
-        Bukkit.getServer().profile.write(lastDecayTimeKey, nowSeconds)
-
+        Bukkit.getServer().profile.write(
+            dynamicBuysKey,
+            DynamicPricer.decay(getDynamicGlobalBuys(), dp.decayRate, periods)
+        )
+        Bukkit.getServer().profile.write(
+            dynamicSellsKey,
+            DynamicPricer.decay(getDynamicGlobalSells(), dp.decayRate, periods)
+        )
+        Bukkit.getServer().profile.write(lastDecayTimeKey, (lastDecay + periods * periodSeconds).toDouble())
     }
 
     /** Get the max amount of times this player can sell this item again. */
@@ -512,6 +525,14 @@ class ShopItem(
 
         if (Bukkit.getServer().profile.read(timesBoughtKey) + amount > globalLimit) {
             return BuyStatus.GLOBAL_BOUGHT_TOO_MANY
+        }
+
+        if (amount < 1) {
+            return BuyStatus.CANNOT_BUY
+        }
+
+        if (amount > maxAtOnce) {
+            return BuyStatus.TOO_MANY_AT_ONCE
         }
 
         if (!player.hasPermission("ecoshop.buy.$id")) {
@@ -573,7 +594,9 @@ class ShopItem(
         bypassLimits: Boolean = false,
         priceValueOverride: Double? = null
     ) {
-        require(if (bypassLimits) amount >= 1 else amount in 1..getMaxBuysAtOnce(player))
+        if (if (bypassLimits) amount < 1 else amount !in 1..getMaxBuysAtOnce(player)) {
+            return
+        }
 
         val basePrice = when (buyType) {
             BuyType.NORMAL -> buyPrice
@@ -733,8 +756,7 @@ class ShopItem(
             if (itemStack == null) {
                 continue
             }
-            val matches = if (isStrictMatch) itemStack.isSimilar(item.item) else item.matches(itemStack)
-            if (!matches) {
+            if (!matchesForSale(itemStack)) {
                 continue
             }
 
@@ -820,6 +842,8 @@ fun ConfiguredPrice?.getDisplay(player: Player, amount: Number): String =
 private val itemCache = EcoCache.builder<HashedItem, Optional<ShopItem>>()
     .expireAfterAccess(Duration.ofSeconds(5))
     .build()
+
+internal fun clearShopItemCache() = itemCache.invalidateAll()
 
 val ItemStack.shopItem: ShopItem?
     get() = itemCache.get(HashedItem.of(this)) {
