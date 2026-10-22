@@ -1,0 +1,35 @@
+{
+  "version": 1,
+  "findings": [
+    {
+      "code": "U003",
+      "path": "eco-core/core-plugin/src/main/kotlin/com/willfp/ecoshop/event/EcoShopContainerSellEvent.kt",
+      "message": "Unused property `actor`"
+    },
+    {
+      "code": "U003",
+      "path": "eco-core/core-plugin/src/main/kotlin/com/willfp/ecoshop/sell/ItemFilter.kt",
+      "message": "Unused property `hasMultipliers`"
+    },
+    {
+      "code": "U002",
+      "path": "eco-core/core-plugin/src/main/kotlin/com/willfp/ecoshop/sellchest/SellChestIndex.kt",
+      "message": "Unused function `get`"
+    },
+    {
+      "code": "U002",
+      "path": "eco-core/core-plugin/src/main/kotlin/com/willfp/ecoshop/sellwand/WandItem.kt",
+      "message": "Unused function `setUses`"
+    },
+    {
+      "code": "U002",
+      "path": "eco-core/core-plugin/src/main/kotlin/com/willfp/ecoshop/shop/Shop.kt",
+      "message": "Unused function `ifHasOrNull`"
+    },
+    {
+      "code": "U002",
+      "path": "eco-core/core-plugin/src/main/kotlin/com/willfp/ecoshop/shop/ShopItem.kt",
+      "message": "Unused function `recordSell`"
+    }
+  ]
+}

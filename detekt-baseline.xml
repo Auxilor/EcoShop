@@ -1,0 +1,468 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>AlsoCouldBeApply:ShopCategory.kt:ShopCategory$also</ID>
+    <ID>BracesOnIfStatements:DynamicPricingConfig.kt:DynamicPricingConfig.Companion$else</ID>
+    <ID>BracesOnIfStatements:DynamicPricingConfig.kt:DynamicPricingConfig.Companion$if</ID>
+    <ID>BracesOnIfStatements:EcoShopPlaceholders.kt:if</ID>
+    <ID>BracesOnIfStatements:ItemFilter.kt:ItemFilter.Companion$else</ID>
+    <ID>BracesOnIfStatements:SellChestType.kt:SellChestType$else</ID>
+    <ID>BracesOnIfStatements:SellQuoter.kt:SellQuoter$if</ID>
+    <ID>BracesOnIfStatements:Shop.kt:Shop$else</ID>
+    <ID>BracesOnIfStatements:Shop.kt:Shop$if</ID>
+    <ID>BracesOnIfStatements:ShopCategory.kt:ShopCategory$else</ID>
+    <ID>BracesOnIfStatements:ShopCategory.kt:ShopCategory$if</ID>
+    <ID>BracesOnIfStatements:ShopItem.kt:ShopItem$else</ID>
+    <ID>BracesOnIfStatements:ShopItem.kt:ShopItem$if</ID>
+    <ID>BracesOnWhenStatements:RotationScheduler.kt:RotationScheduler$when</ID>
+    <ID>BracesOnWhenStatements:WandSeller.kt:WandSeller$when</ID>
+    <ID>C002:CommandResetBuys.kt:CommandResetBuys$forEachSavedProfile(plugin, onProgress = { _, total -&gt; playerCount = total }) { uuid -&gt; PlayerProfile.load(uuid).let { profile -&gt; items.forEach { it.resetTimesBought(profile) } } }.thenRun { plugin.scheduler.global().run { if (playerCount == 0) { sender.sendMessage(plugin.langYml.getMessage("invalid-player")) return@run } sender.sendMessage( plugin.langYml.getMessage("reset-buys-batch", StringUtils.FormatOption.WITHOUT_PLACEHOLDERS) .replace("%players%", playerCount.toString()) .replace("%items%", items.size.toString()) .replace("%resets%", (playerCount * items.size).toString()) ) } }</ID>
+    <ID>C002:CommandResetSells.kt:CommandResetSells$forEachSavedProfile(plugin, onProgress = { _, total -&gt; playerCount = total }) { uuid -&gt; PlayerProfile.load(uuid).let { profile -&gt; items.forEach { it.resetTimesSold(profile) } } }.thenRun { plugin.scheduler.global().run { if (playerCount == 0) { sender.sendMessage(plugin.langYml.getMessage("invalid-player")) return@run } sender.sendMessage( plugin.langYml.getMessage("reset-sells-batch", StringUtils.FormatOption.WITHOUT_PLACEHOLDERS) .replace("%players%", playerCount.toString()) .replace("%items%", items.size.toString()) .replace("%resets%", (playerCount * items.size).toString()) ) } }</ID>
+    <ID>CX016:ShopItem.kt:com.willfp.ecoshop.shop.ShopItem.kt</ID>
+    <ID>CascadingCallWrapping:ItemFilter.kt:ItemFilter$multipliers .filter { it.rule.matches(candidate) } .maxByOrNull { it.rule.specificity } ?.multiplier ?: 1.0</ID>
+    <ID>CognitiveComplexMethod:CommandHistory.kt:CommandHistory$private fun scanHistory: List&lt;String&gt;</ID>
+    <ID>CognitiveComplexMethod:EcoShopPlaceholders.kt:private fun registerItemPlaceholders</ID>
+    <ID>CognitiveComplexMethod:SellChestTask.kt:SellChestTask$fun sweep</ID>
+    <ID>CognitiveComplexMethod:SellEngine.kt:SellEngine$fun commit: SellResult</ID>
+    <ID>CognitiveComplexMethod:SellGUI.kt:SellGUI$@JvmStatic fun update</ID>
+    <ID>CognitiveComplexMethod:SellQuoter.kt:SellQuoter$fun quote: SellQuote</ID>
+    <ID>CognitiveComplexMethod:ShopItemSlot.kt:ShopItemSlot$private fun extractItemStack: (Player, Menu) -&gt; ItemStack</ID>
+    <ID>CognitiveComplexMethod:WandSeller.kt:WandSeller$fun use: Boolean</ID>
+    <ID>CollapsibleIfStatements:SellChestListener.kt:SellChestListener$if (block.type == Material.CHEST || block.type == Material.TRAPPED_CHEST) { if (horizontal.any { SellChestIndex.get(block.getRelative(it)) != null }) { forceSingleNextTick(block) } }</ID>
+    <ID>CollapsibleIfStatements:ShopItem.kt:ShopItem$if (amount != null) { if (amountInInventory &lt; amount) { return SellStatus.DONT_HAVE_ENOUGH } }</ID>
+    <ID>ComplexCondition:DynamicPricer.kt:DynamicPricer$result.isNaN() || result.isInfinite() || (result == 0.0 &amp;&amp; baseValue != 0.0)</ID>
+    <ID>ComplexCondition:ShopItem.kt:ShopItem$result.isNaN() || result.isInfinite() || (result == 0.0 &amp;&amp; baseValue != 0.0)</ID>
+    <ID>ComplexInterface:SellCandidate.kt:SellCandidate</ID>
+    <ID>CouldBeSequence:RotationScheduler.kt:RotationScheduler$map { it to Math.pow(NumberUtils.randFloat(0.0, 1.0), 1.0 / it.rotationWeight.coerceAtLeast(1)) }</ID>
+    <ID>CyclomaticComplexMethod:CommandHistory.kt:CommandHistory$private fun scanHistory: List&lt;String&gt;</ID>
+    <ID>CyclomaticComplexMethod:DynamicPricingConfig.kt:DynamicPricingConfig.Companion$fun from: DynamicPricingConfig</ID>
+    <ID>CyclomaticComplexMethod:EcoShopPlaceholders.kt:private fun registerItemPlaceholders</ID>
+    <ID>CyclomaticComplexMethod:EffectBuyItem.kt:EffectBuyItem$override fun onTrigger: Boolean</ID>
+    <ID>CyclomaticComplexMethod:ItemFilter.kt:ItemFilter.Companion$fun parse: ItemFilter</ID>
+    <ID>CyclomaticComplexMethod:SellChestTask.kt:SellChestTask$fun sweep</ID>
+    <ID>CyclomaticComplexMethod:SellEngine.kt:SellEngine$fun commit: SellResult</ID>
+    <ID>CyclomaticComplexMethod:SellQuoter.kt:SellQuoter$fun quote: SellQuote</ID>
+    <ID>CyclomaticComplexMethod:SellQuoter.kt:SellQuoter$private fun rejection: UnsoldReason?</ID>
+    <ID>CyclomaticComplexMethod:SellWandListener.kt:SellWandListener$@EventHandler(priority = EventPriority.HIGH) fun onInteract</ID>
+    <ID>CyclomaticComplexMethod:ShopItem.kt:ShopItem$fun getBuyStatus: BuyStatus</ID>
+    <ID>CyclomaticComplexMethod:ShopItemSlot.kt:ShopItemSlot$private fun extractItemStack: (Player, Menu) -&gt; ItemStack</ID>
+    <ID>CyclomaticComplexMethod:WandSeller.kt:WandSeller$fun use: Boolean</ID>
+    <ID>DocumentationOverPrivateFunction:CommandHistory.kt:CommandHistory$private fun scanHistory: List&lt;String&gt;</ID>
+    <ID>DocumentationOverPrivateFunction:SellChestListener.kt:SellChestListener$private fun removeChest</ID>
+    <ID>DocumentationOverPrivateFunction:SellChestTask.kt:SellChestTask$private fun sellerFor: Seller?</ID>
+    <ID>DocumentationOverPrivateFunction:SellQuoter.kt:SellQuoter$private fun price: Priced</ID>
+    <ID>DocumentationOverPrivateFunction:ShopItem.kt:ShopItem$private fun hasInventoryRoom: Boolean</ID>
+    <ID>DocumentationOverPrivateFunction:WandLimiter.kt:WandLimiter$private fun currentPeriod: PeriodState</ID>
+    <ID>ElseCaseInsteadOfExhaustiveWhen:ShopItem.kt:ShopItem$when (buyType) { BuyType.ALT -&gt; altBuyPrice else -&gt; buyPrice }</ID>
+    <ID>ExplicitCollectionElementAccessMethod:CategoryRotationState.kt:CategoryRotationState$yaml.set("active-items", activeItems)</ID>
+    <ID>ExplicitCollectionElementAccessMethod:CategoryRotationState.kt:CategoryRotationState$yaml.set("next-rotation", nextRotation)</ID>
+    <ID>ExpressionBodySyntax:EcoShopAdapter.kt:EcoShopAdapter$return SellEventAdapter</ID>
+    <ID>ExpressionBodySyntax:EcoShopAdapter.kt:EcoShopAdapter$return itemStack.getUnitSellValue(player)</ID>
+    <ID>ExpressionBodySyntax:EcoShopAdapter.kt:EcoShopAdapter$return itemStack.isSellable(player)</ID>
+    <ID>ExpressionBodySyntax:EcoShopBuyEvent.kt:EcoShopBuyEvent$return HANDLERS</ID>
+    <ID>ExpressionBodySyntax:EcoShopBuyEvent.kt:EcoShopBuyEvent.Companion$return HANDLERS</ID>
+    <ID>ExpressionBodySyntax:EcoShopContainerSellEvent.kt:EcoShopContainerSellEvent$return HANDLERS</ID>
+    <ID>ExpressionBodySyntax:EcoShopContainerSellEvent.kt:EcoShopContainerSellEvent.Companion$return HANDLERS</ID>
+    <ID>ExpressionBodySyntax:EcoShopPlugin.kt:EcoShopPlugin$return listOf(ShopLogListener, SellWandListener, SellChestListener)</ID>
+    <ID>ExpressionBodySyntax:EcoShopSellEvent.kt:EcoShopSellEvent$return HANDLERS</ID>
+    <ID>ExpressionBodySyntax:EcoShopSellEvent.kt:EcoShopSellEvent.Companion$return HANDLERS</ID>
+    <ID>ExpressionBodySyntax:FilterShopItem.kt:FilterShopItem$return config.getStrings(key)</ID>
+    <ID>ExpressionBodySyntax:ShopItem.kt:ShopItem$return Bukkit.getServer().profile.read(timesBoughtKey)</ID>
+    <ID>ExpressionBodySyntax:ShopItem.kt:ShopItem$return Bukkit.getServer().profile.read(timesSoldKey)</ID>
+    <ID>ExpressionBodySyntax:ShopItem.kt:ShopItem$return limit - getTotalBuys(player)</ID>
+    <ID>ExpressionBodySyntax:ShopItem.kt:ShopItem$return maxAtOnce.coerceAtMost(getBuysLeft(player))</ID>
+    <ID>ExpressionBodySyntax:ShopItem.kt:ShopItem$return player.profile.read(timesBoughtKey)</ID>
+    <ID>ExpressionBodySyntax:ShopItem.kt:ShopItem$return player.profile.read(timesSoldKey)</ID>
+    <ID>ExpressionBodySyntax:ShopItem.kt:ShopItem$return sellLimit - getTotalSells(player)</ID>
+    <ID>F001:DynamicPricerTest.kt:DynamicPricerTest$mutableListOf&lt;String&gt;()</ID>
+    <ID>F001:SellChestIndex.kt:SellChestIndex$LinkedHashMap()</ID>
+    <ID>F001:SellEngineTest.kt:SellEngineTest$mutableListOf&lt;Event&gt;()</ID>
+    <ID>F001:SellEngineTest.kt:SellEngineTest$mutableListOf&lt;SellLogEntry&gt;()</ID>
+    <ID>F001:ShopCategory.kt:ShopCategory$mutableMapOf&lt;Int, ShopItem&gt;()</ID>
+    <ID>F001:ShopCategory.kt:ShopCategory$mutableMapOf&lt;Triple&lt;Int, Int, Int&gt;, Int&gt;()</ID>
+    <ID>F001:ShopCategory.kt:ShopCategory$mutableSetOf&lt;Int&gt;()</ID>
+    <ID>F001:ShopItem.kt:ShopItem$mutableSetOf&lt;String&gt;()</ID>
+    <ID>F001:WandLimiterTest.kt:WandLimiterTest$HashMap&lt;String, PeriodState&gt;()</ID>
+    <ID>F005:SellChestIndex.kt:SellChestIndex$getChunkAt(chunkX, chunkZ)</ID>
+    <ID>F008:SellChestTask.kt:SellChestTask$tick</ID>
+    <ID>FunctionNameMaxLength:ChunkedPricingTest.kt:ChunkedPricingTest$@Test fun `bypass dynamic pricing pays flat base`</ID>
+    <ID>FunctionNameMaxLength:ChunkedPricingTest.kt:ChunkedPricingTest$@Test fun `chunk at least units matches old single read`</ID>
+    <ID>FunctionNameMaxLength:ChunkedPricingTest.kt:ChunkedPricingTest$@Test fun `chunk size below one is treated as one`</ID>
+    <ID>FunctionNameMaxLength:ChunkedPricingTest.kt:ChunkedPricingTest$@Test fun `chunk size one integrates per unit`</ID>
+    <ID>FunctionNameMaxLength:ChunkedPricingTest.kt:ChunkedPricingTest$@Test fun `chunk size two reprices between chunks`</ID>
+    <ID>FunctionNameMaxLength:DynamicPricerTest.kt:DynamicPricerTest$@Test fun `null config returns base and factor one`</ID>
+    <ID>FunctionNameMaxLength:DynamicPricerTest.kt:DynamicPricerTest$@Test fun `zero result with nonzero base falls back and warns once`</ID>
+    <ID>FunctionNameMaxLength:ItemFilterTest.kt:ItemFilterTest$@Test fun `multiple shops union their categories`</ID>
+    <ID>FunctionNameMaxLength:ItemFilterTest.kt:ItemFilterTest$@Test fun `none allows everything with multiplier one`</ID>
+    <ID>FunctionNameMaxLength:ItemFilterTest.kt:ItemFilterTest$@Test fun `parse warns on unknown ids and drops them`</ID>
+    <ID>FunctionNameMaxLength:ItemFilterTest.kt:ItemFilterTest$@Test fun `shop item multiplier beats category regardless of order`</ID>
+    <ID>FunctionNameMaxLength:ItemFilterTest.kt:ItemFilterTest$@Test fun `shops restrict to their categories`</ID>
+    <ID>FunctionNameMaxLength:SellChestLimitsTest.kt:SellChestLimitsTest$@Test fun `permission can lower below default`</ID>
+    <ID>FunctionNameMaxLength:SellEngineTest.kt:SellEngineTest$@Test fun `cancelled container event aborts commit`</ID>
+    <ID>FunctionNameMaxLength:SellEngineTest.kt:SellEngineTest$@Test fun `event multiplier ignored when disabled`</ID>
+    <ID>FunctionNameMaxLength:SellEngineTest.kt:SellEngineTest$@Test fun `failed offline payment keeps items`</ID>
+    <ID>FunctionNameMaxLength:SellEngineTest.kt:SellEngineTest$@Test fun `offline commit pays economy value and skips player hooks`</ID>
+    <ID>FunctionNameMaxLength:SellEngineTest.kt:SellEngineTest$@Test fun `online commit applies event multiplier, removes, records, triggers`</ID>
+    <ID>FunctionNameMaxLength:SellQuoterTest.kt:SellQuoterTest$@Test fun `bypass skips player and global limits`</ID>
+    <ID>FunctionNameMaxLength:SellQuoterTest.kt:SellQuoterTest$@Test fun `extra and filter multipliers stack`</ID>
+    <ID>FunctionNameMaxLength:SellQuoterTest.kt:SellQuoterTest$@Test fun `max value caps economy lines only`</ID>
+    <ID>FunctionNameMaxLength:SellQuoterTest.kt:SellQuoterTest$@Test fun `offline seller uses eligibility and skips permission`</ID>
+    <ID>FunctionNameMaxLength:SellQuoterTest.kt:SellQuoterTest$@Test fun `permission and condition checks can be disabled`</ID>
+    <ID>FunctionNameMaxLength:SellQuoterTest.kt:SellQuoterTest$@Test fun `player limit enforced across stacks`</ID>
+    <ID>FunctionNameMaxLength:SellQuoterTest.kt:SellQuoterTest$@Test fun `resolveWith overrides registry lookup`</ID>
+    <ID>FunctionNameMaxLength:SellQuoterTest.kt:SellQuoterTest$@Test fun `sells all matching stacks into one line`</ID>
+    <ID>FunctionNameMaxLength:SellTargetTest.kt:SellTargetTest$@Test fun `list target removes partial and full amounts`</ID>
+    <ID>FunctionNameMaxLength:SellTotalsTest.kt:SellTotalsTest$@Test fun `of quote uses base times price multiplier`</ID>
+    <ID>FunctionNameMaxLength:SellTotalsTest.kt:SellTotalsTest$@Test fun `of result groups paid lines by price type`</ID>
+    <ID>FunctionNameMaxLength:SellTotalsTest.kt:SellTotalsTest$@Test fun `plus merges units and per-type values`</ID>
+    <ID>FunctionNameMaxLength:SellTotalsTest.kt:SellTotalsTest$@Test fun `render values uses per type format with fallback`</ID>
+    <ID>FunctionNameMaxLength:WandItemTest.kt:WandItemTest$@Test fun `finite uses decrease to zero floor`</ID>
+    <ID>FunctionNameMaxLength:WandItemTest.kt:WandItemTest$@Test fun `infinite uses render as infinity`</ID>
+    <ID>FunctionNameMaxLength:WandLimiterTest.kt:WandLimiterTest$@Test fun `period limit exhausts then resets`</ID>
+    <ID>FunctionNameMinLength:SellChestIndex.kt:ChestKey.Companion$fun of</ID>
+    <ID>FunctionNameMinLength:SellTotals.kt:SellTotals.Companion$fun of: SellTotals</ID>
+    <ID>FunctionNameMinLength:WandProfile.kt:WandProfile.Companion$fun of</ID>
+    <ID>IC001:SellEngineTest.kt:SellEngineTest$// quote expected 5</ID>
+    <ID>IC002:DynamicPricerTest.kt:DynamicPricerTest$// Tiny evaluator: supports "a * b" and "a - b" and plain numbers, enough for tests.</ID>
+    <ID>IC002:EcoShopPlaceholders.kt:// alt-buy pricing</ID>
+    <ID>IC002:EcoShopPlaceholders.kt:// buy limits / amounts</ID>
+    <ID>IC002:EcoShopPlaceholders.kt:// buy pricing</ID>
+    <ID>IC002:EcoShopPlaceholders.kt:// sell limits / amounts</ID>
+    <ID>IC002:EcoShopPlaceholders.kt:// sell pricing</ID>
+    <ID>IC002:RotationScheduler.kt:RotationScheduler$// Default to 1h rather than throw, so a misconfigured category still rotates.</ID>
+    <ID>IC002:SellChestTypes.kt:SellChestTypes$// Drop lookup ids of types removed from config since the last load.</ID>
+    <ID>IC002:SellWands.kt:SellWands$// Drop lookup ids of wands removed from config since the last load.</ID>
+    <ID>IC002:ShopCategories.kt:ShopCategories$// Persist + stop schedulers on the OLD categories before they are cleared.</ID>
+    <ID>IC002:ShopItem.kt:ShopItem$// Can't sell a command or an effect</ID>
+    <ID>IC002:ShopItem.kt:ShopItem$// Only run not met effects if player can afford to buy</ID>
+    <ID>IM002:WandInspector.kt:WandInspector$java.util.Locale.ROOT</ID>
+    <ID>ImplicitUnitReturnType:ChunkedPricingTest.kt:ChunkedPricingTest$@AfterEach fun tearDown</ID>
+    <ID>ImplicitUnitReturnType:CommandReload.kt:CommandReload$override fun onExecute</ID>
+    <ID>ImplicitUnitReturnType:DynamicPricerTest.kt:DynamicPricerTest$@AfterEach fun tearDown</ID>
+    <ID>ImplicitUnitReturnType:RotationScheduler.kt:RotationScheduler$fun forceRotate</ID>
+    <ID>ImplicitUnitReturnType:SellChestLimits.kt:SellChestLimits$fun decrement</ID>
+    <ID>ImplicitUnitReturnType:SellChestLimits.kt:SellChestLimits$fun increment</ID>
+    <ID>ImplicitUnitReturnType:SellChestLimits.kt:SellChestLimits$fun setCount</ID>
+    <ID>ImplicitUnitReturnType:SellChestListener.kt:SellChestListener$@EventHandler fun onChunkLoad</ID>
+    <ID>ImplicitUnitReturnType:SellChestListener.kt:SellChestListener$@EventHandler fun onChunkUnload</ID>
+    <ID>ImplicitUnitReturnType:SellChestListener.kt:SellChestListener$@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true) fun onBlockExplode</ID>
+    <ID>ImplicitUnitReturnType:SellChestListener.kt:SellChestListener$@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true) fun onEntityExplode</ID>
+    <ID>ImplicitUnitReturnType:SellQuoterTest.kt:SellQuoterTest$@AfterEach fun tearDown</ID>
+    <ID>ImplicitUnitReturnType:Shop.kt:fun Menu.kickBack</ID>
+    <ID>ImplicitUnitReturnType:ShopItem.kt:ShopItem$fun recordSell</ID>
+    <ID>ImplicitUnitReturnType:WandItem.kt:WandItem$fun recordSale</ID>
+    <ID>ImplicitUnitReturnType:WandItem.kt:WandItem$fun setUses</ID>
+    <ID>LabeledExpression:CommandHistory.kt:CommandHistory$@run</ID>
+    <ID>LabeledExpression:CommandResetBuys.kt:CommandResetBuys$@run</ID>
+    <ID>LabeledExpression:CommandResetSells.kt:CommandResetSells$@run</ID>
+    <ID>LabeledExpression:EcoShopPlaceholders.kt:@PlayerPlaceholder</ID>
+    <ID>LabeledExpression:ItemFilter.kt:ItemFilter.Companion$@mapNotNull</ID>
+    <ID>LabeledExpression:ItemFilterTest.kt:ItemFilterTest$@mockk</ID>
+    <ID>LabeledExpression:RotationPlaceholders.kt:RotationPlaceholders$@DynamicPlaceholder</ID>
+    <ID>LabeledExpression:SellGUI.kt:SellGUI$@setCaptiveFilter</ID>
+    <ID>LabeledExpression:SellMenu.kt:SellMenu$@onLeftClick</ID>
+    <ID>LabeledExpression:ShopCategory.kt:ShopCategory$@onLeftClick</ID>
+    <ID>LabeledExpression:ShopItem.kt:@get</ID>
+    <ID>LabeledExpression:ShopItem.kt:ShopItem$@run</ID>
+    <ID>LabeledExpression:ShopItemSlot.kt:ShopItemSlot$@onShiftRightClick</ID>
+    <ID>LongMethod:EcoShopPlaceholders.kt:private fun registerItemPlaceholders</ID>
+    <ID>LongMethod:SellEngine.kt:SellEngine$fun commit: SellResult</ID>
+    <ID>LongMethod:SellQuoter.kt:SellQuoter$fun quote: SellQuote</ID>
+    <ID>LongMethod:ShopItemSlot.kt:ShopItemSlot$private fun extractItemStack: (Player, Menu) -&gt; ItemStack</ID>
+    <ID>LongMethod:WandSeller.kt:WandSeller$fun use: Boolean</ID>
+    <ID>LongParameterList:EcoShopSellEvent.kt:EcoShopSellEvent</ID>
+    <ID>LongParameterList:SellQuoter.kt:SellQuoter$private fun price: Priced</ID>
+    <ID>LongParameterList:ShopItem.kt:ShopItem$fun buy</ID>
+    <ID>LongParameterList:ShopLogger.kt:ShopLogger$fun log</ID>
+    <ID>LongParameterList:TestCandidates.kt:fun testCandidate: SellCandidate</ID>
+    <ID>LongParameterList:WandItem.kt:internal fun renderWandLore: List&lt;String&gt;</ID>
+    <ID>LoopWithTooManyJumpStatements:CommandHistory.kt:CommandHistory$for</ID>
+    <ID>LoopWithTooManyJumpStatements:SellChestTask.kt:SellChestTask$for</ID>
+    <ID>LoopWithTooManyJumpStatements:SellEngine.kt:SellEngine$for</ID>
+    <ID>LoopWithTooManyJumpStatements:SellQuoter.kt:SellQuoter$for</ID>
+    <ID>LoopWithTooManyJumpStatements:ShopCategory.kt:ShopCategory$for</ID>
+    <ID>LoopWithTooManyJumpStatements:ShopItem.kt:ShopItem$for</ID>
+    <ID>MagicNumber:CommandGiveSellChest.kt:CommandGiveSellChest$3</ID>
+    <ID>MagicNumber:CommandGiveWand.kt:CommandGiveWand$3</ID>
+    <ID>MagicNumber:CommandHistory.kt:CommandHistory$3</ID>
+    <ID>MagicNumber:DynamicPricer.kt:DynamicPricer$100</ID>
+    <ID>MagicNumber:DynamicPricer.kt:DynamicPricer$100.0</ID>
+    <ID>MagicNumber:EcoShopPlugin.kt:EcoShopPlugin$1200L</ID>
+    <ID>MagicNumber:RotationScheduler.kt:RotationScheduler$1_000L</ID>
+    <ID>MagicNumber:RotationScheduler.kt:RotationScheduler$3_600_000L</ID>
+    <ID>MagicNumber:RotationScheduler.kt:RotationScheduler$60_000L</ID>
+    <ID>MagicNumber:RotationScheduler.kt:RotationScheduler$86_400_000L</ID>
+    <ID>MagicNumber:SellChestHolograms.kt:SellChestHolograms$0.5</ID>
+    <ID>MagicNumber:SellChestIndex.kt:ChestKey$4</ID>
+    <ID>MagicNumber:SellChestIndex.kt:SellChestIndex$4</ID>
+    <ID>MagicNumber:SellChestLimits.kt:SellChestLimits$5</ID>
+    <ID>MagicNumber:SellTarget.kt:35</ID>
+    <ID>MagicNumber:ShopItem.kt:ShopItem$100</ID>
+    <ID>MagicNumber:ShopItem.kt:ShopItem$100.0</ID>
+    <ID>MagicNumber:ShopItem.kt:ShopItem$60</ID>
+    <ID>MagicNumber:WandLimiter.kt:WandLimiter$60</ID>
+    <ID>MagicNumber:WandSeller.kt:WandSeller$1000</ID>
+    <ID>MagicNumber:WandSeller.kt:WandSeller$999</ID>
+    <ID>MapGetWithNotNullAssertionOperator:ShopCategory.kt:ShopCategory$fixedSlotItems[idx]!!</ID>
+    <ID>MapGetWithNotNullAssertionOperator:ShopItem.kt:ShopItem$buyMenus[buyType]!!</ID>
+    <ID>MaxChainedCallsOnSameLine:SellResult.kt:SellResult$builder.build().displayStrings.toList().formatMultiple().formatEco(player)</ID>
+    <ID>MaxChainedCallsOnSameLine:WandInspector.kt:WandInspector$quote.unsold.map { it.index }.distinct().size.toString()</ID>
+    <ID>MaxLineLength:BuyMenu.kt:BuyMenu$.</ID>
+    <ID>MaxLineLength:ChunkedPricingTest.kt:ChunkedPricingTest$.</ID>
+    <ID>MaxLineLength:EffectBuyItem.kt:EffectBuyItem$"Fails silently if the player cannot afford the item or has reached its purchase limits, unless bypass-limits is true."</ID>
+    <ID>MaxLineLength:EffectBuyItem.kt:EffectBuyItem$description = "If true, ignores purchase limits and affordability checks, only requiring that the buy type has a price configured."</ID>
+    <ID>MaxLineLength:EffectSellContainer.kt:EffectSellContainer$"Shop checks to skip: dynamic-pricing, player-limits and global-limits. A bypassed check is ignored, and the sale doesn't count towards it."</ID>
+    <ID>MaxLineLength:EffectSellContainer.kt:EffectSellContainer$"When wand is set, that wand's settings, conditions, cooldown and period limit are used, and every other argument is ignored."</ID>
+    <ID>MaxLineLength:EffectSellContainer.kt:EffectSellContainer$description = "The ID of a sell wand to copy the filters, multiplier, caps, containers, cooldown and period limit from."</ID>
+    <ID>MaxLineLength:EffectSellContainer.kt:EffectSellContainer$description = "The max money earned per use, or -1 for no limit. Only counts eco:economy prices. Supports expressions."</ID>
+    <ID>MaxLineLength:FilterShopItem.kt:FilterShopItem$override val description = "Matches when the shop item involved in the triggering purchase or sale is one of the given shop item IDs."</ID>
+    <ID>MaxLineLength:ItemFilterTest.kt:ItemFilterTest$every { getStrings("whitelist") } returns listOf("diamond", "missing_item", "category:missing_cat", "item:stone")</ID>
+    <ID>MaxLineLength:SellBypassArguments.kt:SellBypassArguments$override val description = "Shop checks a sale skips. A bypassed check is ignored, and the sale doesn't count towards it."</ID>
+    <ID>MaxLineLength:SellChestData.kt:SellChestData$val owner = pdc.get(ownerKey, PersistentDataType.STRING)?.let { runCatching { UUID.fromString(it) }.getOrNull() } ?: return null</ID>
+    <ID>MaxLineLength:SellChestTask.kt:SellChestTask$plugin.logger.warning("Sell chest type '${chest.typeId}' no longer exists; those chests will not sell.")</ID>
+    <ID>MaxLineLength:SellChestType.kt:SellChestType$plugin.logger.warning("[sell chest $id] item material ${item.type} does not match block $block; using $block")</ID>
+    <ID>MaxLineLength:SellChestType.kt:SellChestType$val overflow = if (config.getStringOrNull("overflow").equals("stop", ignoreCase = true)) Overflow.STOP else Overflow.KEEP</ID>
+    <ID>MaxLineLength:SellEngine.kt:SellEngine$PaidLine(candidate, line.units, multiplier, line.economyValue?.times(applied), line.baseValue * multiplier)</ID>
+    <ID>MaxLineLength:SellEngineTest.kt:SellEngineTest$val request = SellRequest(Seller.Offline(owner) { true }, SellSource.CHEST, ListTarget(listOf(stack)), applyEventMultiplier = false)</ID>
+    <ID>MaxLineLength:SellEngineTest.kt:SellEngineTest$val request = SellRequest(Seller.Online(player), SellSource.CHEST, ListTarget(listOf(fakeStack(1))), applyEventMultiplier = false)</ID>
+    <ID>MaxLineLength:SellEngineTest.kt:SellEngineTest$val request = SellRequest(Seller.Online(player), SellSource.WAND, ListTarget(listOf(fakeStack(3))), bypass = bypass)</ID>
+    <ID>MaxLineLength:SellFilterArguments.kt:SellFilterArguments$description = "Only sell these shop item IDs or categories (category:&lt;id&gt;). If omitted, every item can sell."</ID>
+    <ID>MaxLineLength:SellMenu.kt:SellMenu$.</ID>
+    <ID>MaxLineLength:SellMenu.kt:SellMenu$val priceDisplay = item.sellPrice?.getDisplay(player, maxAmount * item.getEffectiveSellMultiplier(player)) ?: "0"</ID>
+    <ID>MaxLineLength:SellQuoter.kt:SellQuoter$!candidate.isSellable || candidate.sellPrice == null || !candidate.matchesForSale(stack) -&gt; UnsoldReason.NOT_SELLABLE</ID>
+    <ID>MaxLineLength:SellQuoter.kt:SellQuoter$/** Chunked dynamic pricing, stopping early if [valueBudget] would be exceeded. [dynamic] null means flat base price. */</ID>
+    <ID>MaxLineLength:SellQuoter.kt:SellQuoter$player != null &amp;&amp; request.checkConditions &amp;&amp; !candidate.sellConditionsMet(player) -&gt; UnsoldReason.MISSING_REQUIREMENTS</ID>
+    <ID>MaxLineLength:SellQuoter.kt:SellQuoter$player != null &amp;&amp; request.checkPermissions &amp;&amp; !candidate.hasSellPermission(player) -&gt; UnsoldReason.NO_PERMISSION</ID>
+    <ID>MaxLineLength:SellQuoter.kt:SellQuoter$val priced = price(candidate, dynamic, base, multiplier, requested, if (economy) valueLeft else Double.MAX_VALUE)</ID>
+    <ID>MaxLineLength:SellQuoterTest.kt:SellQuoterTest$listOf(UnsoldReason.NOT_IN_SHOP, UnsoldReason.FILTERED, UnsoldReason.NO_PERMISSION, UnsoldReason.MISSING_REQUIREMENTS)</ID>
+    <ID>MaxLineLength:SellQuoterTest.kt:SellQuoterTest$private</ID>
+    <ID>MaxLineLength:SellQuoterTest.kt:SellQuoterTest$val quote = quoter(mapOf(s to d)).quote(request(s) { copy(bypass = SellBypass(playerLimits = true, globalLimits = true)) })</ID>
+    <ID>MaxLineLength:SellTotals.kt:SellTotals.Companion$quote.lines.fold(EMPTY) { acc, line -&gt; acc + line(line.candidate, line.units, line.baseValue * line.priceMultiplier) }</ID>
+    <ID>MaxLineLength:SellWand.kt:SellWand$val maxValuePerUse = (config.getDoubleOrNull("max-value-per-use") ?: -1.0).let { if (it &lt; 0) Double.MAX_VALUE else it }</ID>
+    <ID>MaxLineLength:ShopItemSlot.kt:ShopItemSlot$.</ID>
+    <ID>MaxLineLength:TriggerUseSellWand.kt:TriggerUseSellWand$override val description = "Fires when the player sells a container's contents with a sell wand or the sell_container effect."</ID>
+    <ID>MaxLineLength:WandInspectConfig.kt:WandInspectConfig.Companion$display</ID>
+    <ID>MaxLineLength:WandItemTest.kt:WandItemTest$val lore = renderWandLore(listOf("Sold %sold_items% for %sold_value%"), 1, 1, 1.0, soldItems = 12345, soldValue = "$99")</ID>
+    <ID>MaxLineLength:WandSeller.kt:WandSeller$fun</ID>
+    <ID>MissingUseCall:ShopLogger.kt:ShopLogger$BufferedWriter(FileWriter(file, true))</ID>
+    <ID>MultilineLambdaItParameter:BuyMenu.kt:BuyMenu${ min( item.getMaxBuysAtOnce(it), item.item?.item?.type?.maxStackSize ?: Int.MAX_VALUE ).coerceAtMost( min( 64, config.getInt("set") ) ) }</ID>
+    <ID>MultilineLambdaItParameter:SellChestHolograms.kt:{ it.replace("%type%", typeName) .replace("%owner%", ownerName) .replace("%sold_items%", "%,d".format(Locale.ROOT, soldItems)) .replace("%sold_value%", soldValue) }</ID>
+    <ID>MultilineLambdaItParameter:SellChestItem.kt:SellChestItem${ it.replace("%sold_items%", "%,d".format(Locale.ROOT, totals.units)) .replace("%sold_value%", SellValueFormat.format(totals, null)) }</ID>
+    <ID>MultilineLambdaItParameter:SellMenu.kt:SellMenu${ val maxSellable = min( item.getAmountInPlayerInventory(it), min( item.getSellsLeft(it), item.globalSellLimit - item.getTotalGlobalSells() ) ) min( maxSellable, item.item?.item?.type?.maxStackSize ?: Int.MAX_VALUE ).coerceAtMost( min( 64, config.getInt("set") ) ) }</ID>
+    <ID>MultilineLambdaItParameter:SellTotalsTest.kt:SellTotalsTest${ val price = mockk&lt;ConfiguredPrice&gt; { every { identifier } returns type } every { it.sellPrice } returns price }</ID>
+    <ID>MultilineLambdaItParameter:ShopCategory.kt:ShopCategory${ try { val item = ShopItem(it, dynamicPricing) item.addCategory(id) ShopItems.register(item) item } catch (e: InvalidShopItemException) { plugin.logger.warning(e.message) null } }</ID>
+    <ID>MultilineLambdaItParameter:WandItem.kt:{ it.replace("%uses%", fmt(uses)) .replace("%max_uses%", fmt(maxUses)) .replace("%multiplier%", multiplier.toString()) .replace("%sold_items%", "%,d".format(Locale.ROOT, soldItems)) .replace("%sold_value%", soldValue) }</ID>
+    <ID>NewLineAtEndOfFile:CommandSellHand.kt:com.willfp.ecoshop.commands.CommandSellHand.kt</ID>
+    <ID>NewLineAtEndOfFile:EcoShopPlaceholders.kt:com.willfp.ecoshop.EcoShopPlaceholders.kt</ID>
+    <ID>NewLineAtEndOfFile:EffectBuyItem.kt:com.willfp.ecoshop.libreforge.EffectBuyItem.kt</ID>
+    <ID>NewLineAtEndOfFile:ShopItems.kt:com.willfp.ecoshop.shop.ShopItems.kt</ID>
+    <ID>NullableBooleanCheck:ChestHologramConfig.kt:ChestHologramConfig.Companion$config.getBoolOrNull("enabled") ?: false</ID>
+    <ID>NullableBooleanCheck:CommandSellHand.kt:CommandSellHand$plugin.configYml.getBoolOrNull("shop-items.sell-strict-match") ?: false</ID>
+    <ID>NullableBooleanCheck:DynamicPricingConfig.kt:DynamicPricingConfig.Companion$config.getBoolOrNull("$key.enabled") ?: true</ID>
+    <ID>NullableBooleanCheck:DynamicPricingConfig.kt:DynamicPricingConfig.Companion$config.getBoolOrNull("decay.enabled") ?: parent?.decayEnabled ?: false</ID>
+    <ID>NullableBooleanCheck:DynamicPricingConfig.kt:DynamicPricingConfig.Companion$config.getBoolOrNull("enabled") ?: false</ID>
+    <ID>NullableBooleanCheck:EffectBuyItem.kt:EffectBuyItem$config.getBoolOrNull("bypass-limits") ?: false</ID>
+    <ID>NullableBooleanCheck:SellBypass.kt:SellBypass.Companion$config.getBoolOrNull("dynamic-pricing") ?: false</ID>
+    <ID>NullableBooleanCheck:SellBypass.kt:SellBypass.Companion$config.getBoolOrNull("global-limits") ?: false</ID>
+    <ID>NullableBooleanCheck:SellBypass.kt:SellBypass.Companion$config.getBoolOrNull("player-limits") ?: false</ID>
+    <ID>NullableBooleanCheck:SellChestHolograms.kt:SellChestHolograms$plugin.configYml.getBoolOrNull("sell-chests.holograms") ?: true</ID>
+    <ID>NullableBooleanCheck:SellChestListener.kt:SellChestListener$plugin.configYml.getBoolOrNull("sell-chests.explosion-proof") ?: true</ID>
+    <ID>NullableBooleanCheck:SellChestType.kt:SellChestType$config.getBoolOrNull("notify") ?: true</ID>
+    <ID>NullableBooleanCheck:SellGUI.kt:SellGUI$plugin.configYml.getBoolOrNull("shop-items.sell-strict-match") ?: true</ID>
+    <ID>NullableBooleanCheck:SellWand.kt:SellWand$config.getBoolOrNull("break-when-empty") ?: true</ID>
+    <ID>NullableBooleanCheck:SellWand.kt:SellWand$config.getBoolOrNull("require-sneak") ?: false</ID>
+    <ID>NullableBooleanCheck:ShopCategory.kt:ShopCategory$config.getBoolOrNull("rotation.broadcast-message") ?: true</ID>
+    <ID>NullableBooleanCheck:ShopCategory.kt:ShopCategory$config.getBoolOrNull("rotation.enabled") ?: false</ID>
+    <ID>NullableBooleanCheck:ShopItem.kt:ShopItem$categoryDynamicPricing?.decayEnabled ?: false</ID>
+    <ID>NullableBooleanCheck:ShopItem.kt:ShopItem$config.getBoolOrNull("gui.show-quick-buy-sell") ?: true</ID>
+    <ID>NullableBooleanCheck:ShopItem.kt:ShopItem$config.getBoolOrNull("rotation.always-show") ?: false</ID>
+    <ID>NullableBooleanCheck:ShopItem.kt:ShopItem$config.getBoolOrNull("rotation.enabled") ?: false</ID>
+    <ID>NullableBooleanCheck:ShopItem.kt:ShopItem$dp.getBoolOrNull("enabled") ?: parentType?.enabled ?: false</ID>
+    <ID>NullableBooleanCheck:ShopItem.kt:ShopItem$plugin.configYml.getBoolOrNull("shop-items.sell-strict-match") ?: true</ID>
+    <ID>NullableBooleanCheck:WandInspectConfig.kt:WandInspectConfig.Companion$config.getBoolOrNull("enabled") ?: true</ID>
+    <ID>NullableToStringCall:ShopLogger.kt:ShopLogger$${e.message}</ID>
+    <ID>PF012:DynamicPricingDecayTask.kt:DynamicPricingDecayTask$values()</ID>
+    <ID>PF012:EcoShopPlaceholders.kt:values()</ID>
+    <ID>PF012:SellGUI.kt:SellGUI$values()</ID>
+    <ID>PF012:ShopItem.kt:values()</ID>
+    <ID>PropertyUsedBeforeDeclaration:ShopCategory.kt:ShopCategory$menu</ID>
+    <ID>ReplaceSafeCallChainWithRun:AmountSelector.kt:AmountAdjustSelector$item.item?.item?.type?.maxStackSize</ID>
+    <ID>ReplaceSafeCallChainWithRun:BuyMenu.kt:BuyMenu$item.item?.item?.type?.maxStackSize</ID>
+    <ID>ReplaceSafeCallChainWithRun:CommandHistory.kt:CommandHistory$ShopLogger.logDirectory.listFiles { f -&gt; f.extension == "log" } ?.sortedByDescending { it.name } ?.take(maxDays)</ID>
+    <ID>ReplaceSafeCallChainWithRun:EcoShopPlaceholders.kt:item.altBuyPrice?.getValue(player)?.toString()</ID>
+    <ID>ReplaceSafeCallChainWithRun:EcoShopPlaceholders.kt:item.buyPrice?.getValue(player)?.toString()</ID>
+    <ID>ReplaceSafeCallChainWithRun:EcoShopPlaceholders.kt:item.sellPrice?.getValue(player)?.toString()</ID>
+    <ID>ReplaceSafeCallChainWithRun:SellChestItem.kt:SellChestItem$stack?.itemMeta?.persistentDataContainer?.get(soldKey, PersistentDataType.STRING)</ID>
+    <ID>ReplaceSafeCallChainWithRun:SellChestItem.kt:SellChestItem$stack?.itemMeta?.persistentDataContainer?.get(typeKey, PersistentDataType.STRING)</ID>
+    <ID>ReplaceSafeCallChainWithRun:SellMenu.kt:SellMenu$item.item?.item?.type?.maxStackSize</ID>
+    <ID>ReplaceSafeCallChainWithRun:WandItem.kt:WandItem$stack.itemMeta?.persistentDataContainer?.get(soldKey, PersistentDataType.STRING)</ID>
+    <ID>ReplaceSafeCallChainWithRun:WandItem.kt:WandItem$stack.itemMeta?.persistentDataContainer?.get(usesKey, PersistentDataType.INTEGER)</ID>
+    <ID>ReplaceSafeCallChainWithRun:WandItem.kt:WandItem$stack?.itemMeta?.persistentDataContainer?.get(idKey, PersistentDataType.STRING)</ID>
+    <ID>ReturnCount:CommandGiveSellChest.kt:CommandGiveSellChest$override fun onExecute</ID>
+    <ID>ReturnCount:CommandGiveWand.kt:CommandGiveWand$override fun onExecute</ID>
+    <ID>ReturnCount:CommandHistory.kt:CommandHistory$override fun onExecute</ID>
+    <ID>ReturnCount:CommandHistory.kt:CommandHistory$private fun scanHistory: List&lt;String&gt;</ID>
+    <ID>ReturnCount:CommandResetBuys.kt:CommandResetBuys$override fun onExecute</ID>
+    <ID>ReturnCount:CommandResetSells.kt:CommandResetSells$override fun onExecute</ID>
+    <ID>ReturnCount:CommandSellChestCount.kt:CommandSellChestCount$override fun onExecute</ID>
+    <ID>ReturnCount:CommandSellHand.kt:CommandSellHand$override fun onExecute</ID>
+    <ID>ReturnCount:CommandSellHandall.kt:CommandSellHandall$override fun onExecute</ID>
+    <ID>ReturnCount:DynamicPricer.kt:DynamicPricer$fun sellValue: Double</ID>
+    <ID>ReturnCount:DynamicPricerTest.kt:DynamicPricerTest$private fun evalSimple: Double</ID>
+    <ID>ReturnCount:EffectBuyItem.kt:EffectBuyItem$override fun onTrigger: Boolean</ID>
+    <ID>ReturnCount:EffectOpenShop.kt:EffectOpenShop$override fun onTrigger: Boolean</ID>
+    <ID>ReturnCount:EffectSellContainer.kt:EffectSellContainer$override fun onTrigger: Boolean</ID>
+    <ID>ReturnCount:ItemFilter.kt:ItemFilter$fun allows: Boolean</ID>
+    <ID>ReturnCount:ItemFilter.kt:ItemFilter.Companion$fun parseRule: FilterRule?</ID>
+    <ID>ReturnCount:ItemFilter.kt:ItemFilter.Companion$fun validRule: FilterRule?</ID>
+    <ID>ReturnCount:OfflineEligibility.kt:OfflineEligibility$fun isEligible: Boolean</ID>
+    <ID>ReturnCount:SellChestData.kt:SellChestData$fun read: SellChestInfo?</ID>
+    <ID>ReturnCount:SellChestIndex.kt:ChestKey$fun block: Block?</ID>
+    <ID>ReturnCount:SellChestLimits.kt:internal fun resolveChestLimit: Int</ID>
+    <ID>ReturnCount:SellChestListener.kt:SellChestListener$@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true) fun onHopperMove</ID>
+    <ID>ReturnCount:SellChestListener.kt:SellChestListener$@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true) fun onOpen</ID>
+    <ID>ReturnCount:SellChestListener.kt:SellChestListener$@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true) fun onPlaceCheck</ID>
+    <ID>ReturnCount:SellChestListener.kt:SellChestListener$@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = false) fun onInteract</ID>
+    <ID>ReturnCount:SellChestTask.kt:SellChestTask$private fun afterSale</ID>
+    <ID>ReturnCount:SellChestTask.kt:SellChestTask$private fun sellChest: Boolean</ID>
+    <ID>ReturnCount:SellChestTask.kt:SellChestTask$private fun sellerFor: Seller?</ID>
+    <ID>ReturnCount:SellEngine.kt:SellEngine$fun commit: SellResult</ID>
+    <ID>ReturnCount:SellTotals.kt:SellTotals.Companion$fun decode: SellTotals</ID>
+    <ID>ReturnCount:SellWandListener.kt:SellWandListener$@EventHandler(priority = EventPriority.HIGH) fun onInteract</ID>
+    <ID>ReturnCount:ShopItem.kt:ShopItem$@JvmOverloads fun getCurrentSellStatus: SellStatus</ID>
+    <ID>ReturnCount:ShopItem.kt:ShopItem$@JvmOverloads fun getSellStatus: SellStatus</ID>
+    <ID>ReturnCount:ShopItem.kt:ShopItem$fun applyDecay</ID>
+    <ID>ReturnCount:ShopItem.kt:ShopItem$fun getBuyStatus: BuyStatus</ID>
+    <ID>ReturnCount:ShopItem.kt:ShopItem$fun getEffectiveBuyMultiplier: Double</ID>
+    <ID>ReturnCount:ShopItem.kt:ShopItem$fun parseItemType: PriceDynamicConfig</ID>
+    <ID>ReturnCount:ShopItem.kt:ShopItem$override fun baseSellValue: Double</ID>
+    <ID>ReturnCount:ShopItem.kt:ShopItem$private fun effectiveBuyValue: Double</ID>
+    <ID>ReturnCount:ShopItem.kt:fun ItemStack.getUnitSellValue: ConfiguredPrice</ID>
+    <ID>ReturnCount:ShopItem.kt:fun ItemStack.isSellable: Boolean</ID>
+    <ID>ReturnCount:ShopItem.kt:fun ItemStack.sell: Boolean</ID>
+    <ID>ReturnCount:WandLimiter.kt:WandLimiter$fun check: LimitCheck</ID>
+    <ID>ReturnCount:WandSeller.kt:WandSeller$fun use: Boolean</ID>
+    <ID>SpreadOperator:BuyMenu.kt:BuyMenu$( MaskItems.fromItemNames( plugin.configYml.getStrings("buy-menu.mask.items") ), *plugin.configYml.getStrings("buy-menu.mask.pattern").toTypedArray() )</ID>
+    <ID>SpreadOperator:MoreMenu.kt:MoreMenu$( MaskItems.fromItemNames( plugin.configYml.getStrings("$key-more.mask.items") ), *plugin.configYml.getStrings("$key-more.mask.pattern").toTypedArray() )</ID>
+    <ID>SpreadOperator:SellMenu.kt:SellMenu$( MaskItems.fromItemNames( plugin.configYml.getStrings("sell-menu.mask.items") ), *plugin.configYml.getStrings("sell-menu.mask.pattern").toTypedArray() )</ID>
+    <ID>SpreadOperator:Shop.kt:Shop$( MaskItems.fromItemNames(pageConfig.getStrings("mask.items")), *pageConfig.getStrings("mask.pattern").toTypedArray() )</ID>
+    <ID>SpreadOperator:ShopCategory.kt:ShopCategory$( MaskItems.fromItemNames(pageConfig.getStrings("mask.items")), *pageConfig.getStrings("mask.pattern").toTypedArray() )</ID>
+    <ID>TooGenericExceptionCaught:ShopLogger.kt:ShopLogger$e: Exception</ID>
+    <ID>TooManyFunctions:RotationScheduler.kt:RotationScheduler</ID>
+    <ID>TooManyFunctions:SellCandidate.kt:SellCandidate</ID>
+    <ID>TooManyFunctions:SellChestIndex.kt:SellChestIndex</ID>
+    <ID>TooManyFunctions:SellChestListener.kt:SellChestListener : Listener</ID>
+    <ID>TooManyFunctions:ShopItem.kt:ShopItem : KRegistrableSellCandidate</ID>
+    <ID>UnderscoresInNumericLiterals:ChestHologramTest.kt:ChestHologramTest$1234567</ID>
+    <ID>UnderscoresInNumericLiterals:WandItemTest.kt:WandItemTest$12345</ID>
+    <ID>UnnamedParameterUse:AmountSelector.kt:AmountAdjustSelector$min</ID>
+    <ID>UnnamedParameterUse:BuyMenu.kt:BuyMenu$min</ID>
+    <ID>UnnamedParameterUse:BuyMenu.kt:BuyMenu$replace</ID>
+    <ID>UnnamedParameterUse:BuyMenu.kt:BuyMenu$replaceIn</ID>
+    <ID>UnnamedParameterUse:ChunkedPricingTest.kt:ChunkedPricingTest$PriceDynamicConfig</ID>
+    <ID>UnnamedParameterUse:CommandGiveSellChest.kt:CommandGiveSellChest$replace</ID>
+    <ID>UnnamedParameterUse:CommandGiveWand.kt:CommandGiveWand$replace</ID>
+    <ID>UnnamedParameterUse:CommandHistory.kt:CommandHistory$replace</ID>
+    <ID>UnnamedParameterUse:CommandReload.kt:CommandReload$replace</ID>
+    <ID>UnnamedParameterUse:CommandResetBuys.kt:CommandResetBuys$replace</ID>
+    <ID>UnnamedParameterUse:CommandResetDynamicPricing.kt:CommandResetDynamicPricing$replace</ID>
+    <ID>UnnamedParameterUse:CommandResetSells.kt:CommandResetSells$replace</ID>
+    <ID>UnnamedParameterUse:CommandRotate.kt:CommandRotate$replace</ID>
+    <ID>UnnamedParameterUse:CommandSellChestCount.kt:CommandSellChestCount$replace</ID>
+    <ID>UnnamedParameterUse:CommandShop.kt:CommandShop$replace</ID>
+    <ID>UnnamedParameterUse:DynamicPricer.kt:DynamicPricer$coerceIn</ID>
+    <ID>UnnamedParameterUse:DynamicPricer.kt:DynamicPricer$maxOf</ID>
+    <ID>UnnamedParameterUse:DynamicPricer.kt:DynamicPricer$minOf</ID>
+    <ID>UnnamedParameterUse:DynamicPricer.kt:DynamicPricer$replace</ID>
+    <ID>UnnamedParameterUse:DynamicPricerTest.kt:DynamicPricerTest$PriceDynamicConfig</ID>
+    <ID>UnnamedParameterUse:DynamicPricerTest.kt:DynamicPricerTest$sellFactor</ID>
+    <ID>UnnamedParameterUse:DynamicPricerTest.kt:DynamicPricerTest$sellValue</ID>
+    <ID>UnnamedParameterUse:EffectBuyItem.kt:EffectBuyItem$require</ID>
+    <ID>UnnamedParameterUse:EffectOpenShop.kt:EffectOpenShop$require</ID>
+    <ID>UnnamedParameterUse:EffectSellContainer.kt:EffectSellContainer$describeInherit</ID>
+    <ID>UnnamedParameterUse:ItemFilter.kt:ItemFilter.Companion$ItemFilter</ID>
+    <ID>UnnamedParameterUse:ItemFilter.kt:ItemFilter.Companion$validRule</ID>
+    <ID>UnnamedParameterUse:ItemFilterTest.kt:ItemFilterTest$ItemFilter</ID>
+    <ID>UnnamedParameterUse:MoreMenu.kt:MoreMenu$replace</ID>
+    <ID>UnnamedParameterUse:OfflineEarnings.kt:OfflineEarnings$replace</ID>
+    <ID>UnnamedParameterUse:ProfilePeriodStore.kt:ProfilePeriodStore$PeriodState</ID>
+    <ID>UnnamedParameterUse:RotationPlaceholders.kt:RotationPlaceholders$replace</ID>
+    <ID>UnnamedParameterUse:SellChestHolograms.kt:SellChestHolograms$renderChestLines</ID>
+    <ID>UnnamedParameterUse:SellChestHolograms.kt:replace</ID>
+    <ID>UnnamedParameterUse:SellChestIndex.kt:ChestKey.Companion$ChestKey</ID>
+    <ID>UnnamedParameterUse:SellChestIndex.kt:SellChestIndex$Triple</ID>
+    <ID>UnnamedParameterUse:SellChestItem.kt:SellChestItem$replace</ID>
+    <ID>UnnamedParameterUse:SellChestLimitsTest.kt:SellChestLimitsTest$canPlaceChest</ID>
+    <ID>UnnamedParameterUse:SellChestListener.kt:SellChestListener$replace</ID>
+    <ID>UnnamedParameterUse:SellChestTask.kt:SellChestTask$replace</ID>
+    <ID>UnnamedParameterUse:SellEngine.kt:SellEngine$PaidLine</ID>
+    <ID>UnnamedParameterUse:SellEngine.kt:SellEngine$SellLogEntry</ID>
+    <ID>UnnamedParameterUse:SellEngine.kt:SellEngine$remove</ID>
+    <ID>UnnamedParameterUse:SellEngineTest.kt:SellEngineTest$QuoteLine</ID>
+    <ID>UnnamedParameterUse:SellEngineTest.kt:SellEngineTest$SlotTake</ID>
+    <ID>UnnamedParameterUse:SellMenu.kt:SellMenu$min</ID>
+    <ID>UnnamedParameterUse:SellMenu.kt:SellMenu$replace</ID>
+    <ID>UnnamedParameterUse:SellMenu.kt:SellMenu$replaceIn</ID>
+    <ID>UnnamedParameterUse:SellMessages.kt:SellMessages$replace</ID>
+    <ID>UnnamedParameterUse:SellQuoter.kt:SellQuoter$QuoteLine</ID>
+    <ID>UnnamedParameterUse:SellQuoter.kt:SellQuoter$minOf</ID>
+    <ID>UnnamedParameterUse:SellQuoterTest.kt:SellQuoterTest$ItemFilter</ID>
+    <ID>UnnamedParameterUse:SellQuoterTest.kt:SellQuoterTest$SlotTake</ID>
+    <ID>UnnamedParameterUse:SellTargetTest.kt:SellTargetTest$remove</ID>
+    <ID>UnnamedParameterUse:SellTotalsTest.kt:SellTotalsTest$PaidLine</ID>
+    <ID>UnnamedParameterUse:SellTotalsTest.kt:SellTotalsTest$QuoteLine</ID>
+    <ID>UnnamedParameterUse:SellValueFormat.kt:replace</ID>
+    <ID>UnnamedParameterUse:SellWand.kt:SellWand$WandLimits</ID>
+    <ID>UnnamedParameterUse:Sells.kt:Sells$log</ID>
+    <ID>UnnamedParameterUse:Shop.kt:Shop$replace</ID>
+    <ID>UnnamedParameterUse:ShopCategory.kt:ShopCategory$Triple</ID>
+    <ID>UnnamedParameterUse:ShopCategory.kt:ShopCategory$addPageChanger</ID>
+    <ID>UnnamedParameterUse:ShopCategory.kt:ShopCategory$replace</ID>
+    <ID>UnnamedParameterUse:ShopItem.kt:ShopItem$PriceDynamicConfig</ID>
+    <ID>UnnamedParameterUse:ShopItem.kt:ShopItem$coerceIn</ID>
+    <ID>UnnamedParameterUse:ShopItem.kt:ShopItem$maxOf</ID>
+    <ID>UnnamedParameterUse:ShopItem.kt:ShopItem$minOf</ID>
+    <ID>UnnamedParameterUse:ShopItem.kt:ShopItem$replace</ID>
+    <ID>UnnamedParameterUse:ShopItem.kt:ShopItem$sellFactor</ID>
+    <ID>UnnamedParameterUse:ShopItem.kt:replace</ID>
+    <ID>UnnamedParameterUse:ShopItemSlot.kt:ShopItemSlot$replace</ID>
+    <ID>UnnamedParameterUse:ShopItemSlot.kt:ShopItemSlot$replaceIn</ID>
+    <ID>UnnamedParameterUse:ShopItemSlot.kt:replace</ID>
+    <ID>UnnamedParameterUse:Status.kt:replace</ID>
+    <ID>UnnamedParameterUse:WandInspector.kt:WandInspector$replace</ID>
+    <ID>UnnamedParameterUse:WandItem.kt:replace</ID>
+    <ID>UnnamedParameterUse:WandItemTest.kt:WandItemTest$renderWandLore</ID>
+    <ID>UnnamedParameterUse:WandLimiter.kt:WandLimiter$PeriodState</ID>
+    <ID>UnnamedParameterUse:WandLimiterTest.kt:WandLimiterTest$WandLimits</ID>
+    <ID>UnnamedParameterUse:WandSeller.kt:WandSeller$replace</ID>
+    <ID>UnnecessaryParentheses:ContainerTypes.kt:ContainerTypes$(includeShulkers &amp;&amp; Tag.SHULKER_BOXES.isTagged(material))</ID>
+    <ID>UnnecessaryParentheses:DynamicPricer.kt:DynamicPricer$(result == 0.0 &amp;&amp; baseValue != 0.0)</ID>
+    <ID>UnnecessaryParentheses:DynamicPricingConfig.kt:DynamicPricingConfig.Companion$(config.getBoolOrNull("$key.enabled") ?: true)</ID>
+    <ID>UnnecessaryParentheses:RotationPlaceholders.kt:RotationPlaceholders$(totalSeconds % 3600)</ID>
+    <ID>UnnecessaryParentheses:SellQuoter.kt:SellQuoter$(kept.firstOrNull { it.index == take.index }?.amount ?: 0)</ID>
+    <ID>UnnecessaryParentheses:ShopItem.kt:ShopItem$(result == 0.0 &amp;&amp; baseValue != 0.0)</ID>
+    <ID>UnnecessaryParentheses:TimeFormat.kt:(s % 3600)</ID>
+    <ID>UnsafeCallOnNullableType:CommandSellHand.kt:CommandSellHand$shopItem.item!!</ID>
+    <ID>UnsafeCallOnNullableType:SellEngine.kt:SellEngine$request.target.get(line.takes.first().index)!!</ID>
+    <ID>UnsafeCallOnNullableType:SellQuoter.kt:SellQuoter$candidate!!</ID>
+    <ID>UnsafeCallOnNullableType:ShopCategory.kt:ShopCategory$fixedSlotItems[idx]!!</ID>
+    <ID>UnsafeCallOnNullableType:ShopCategory.kt:ShopCategory$scheduler!!</ID>
+    <ID>UnsafeCallOnNullableType:ShopItem.kt:ShopItem$Bukkit.getPluginManager().getPermission("ecoshop.buy.*")!!</ID>
+    <ID>UnsafeCallOnNullableType:ShopItem.kt:ShopItem$Bukkit.getPluginManager().getPermission("ecoshop.sell.*")!!</ID>
+    <ID>UnsafeCallOnNullableType:ShopItem.kt:ShopItem$buyMenus[buyType]!!</ID>
+    <ID>UnsafeCallOnNullableType:ShopItem.kt:ShopItem$getBuyPrice(buyType)!!</ID>
+    <ID>UnsafeCallOnNullableType:ShopItem.kt:ShopItem$sellPrice!!</ID>
+    <ID>UnsafeCallOnNullableType:ShopItem.kt:ShopItem$when (buyType) { BuyType.NORMAL -&gt; buyPrice BuyType.ALT -&gt; altBuyPrice }!!</ID>
+    <ID>UnusedParameter:ItemFilter.kt:ItemFilter$stack: ItemStack</ID>
+    <ID>UnusedPrivateProperty:MoreMenu.kt:MoreMenu$private val key: String</ID>
+    <ID>UseIfInsteadOfWhen:ShopItem.kt:ShopItem$when (buyType) { BuyType.ALT -&gt; altBuyPrice else -&gt; buyPrice }</ID>
+    <ID>UseOrEmpty:ShopItem.kt:this?.getDisplay(player, amount.toDouble()) ?: ""</ID>
+    <ID>UseOrEmpty:ShopItemSlot.kt:ShopItemSlot$item.altBuyPrice?.getDisplay(player, item.getEffectiveBuyMultiplier(BuyType.ALT, player)) ?: ""</ID>
+    <ID>UseOrEmpty:ShopItemSlot.kt:ShopItemSlot$item.buyPrice?.getDisplay(player, item.getEffectiveBuyMultiplier(BuyType.NORMAL, player)) ?: ""</ID>
+    <ID>UseOrEmpty:ShopItemSlot.kt:ShopItemSlot$item.getBuyPrice(buyType)?.getDisplay(player, buyDisplayMultiplier) ?: ""</ID>
+    <ID>UseOrEmpty:ShopItemSlot.kt:ShopItemSlot$item.sellPrice?.getDisplay(player, item.getEffectiveSellMultiplier(player)) ?: ""</ID>
+    <ID>UseOrEmpty:ShopItemSlot.kt:ShopItemSlot$meta?.lore ?: emptyList()</ID>
+    <ID>UseOrEmpty:ShopLogger.kt:ShopLogger$source?.let { " via $it" } ?: ""</ID>
+  </CurrentIssues>
+</SmellBaseline>
