@@ -66,15 +66,15 @@ class DynamicPricerTest {
     }
 
     @Test
-    fun `elapsed periods counts whole periods only`() {
-        assertEquals(0L, DynamicPricer.elapsedDecayPeriods(59, 60))
-        assertEquals(1L, DynamicPricer.elapsedDecayPeriods(60, 60))
-        assertEquals(10L, DynamicPricer.elapsedDecayPeriods(659, 60))
-        assertEquals(1L, DynamicPricer.elapsedDecayPeriods(5, 0))
+    fun `elapsed counts whole periods`() {
+        assertEquals(0L, DynamicPricer.elapsedDecayPeriods(elapsedSeconds = 59, periodSeconds = 60))
+        assertEquals(1L, DynamicPricer.elapsedDecayPeriods(elapsedSeconds = 60, periodSeconds = 60))
+        assertEquals(10L, DynamicPricer.elapsedDecayPeriods(elapsedSeconds = 659, periodSeconds = 60))
+        assertEquals(1L, DynamicPricer.elapsedDecayPeriods(elapsedSeconds = 5, periodSeconds = 0))
     }
 
     @Test
-    fun `single period decay matches one step`() {
+    fun `one period decays one step`() {
         assertEquals(90, DynamicPricer.decay(100, 0.1, 1))
     }
 
