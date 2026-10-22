@@ -89,7 +89,9 @@ object CommandResetSells : Subcommand(
         var playerCount = 0
 
         forEachSavedProfile(plugin, onProgress = { _, total -> playerCount = total }) { uuid ->
-            PlayerProfile.load(uuid).let { profile -> resets.forEach { (item, reset) -> item.resetTimesSold(uuid, profile, reset) } }
+            PlayerProfile.load(uuid).let { profile ->
+                resets.forEach { (item, reset) -> item.resetTimesSold(uuid, profile, reset) }
+            }
         }.whenComplete { _, _ ->
             resets.forEach { (item, reset) -> item.finishResetAllTimesSold(reset) }
         }.thenRun {

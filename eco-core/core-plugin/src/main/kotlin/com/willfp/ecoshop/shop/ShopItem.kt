@@ -301,11 +301,9 @@ class ShopItem(
 
     private val counterLock = Any()
 
-    @Volatile
-    private var pendingBuyReset: MutableSet<UUID>? = null
+    private val buyReset = GlobalCounterReset(lock = counterLock, key = timesBoughtKey)
 
-    @Volatile
-    private var pendingSellReset: MutableSet<UUID>? = null
+    private val sellReset = GlobalCounterReset(lock = counterLock, key = timesSoldKey)
 
     init {
         if (this.item != null && this.item.item.amount != 1) {
@@ -436,7 +434,7 @@ class ShopItem(
 
     /** Get the total amount of times a player has bought this item. */
     fun getTotalBuys(player: OfflinePlayer): Int {
-        pendingBuyReset?.let { claimReset(it, timesBoughtKey, player.uniqueId, player.profile) }
+        buyReset.claimPending(player.uniqueId, player.profile)
         return player.profile.read(timesBoughtKey)
     }
 
@@ -492,7 +490,7 @@ class ShopItem(
 
     /** Get the total amount of times a player has sold this item. */
     fun getTotalSells(player: OfflinePlayer): Int {
-        pendingSellReset?.let { claimReset(it, timesSoldKey, player.uniqueId, player.profile) }
+        sellReset.claimPending(player.uniqueId, player.profile)
         return player.profile.read(timesSoldKey)
     }
 
@@ -757,21 +755,14 @@ class ShopItem(
      * Start resetting buys for every player. Players are reset with [resetTimesBought] as the
      * scan reaches them, or on their first buy before that, so no buy is lost during the scan.
      */
-    fun startResetAllTimesBought(): MutableSet<UUID> = synchronized(counterLock) {
-        Bukkit.getServer().profile.write(timesBoughtKey, 0)
-        mutableSetOf<UUID>().also { pendingBuyReset = it }
-    }
+    fun startResetAllTimesBought(): MutableSet<UUID> = buyReset.start()
 
     fun resetTimesBought(uuid: UUID, profile: Profile, reset: MutableSet<UUID>) {
-        if (pendingBuyReset === reset) {
-            claimReset(reset, timesBoughtKey, uuid, profile)
-        }
+        buyReset.reset(uuid, profile, reset)
     }
 
-    fun finishResetAllTimesBought(reset: MutableSet<UUID>) = synchronized(counterLock) {
-        if (pendingBuyReset === reset) {
-            pendingBuyReset = null
-        }
+    fun finishResetAllTimesBought(reset: MutableSet<UUID>) {
+        buyReset.finish(reset)
     }
 
     fun resetTimesSold(player: OfflinePlayer) {
@@ -785,29 +776,14 @@ class ShopItem(
      * Start resetting sells for every player. Players are reset with [resetTimesSold] as the
      * scan reaches them, or on their first sell before that, so no sell is lost during the scan.
      */
-    fun startResetAllTimesSold(): MutableSet<UUID> = synchronized(counterLock) {
-        Bukkit.getServer().profile.write(timesSoldKey, 0)
-        mutableSetOf<UUID>().also { pendingSellReset = it }
-    }
+    fun startResetAllTimesSold(): MutableSet<UUID> = sellReset.start()
 
     fun resetTimesSold(uuid: UUID, profile: Profile, reset: MutableSet<UUID>) {
-        if (pendingSellReset === reset) {
-            claimReset(reset, timesSoldKey, uuid, profile)
-        }
+        sellReset.reset(uuid, profile, reset)
     }
 
-    fun finishResetAllTimesSold(reset: MutableSet<UUID>) = synchronized(counterLock) {
-        if (pendingSellReset === reset) {
-            pendingSellReset = null
-        }
-    }
-
-    private fun claimReset(reset: MutableSet<UUID>, key: PersistentDataKey<Int>, uuid: UUID, profile: Profile) {
-        synchronized(counterLock) {
-            if (reset.add(uuid)) {
-                profile.write(key, 0)
-            }
-        }
+    fun finishResetAllTimesSold(reset: MutableSet<UUID>) {
+        sellReset.finish(reset)
     }
 
     override fun recordSell(player: OfflinePlayer, amount: Int, bypass: SellBypass) {
