@@ -103,7 +103,13 @@ class ShopCategory(
 
         addPageChanger(config, "gui.forwards-arrow", PageChanger.Direction.FORWARDS, pageChangeSound)
 
-        addPageChanger(config, "gui.backwards-arrow", PageChanger.Direction.BACKWARDS, pageChangeSound, hideInactive = true)
+        addPageChanger(
+            config,
+            "gui.backwards-arrow",
+            PageChanger.Direction.BACKWARDS,
+            pageChangeSound,
+            hideInactive = true
+        )
 
         // (page, row, column) -> r-slot index, scanned from every page's mask pattern.
         val rSlotPositions = mutableMapOf<Triple<Int, Int, Int>, Int>()
