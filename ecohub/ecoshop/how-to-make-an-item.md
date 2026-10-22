@@ -137,7 +137,7 @@ buy:
 
 #### `max-at-once`
 
-Caps how many a player can buy in one go, and removes the multi-buy GUI. Defaults to unlimited.
+Caps how many a player can buy in one go, and removes the multi-buy GUI. Defaults to unlimited. Buying more than this at once (for example a quick-buy `amount` above it, or a `buy_item` effect) is refused with `buy-status.too-many-at-once` from `lang.yml`.
 
 ```yaml
 buy:
