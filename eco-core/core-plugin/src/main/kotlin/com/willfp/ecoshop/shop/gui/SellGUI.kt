@@ -18,13 +18,9 @@ object SellGUI {
     @Volatile
     private lateinit var menu: Menu
 
-    @Volatile
-    private var strictSellMatch = false
-
     @JvmStatic
     fun update() {
         val rows = plugin.configYml.getInt("sell-gui.rows")
-        strictSellMatch = plugin.configYml.getBoolOrNull("shop-items.sell-strict-match") ?: true
 
         menu = menu(rows) {
             title = plugin.configYml.getFormattedString("sell-gui.title")
@@ -42,14 +38,8 @@ object SellGUI {
                             setCaptiveFilter { player, _, itemStack ->
                                 if (itemStack == null) return@setCaptiveFilter true
 
-                                if (!strictSellMatch) {
-                                    return@setCaptiveFilter ShopItems.values().any { shopItem ->
-                                        shopItem.item?.matches(itemStack) == true && shopItem.isSellable
-                                    }
-                                }
-
                                 ShopItems.values().any { shopItem ->
-                                    itemStack.isSimilar(shopItem.item?.item) && shopItem.isSellable
+                                    shopItem.matchesForSale(itemStack) && shopItem.isSellable
                                 }
                             }
                         }

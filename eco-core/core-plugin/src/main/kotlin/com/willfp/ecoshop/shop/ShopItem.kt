@@ -732,8 +732,7 @@ class ShopItem(
             if (itemStack == null) {
                 continue
             }
-            val matches = if (isStrictMatch) itemStack.isSimilar(item.item) else item.matches(itemStack)
-            if (!matches) {
+            if (!matchesForSale(itemStack)) {
                 continue
             }
 
@@ -803,6 +802,8 @@ fun ConfiguredPrice?.getDisplay(player: Player, amount: Number): String =
 private val itemCache = EcoCache.builder<HashedItem, Optional<ShopItem>>()
     .expireAfterAccess(Duration.ofSeconds(5))
     .build()
+
+internal fun clearShopItemCache() = itemCache.invalidateAll()
 
 val ItemStack.shopItem: ShopItem?
     get() = itemCache.get(HashedItem.of(this)) {
