@@ -67,6 +67,8 @@ class ShopItem(
 ) : KRegistrable, SellCandidate {
     override val id: String = config.getString("id")
 
+    private val dynamicPricingState = DynamicPricingState(id)
+
     val dynamicPricing: DynamicPricingConfig? = run {
         val hasBuyDp = config.has("buy") && config.getSubsection("buy").has("dynamic-pricing")
         val hasAltBuyDp = config.has("alt-buy") && config.getSubsection("alt-buy").has("dynamic-pricing")
@@ -204,9 +206,9 @@ class ShopItem(
 
     override fun totalGlobalSells(): Int = getTotalGlobalSells()
 
-    override fun dynamicGlobalBuys(): Int = getDynamicGlobalBuys()
+    override fun dynamicGlobalBuys(): Int = dynamicPricingState.globalBuys()
 
-    override fun dynamicGlobalSells(): Int = getDynamicGlobalSells()
+    override fun dynamicGlobalSells(): Int = dynamicPricingState.globalSells()
 
     override fun hasSellPermission(player: Player): Boolean = player.hasPermission("ecoshop.sell.$id")
 
@@ -281,35 +283,11 @@ class ShopItem(
         0
     )
 
-    private val dynamicBuysKey = PersistentDataKey(
-        plugin.createNamespacedKey("${id}_dp_buys"),
-        PersistentDataKeyType.INT,
-        0
-    )
-
-    private val dynamicSellsKey = PersistentDataKey(
-        plugin.createNamespacedKey("${id}_dp_sells"),
-        PersistentDataKeyType.INT,
-        0
-    )
-
-    private val legacyLastDecayTimeKey = PersistentDataKey(
-        plugin.createNamespacedKey("${id}_dp_last_decay"),
-        PersistentDataKeyType.INT,
-        0
-    )
-
     private val counterLock = Any()
 
     private val buyReset = GlobalCounterReset(lock = counterLock, key = timesBoughtKey)
 
     private val sellReset = GlobalCounterReset(lock = counterLock, key = timesSoldKey)
-
-    private val lastDecayTimeKey = PersistentDataKey(
-        plugin.createNamespacedKey("${id}_dp_last_decay_time"),
-        PersistentDataKeyType.DOUBLE,
-        0.0
-    )
 
     init {
         if (this.item != null && this.item.item.amount != 1) {
@@ -397,8 +375,8 @@ class ShopItem(
 
         val substituted = formula
             .replace("%base_price%", baseValue.toString())
-            .replace("%buys%", getDynamicGlobalBuys().toString())
-            .replace("%sells%", getDynamicGlobalSells().toString())
+            .replace("%buys%", dynamicPricingState.globalBuys().toString())
+            .replace("%sells%", dynamicPricingState.globalSells().toString())
 
         val result = NumberUtils.evaluateExpression(substituted)
         if (result.isNaN() || result.isInfinite() || (result == 0.0 && baseValue != 0.0)) {
@@ -424,7 +402,7 @@ class ShopItem(
     fun getEffectiveSellMultiplier(player: Player): Double {
         val baseValue = sellPrice?.getValue(player) ?: return 1.0
         return DynamicPricer.sellFactor(
-            dynamicPricing?.sell, baseValue, getDynamicGlobalBuys(), getDynamicGlobalSells(), id
+            dynamicPricing?.sell, baseValue, dynamicPricingState.globalBuys(), dynamicPricingState.globalSells(), id
         )
     }
 
@@ -449,51 +427,14 @@ class ShopItem(
         return Bukkit.getServer().profile.read(timesBoughtKey)
     }
 
-    private fun getDynamicGlobalBuys(): Int =
-        Bukkit.getServer().profile.read(dynamicBuysKey)
-
-    private fun getDynamicGlobalSells(): Int =
-        Bukkit.getServer().profile.read(dynamicSellsKey)
-
-    fun hasDynamicActivity(): Boolean =
-        getDynamicGlobalBuys() > 0 || getDynamicGlobalSells() > 0
+    fun hasDynamicActivity(): Boolean = dynamicPricingState.hasActivity()
 
     fun resetDynamicPricing() {
-        Bukkit.getServer().profile.write(dynamicBuysKey, 0)
-        Bukkit.getServer().profile.write(dynamicSellsKey, 0)
-        Bukkit.getServer().profile.write(lastDecayTimeKey, 0.0)
-        Bukkit.getServer().profile.write(legacyLastDecayTimeKey, 0)
+        dynamicPricingState.reset()
     }
 
-    private fun getLastDecayTime(): Long =
-        Bukkit.getServer().profile.read(lastDecayTimeKey).toLong().takeIf { it > 0 }
-            ?: Bukkit.getServer().profile.read(legacyLastDecayTimeKey).toLong()
-
     fun applyDecay() {
-        val dp = dynamicPricing ?: return
-        if (!dp.decayEnabled || dp.decayRate <= 0.0) return
-
-        val nowSeconds = System.currentTimeMillis() / 1000L
-        val lastDecay = getLastDecayTime()
-
-        if (lastDecay == 0L) {
-            Bukkit.getServer().profile.write(lastDecayTimeKey, nowSeconds.toDouble())
-            return
-        }
-
-        val periodSeconds = dp.decayPeriodMinutes * 60L
-        val periods = DynamicPricer.elapsedDecayPeriods(nowSeconds - lastDecay, periodSeconds)
-        if (periods < 1) return
-
-        Bukkit.getServer().profile.write(
-            dynamicBuysKey,
-            DynamicPricer.decay(getDynamicGlobalBuys(), dp.decayRate, periods)
-        )
-        Bukkit.getServer().profile.write(
-            dynamicSellsKey,
-            DynamicPricer.decay(getDynamicGlobalSells(), dp.decayRate, periods)
-        )
-        Bukkit.getServer().profile.write(lastDecayTimeKey, (lastDecay + periods * periodSeconds).toDouble())
+        dynamicPricingState.applyDecay(dynamicPricing ?: return)
     }
 
     /** Get the max amount of times this player can sell this item again. */
@@ -645,7 +586,7 @@ class ShopItem(
         synchronized(counterLock) {
             player.profile.write(timesBoughtKey, getTotalBuys(player) + amount)
             Bukkit.getServer().profile.write(timesBoughtKey, getTotalGlobalBuys() + amount)
-            Bukkit.getServer().profile.write(dynamicBuysKey, getDynamicGlobalBuys() + amount)
+            dynamicPricingState.addBuys(amount)
         }
 
         if (shop?.isBroadcasting == true) {
@@ -821,7 +762,7 @@ class ShopItem(
                 Bukkit.getServer().profile.write(timesSoldKey, getTotalGlobalSells() + amount)
             }
             if (!bypass.dynamicPricing) {
-                Bukkit.getServer().profile.write(dynamicSellsKey, getDynamicGlobalSells() + amount)
+                dynamicPricingState.addSells(amount)
             }
         }
     }
