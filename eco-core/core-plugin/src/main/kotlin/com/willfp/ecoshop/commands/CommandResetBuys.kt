@@ -84,12 +84,16 @@ object CommandResetBuys : Subcommand(
     }
 
     private fun resetAllPlayers(sender: CommandSender, items: List<ShopItem>) {
-        items.forEach { it.resetGlobalTimesBought() }
+        val resets = items.associateWith { it.startResetAllTimesBought() }
 
         var playerCount = 0
 
         forEachSavedProfile(plugin, onProgress = { _, total -> playerCount = total }) { uuid ->
-            PlayerProfile.load(uuid).let { profile -> items.forEach { it.resetTimesBought(profile) } }
+            PlayerProfile.load(uuid).let { profile ->
+                resets.forEach { (item, reset) -> item.resetTimesBought(uuid, profile, reset) }
+            }
+        }.whenComplete { _, _ ->
+            resets.forEach { (item, reset) -> item.finishResetAllTimesBought(reset) }
         }.thenRun {
             plugin.scheduler.global().run {
                 if (playerCount == 0) {
