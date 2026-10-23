@@ -126,6 +126,24 @@ alt-buy:
   display: "&b%value% ❖"
 ```
 
+#### `prices`
+
+Charges several currencies together for one purchase. List them under `prices` in place of `type`, `value`, and `display`; the player must afford every one, and all are paid. Works in `buy`, `alt-buy`, and `sell` (selling gives every listed price).
+
+```yaml
+buy:
+  prices:
+    - type: coins
+      value: 1000
+      display: "$%value%"
+    - type: levels
+      value: 5
+      display: "%value% Levels"
+  limit: 3 # Other buy fields stay beside the list.
+```
+
+The menu shows the prices separated by commas, e.g. `$1000, 5 Levels`. See [Combining Prices](https://hub.auxilor.io/wiki/eco/the-price-lookup-system#combining-prices).
+
 #### `amount`
 
 The default, or quick-buy, amount handed over per purchase. Defaults to `1`.
