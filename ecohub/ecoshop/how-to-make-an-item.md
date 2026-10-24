@@ -328,13 +328,13 @@ These placeholders are available in an item's `display`, `bottom-lore`, and pric
 | `%amount%` | The amount of items the player bought |
 | `%value%` | The buy/sell value, for use in a price display |
 | `%value_commas%` | The comma-separated buy/sell value |
-| `%playerlimit%` | The per-player purchase limit for the item |
+| `%playerlimit%` | The per-player purchase limit for the item, or the `infinite` lang key (`∞` by default) if unlimited |
 | `%playerbuys%` | The number of times the player has bought this item |
-| `%globallimit%` | The global purchase limit for the item |
+| `%globallimit%` | The global purchase limit for the item, or the `infinite` lang key (`∞` by default) if unlimited |
 | `%globalbuys%` | The number of times the item has been bought globally |
-| `%playerselllimit%` | The per-player sell limit for the item |
+| `%playerselllimit%` | The per-player sell limit for the item, or the `infinite` lang key (`∞` by default) if unlimited |
 | `%playersells%` | The number of times the player has sold this item |
-| `%globalselllimit%` | The global sell limit for the item |
+| `%globalselllimit%` | The global sell limit for the item, or the `infinite` lang key (`∞` by default) if unlimited |
 | `%globalsells%` | The number of times the item has been sold globally |
 
 :::tip Troubleshooting

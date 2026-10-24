@@ -4,6 +4,7 @@ import com.willfp.eco.core.command.impl.Subcommand
 import com.willfp.eco.util.savedDisplayName
 import com.willfp.ecoshop.plugin
 import com.willfp.ecoshop.sellchest.SellChestLimits
+import com.willfp.ecoshop.util.infiniteDisplay
 import org.bukkit.Bukkit
 import org.bukkit.command.CommandSender
 import org.bukkit.util.StringUtil
@@ -49,7 +50,7 @@ object CommandSellChestCount : Subcommand(
                 .replace("%count%", SellChestLimits.count(player).toString())
                 .replace("%limit%", when {
                     limit == null -> "?"
-                    limit < 0 -> "∞"
+                    limit < 0 -> infiniteDisplay
                     else -> limit.toString()
                 })
         )

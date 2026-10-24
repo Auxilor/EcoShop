@@ -19,6 +19,7 @@ import com.willfp.ecoshop.shop.ShopItem
 import com.willfp.ecoshop.shop.configKey
 import com.willfp.ecoshop.shop.getDisplay
 import com.willfp.ecoshop.shop.parentShop
+import com.willfp.ecoshop.util.toLimitDisplay
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 
@@ -233,13 +234,13 @@ class ShopItemSlot(
             @Suppress("DEPRECATION")
             val lore = (meta?.lore ?: emptyList())
                 .replaceIn("%playerbuys%", item.getTotalBuys(player))
-                .replaceIn("%playerlimit%", item.limit)
+                .replaceIn("%playerlimit%", item.limit.toLimitDisplay())
                 .replaceIn("%globalbuys%", item.getTotalGlobalBuys())
-                .replaceIn("%globallimit%", item.globalLimit)
+                .replaceIn("%globallimit%", item.globalLimit.toLimitDisplay())
                 .replaceIn("%playersells%", item.getTotalSells(player))
-                .replaceIn("%playerselllimit%", item.sellLimit)
+                .replaceIn("%playerselllimit%", item.sellLimit.toLimitDisplay())
                 .replaceIn("%globalsells%", item.getTotalGlobalSells())
-                .replaceIn("%globalselllimit%", item.globalSellLimit)
+                .replaceIn("%globalselllimit%", item.globalSellLimit.toLimitDisplay())
 
 
             @Suppress("DEPRECATION")

@@ -24,7 +24,7 @@ class WandItemTest {
 
     @Test
     fun `infinite uses render as infinity`() {
-        assertEquals(listOf("∞/∞"), renderWandLore(listOf("%uses%/%max_uses%"), -1, -1, 1.0))
+        assertEquals(listOf("∞/∞"), renderWandLore(listOf("%uses%/%max_uses%"), -1, -1, 1.0, infinite = "∞"))
     }
 
     @Test

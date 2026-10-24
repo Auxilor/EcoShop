@@ -4,6 +4,7 @@ import com.willfp.eco.core.fast.fast
 import com.willfp.ecoshop.plugin
 import com.willfp.ecoshop.sell.SellTotals
 import com.willfp.ecoshop.sell.SellValueFormat
+import com.willfp.ecoshop.util.infiniteDisplay
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import org.bukkit.persistence.PersistentDataType
@@ -19,9 +20,10 @@ internal fun renderWandLore(
     maxUses: Int,
     multiplier: Double,
     soldItems: Long = 0,
-    soldValue: String = "0"
+    soldValue: String = "0",
+    infinite: String? = null
 ): List<String> {
-    fun fmt(value: Int) = if (value < 0) "∞" else value.toString()
+    fun fmt(value: Int) = if (value < 0) infinite ?: infiniteDisplay else value.toString()
     return template.map {
         it.replace("%uses%", fmt(uses))
             .replace("%max_uses%", fmt(maxUses))

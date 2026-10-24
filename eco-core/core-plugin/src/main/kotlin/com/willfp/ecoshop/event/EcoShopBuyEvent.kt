@@ -13,8 +13,11 @@ class EcoShopBuyEvent(
     override var price: Price,
     val buyType: BuyType,
     val amount: Int,
-    val payAmount: Double
+    private val payAmountFor: (Price) -> Double
 ) : PlayerEvent(who), ShopEvent {
+    /** The multiplier [price] is paid with, worked out again when [price] is replaced. */
+    val payAmount: Double
+        get() = payAmountFor(price)
 
     // Below here is bukkit boilerplate
     override fun getHandlers(): HandlerList {
