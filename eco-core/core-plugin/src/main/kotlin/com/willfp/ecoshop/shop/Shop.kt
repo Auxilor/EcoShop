@@ -1,14 +1,14 @@
 package com.willfp.ecoshop.shop
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.eco.core.gui.addCustomSlots
 import com.willfp.eco.core.gui.addPage
 import com.willfp.eco.core.gui.addPageChanger
+import com.willfp.eco.core.gui.getSlotLocations
 import com.willfp.eco.core.gui.menu
 import com.willfp.eco.core.gui.menu.Menu
 import com.willfp.eco.core.gui.page.PageChanger
-import com.willfp.eco.core.gui.slot.ConfigSlot
-import com.willfp.eco.core.gui.slot.FillerMask
-import com.willfp.eco.core.gui.slot.MaskItems
+import com.willfp.eco.core.gui.setMask
 import com.willfp.eco.core.registry.KRegistrable
 import com.willfp.eco.core.sound.PlayableSound
 import com.willfp.eco.util.StringUtils
@@ -85,30 +85,17 @@ class Shop(
             val pageNumber = pageConfig.getInt("page")
 
             addPage(pageNumber) {
-                setMask(
-                    FillerMask(
-                        MaskItems.fromItemNames(pageConfig.getStrings("mask.items")),
-                        *pageConfig.getStrings("mask.pattern").toTypedArray()
-                    )
-                )
+                setMask(pageConfig)
 
                 for (config in pageConfig.getSubsections("categories")) {
                     val category = ShopCategories.getByID(config.getString("id")) ?: continue
 
-                    setSlot(
-                        config.getInt("row"),
-                        config.getInt("column"),
-                        category.slot
-                    )
+                    for (location in config.getSlotLocations()) {
+                        setSlot(location.row, location.column, category.slot)
+                    }
                 }
 
-                for (config in pageConfig.getSubsections("custom-slots")) {
-                    setSlot(
-                        config.getInt("row"),
-                        config.getInt("column"),
-                        ConfigSlot(config)
-                    )
-                }
+                addCustomSlots(pageConfig, "")
             }
         }
 

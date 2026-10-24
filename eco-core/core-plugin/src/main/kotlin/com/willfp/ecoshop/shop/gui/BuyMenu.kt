@@ -1,12 +1,14 @@
 package com.willfp.ecoshop.shop.gui
 
+import com.willfp.eco.core.gui.addCustomSlots
+import com.willfp.eco.core.gui.component.ConfigButton
+import com.willfp.eco.core.gui.component.addComponent
+import com.willfp.eco.core.gui.getSlotLocations
 import com.willfp.eco.core.gui.menu
 import com.willfp.eco.core.gui.menu.Menu
 import com.willfp.eco.core.gui.onLeftClick
+import com.willfp.eco.core.gui.setMask
 import com.willfp.eco.core.gui.slot
-import com.willfp.eco.core.gui.slot.ConfigSlot
-import com.willfp.eco.core.gui.slot.FillerMask
-import com.willfp.eco.core.gui.slot.MaskItems
 import com.willfp.eco.core.items.Items
 import com.willfp.eco.core.items.builder.modify
 import com.willfp.ecoshop.plugin
@@ -75,139 +77,126 @@ class BuyMenu(
 
         allowChangingHeldItem()
 
-        setMask(
-            FillerMask(
-                MaskItems.fromItemNames(
-                    plugin.configYml.getStrings("buy-menu.mask.items")
-                ),
-                *plugin.configYml.getStrings("buy-menu.mask.pattern").toTypedArray()
-            )
-        )
+        setMask(plugin.configYml, "buy-menu")
 
-        setSlot(
-            plugin.configYml.getInt("buy-menu.item.row"),
-            plugin.configYml.getInt("buy-menu.item.column"),
-            slot { player, menu ->
-                item.displayItem.modify {
-                    val amount = menu.amountOfItem[player]
+        for (location in plugin.configYml.getSlotLocations("buy-menu.item")) {
+            setSlot(
+                location.row,
+                location.column,
+                slot { player, menu ->
+                    item.displayItem.modify {
+                        val amount = menu.amountOfItem[player]
 
-                    setAmount(amount)
+                        setAmount(amount)
 
-                    setDisplayName(item.displayName)
+                        setDisplayName(item.displayName)
 
-                    addLoreLines(
-                        plugin.langYml.getStrings("confirm-buy-price")
-                            .replaceIn("%price%", item.getBuyPrice(buyType).getDisplay(player, amount * item.getEffectiveBuyMultiplier(buyType, player)))
-                            .replaceIn("%amount%", amount.toString())
-                    )
+                        addLoreLines(
+                            plugin.langYml.getStrings("confirm-buy-price")
+                                .replaceIn("%price%", item.getBuyPrice(buyType).getDisplay(player, amount * item.getEffectiveBuyMultiplier(buyType, player)))
+                                .replaceIn("%amount%", amount.toString())
+                        )
+                    }
                 }
-            }
-        )
+            )
+        }
 
         addComponent(
-            plugin.configYml.getInt("buy-menu.buy-more.row"),
-            plugin.configYml.getInt("buy-menu.buy-more.column"),
-            slot(Items.lookup(plugin.configYml.getString("buy-menu.buy-more.item"))) {
-                onLeftClick { player, _, _, menu ->
-                    menu.parentShop[player]?.clickSound?.playTo(player)
-                    buyMoreMenu.open(player, menu)
-                }
+            ConfigButton(plugin.configYml.getSubsection("buy-menu.buy-more")) { player, _, _, menu ->
+                menu.parentShop[player]?.clickSound?.playTo(player)
+                buyMoreMenu.open(player, menu)
             }
         )
 
         for (config in plugin.configYml.getSubsections("buy-menu.add-buttons")) {
-            addComponent(
-                config.getInt("row"),
-                config.getInt("column"),
-                AmountAdjustSelector(
-                    item,
-                    config.getInt("add"),
-                    config
+            for (location in config.getSlotLocations()) {
+                addComponent(
+                    location.row,
+                    location.column,
+                    AmountAdjustSelector(
+                        item,
+                        config.getInt("add"),
+                        config
+                    )
                 )
-            )
+            }
         }
 
         for (config in plugin.configYml.getSubsections("buy-menu.set-buttons")) {
-            addComponent(
-                config.getInt("row"),
-                config.getInt("column"),
-                AmountSetSelector(
-                    config
-                ) {
-                    min(
-                        item.getMaxBuysAtOnce(it),
-                        item.item?.item?.type?.maxStackSize ?: Int.MAX_VALUE
-                    ).coerceAtMost(
+            for (location in config.getSlotLocations()) {
+                addComponent(
+                    location.row,
+                    location.column,
+                    AmountSetSelector(
+                        config
+                    ) {
                         min(
-                            64,
-                            config.getInt("set")
-                        )
-                    )
-                }
-            )
-        }
-
-        setSlot(
-            plugin.configYml.getInt("buy-menu.cancel.row"),
-            plugin.configYml.getInt("buy-menu.cancel.column"),
-            slot(Items.lookup(plugin.configYml.getString("buy-menu.cancel.item"))) {
-                onLeftClick { player, _, _, menu ->
-                    menu.kickBack(player)
-                }
-            }
-        )
-
-        setSlot(
-            plugin.configYml.getInt("buy-menu.confirm.row"),
-            plugin.configYml.getInt("buy-menu.confirm.column"),
-            slot({ player, menu ->
-                Items.lookup(plugin.configYml.getString("buy-menu.confirm.item")).modify {
-                    addLoreLines(
-                        plugin.langYml.getStrings("confirm-buy-price")
-                            .replaceIn("%price%", item.getBuyPrice(buyType).getDisplay(player, menu.amountOfItem[player] * item.getEffectiveBuyMultiplier(buyType, player)))
-                            .replaceIn("%amount%", menu.amountOfItem[player].toString())
-                    )
-                }
-            }) {
-                onLeftClick { player, _, _, menu ->
-                    val amount = menu.amountOfItem[player]
-
-                    val status = item.getBuyStatus(player, amount, buyType)
-                    val buyDisplayMultiplier = item.getEffectiveBuyMultiplier(buyType, player)
-
-                    if (status == BuyStatus.ALLOW) {
-                        item.buy(
-                            player,
-                            amount,
-                            buyType,
-                            menu.parentShop[player]
-                        )
-
-                        player.sendMessage(
-                            plugin.langYml.getMessage("bought-item-multiple")
-                                .replace("%amount%", amount.toString())
-                                .replace("%item%", item.displayName)
-                                .replace("%price%", item.getBuyPrice(buyType).getDisplay(player, amount * buyDisplayMultiplier))
-                        )
-
-                        menu.kickBack(player)
-                    } else {
-                        player.sendMessage(
-                            plugin.langYml.getMessage("buy-status.${status.configKey}")
-                                .replace("%price%", item.getBuyPrice(buyType).getDisplay(player, amount * buyDisplayMultiplier))
+                            item.getMaxBuysAtOnce(it),
+                            item.item?.item?.type?.maxStackSize ?: Int.MAX_VALUE
+                        ).coerceAtMost(
+                            min(
+                                64,
+                                config.getInt("set")
+                            )
                         )
                     }
-                }
+                )
+            }
+        }
+
+        addComponent(
+            ConfigButton(plugin.configYml.getSubsection("buy-menu.cancel")) { player, _, _, menu ->
+                menu.kickBack(player)
             }
         )
 
-        for (config in plugin.configYml.getSubsections("buy-menu.custom-slots")) {
+        for (location in plugin.configYml.getSlotLocations("buy-menu.confirm")) {
             setSlot(
-                config.getInt("row"),
-                config.getInt("column"),
-                ConfigSlot(config)
+                location.row,
+                location.column,
+                slot({ player, menu ->
+                    Items.lookup(plugin.configYml.getString("buy-menu.confirm.item")).modify {
+                        addLoreLines(
+                            plugin.langYml.getStrings("confirm-buy-price")
+                                .replaceIn("%price%", item.getBuyPrice(buyType).getDisplay(player, menu.amountOfItem[player] * item.getEffectiveBuyMultiplier(buyType, player)))
+                                .replaceIn("%amount%", menu.amountOfItem[player].toString())
+                        )
+                    }
+                }) {
+                    onLeftClick { player, _, _, menu ->
+                        val amount = menu.amountOfItem[player]
+
+                        val status = item.getBuyStatus(player, amount, buyType)
+                        val buyDisplayMultiplier = item.getEffectiveBuyMultiplier(buyType, player)
+
+                        if (status == BuyStatus.ALLOW) {
+                            item.buy(
+                                player,
+                                amount,
+                                buyType,
+                                menu.parentShop[player]
+                            )
+
+                            player.sendMessage(
+                                plugin.langYml.getMessage("bought-item-multiple")
+                                    .replace("%amount%", amount.toString())
+                                    .replace("%item%", item.displayName)
+                                    .replace("%price%", item.getBuyPrice(buyType).getDisplay(player, amount * buyDisplayMultiplier))
+                            )
+
+                            menu.kickBack(player)
+                        } else {
+                            player.sendMessage(
+                                plugin.langYml.getMessage("buy-status.${status.configKey}")
+                                    .replace("%price%", item.getBuyPrice(buyType).getDisplay(player, amount * buyDisplayMultiplier))
+                            )
+                        }
+                    }
+                }
             )
         }
+
+        addCustomSlots(plugin.configYml, "buy-menu")
 
         onOpen { player, menu ->
             menu.amountOfItem[player] = item.buyAmount

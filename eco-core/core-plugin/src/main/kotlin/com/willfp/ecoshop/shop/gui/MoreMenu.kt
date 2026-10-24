@@ -1,14 +1,13 @@
 package com.willfp.ecoshop.shop.gui
 
+import com.willfp.eco.core.gui.addCustomSlots
+import com.willfp.eco.core.gui.component.ConfigButton
+import com.willfp.eco.core.gui.component.addComponent
+import com.willfp.eco.core.gui.getSlotLocations
 import com.willfp.eco.core.gui.menu
 import com.willfp.eco.core.gui.menu.Menu
-import com.willfp.eco.core.gui.onLeftClick
-import com.willfp.eco.core.gui.slot
-import com.willfp.eco.core.gui.slot.ConfigSlot
-import com.willfp.eco.core.gui.slot.FillerMask
-import com.willfp.eco.core.gui.slot.MaskItems
+import com.willfp.eco.core.gui.setMask
 import com.willfp.eco.core.gui.slot.Slot
-import com.willfp.eco.core.items.Items
 import com.willfp.ecoshop.plugin
 import com.willfp.ecoshop.shop.ShopItem
 import com.willfp.ecoshop.shop.kickBack
@@ -27,14 +26,7 @@ class MoreMenu(
 
         allowChangingHeldItem()
 
-        setMask(
-            FillerMask(
-                MaskItems.fromItemNames(
-                    plugin.configYml.getStrings("$key-more.mask.items")
-                ),
-                *plugin.configYml.getStrings("$key-more.mask.pattern").toTypedArray()
-            )
-        )
+        setMask(plugin.configYml, "$key-more")
 
         // Command/effect-only items have no item, so fall back to the display item's stack size.
         val stackSize = (item.item?.item ?: item.displayItem).maxStackSize.takeIf { it > 0 } ?: 64
@@ -43,30 +35,18 @@ class MoreMenu(
             val stacks = config.getInt("stacks")
             val amount = stacks * stackSize
 
-            setSlot(
-                config.getInt("row"),
-                config.getInt("column"),
-                slotBuilder(amount, stacks)
-            )
+            for (location in config.getSlotLocations()) {
+                setSlot(location.row, location.column, slotBuilder(amount, stacks))
+            }
         }
 
-        setSlot(
-            plugin.configYml.getInt("$key-more.back.row"),
-            plugin.configYml.getInt("$key-more.back.column"),
-            slot(Items.lookup(plugin.configYml.getString("$key-more.back.item"))) {
-                onLeftClick { player, _, _, menu ->
-                    menu.kickBack(player)
-                }
+        addComponent(
+            ConfigButton(plugin.configYml.getSubsection("$key-more.back")) { player, _, _, menu ->
+                menu.kickBack(player)
             }
         )
 
-        for (config in plugin.configYml.getSubsections("$key-more.custom-slots")) {
-            setSlot(
-                config.getInt("row"),
-                config.getInt("column"),
-                ConfigSlot(config)
-            )
-        }
+        addCustomSlots(plugin.configYml, "$key-more")
     }
 
     fun open(player: Player, previousMenu: Menu) {

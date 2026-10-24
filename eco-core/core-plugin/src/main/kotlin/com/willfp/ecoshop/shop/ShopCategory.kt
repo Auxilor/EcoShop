@@ -1,16 +1,18 @@
 package com.willfp.ecoshop.shop
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.eco.core.gui.addCustomSlots
 import com.willfp.eco.core.gui.addPage
 import com.willfp.eco.core.gui.addPageChanger
+import com.willfp.eco.core.gui.component.ConfigButton
+import com.willfp.eco.core.gui.component.addComponent
 import com.willfp.eco.core.gui.menu
 import com.willfp.eco.core.gui.menu.Menu
+import com.willfp.eco.core.gui.menuStateVar
 import com.willfp.eco.core.gui.onLeftClick
 import com.willfp.eco.core.gui.page.PageChanger
+import com.willfp.eco.core.gui.setMask
 import com.willfp.eco.core.gui.slot
-import com.willfp.eco.core.gui.slot.ConfigSlot
-import com.willfp.eco.core.gui.slot.FillerMask
-import com.willfp.eco.core.gui.slot.MaskItems
 import com.willfp.eco.core.gui.slot.Slot
 import com.willfp.eco.core.items.Items
 import com.willfp.eco.core.items.builder.modify
@@ -19,7 +21,6 @@ import com.willfp.eco.core.sound.PlayableSound
 import com.willfp.eco.util.StringUtils
 import com.willfp.eco.util.formatEco
 import com.willfp.eco.util.openMenu
-import com.willfp.ecomponent.menuStateVar
 import com.willfp.ecoshop.plugin
 import com.willfp.ecoshop.runOwned
 import com.willfp.ecoshop.shop.gui.RotationSlot
@@ -102,19 +103,12 @@ class ShopCategory(
 
         addPageChanger(config, "gui.forwards-arrow", PageChanger.Direction.FORWARDS, pageChangeSound)
 
-        val backwardsActive = Items.lookup(config.getString("gui.backwards-arrow.item")).item
-        val backwardsRow = config.getIntOrNull("gui.backwards-arrow.location.row")
-            ?: config.getInt("gui.backwards-arrow.row")
-        val backwardsColumn = config.getIntOrNull("gui.backwards-arrow.location.column")
-            ?: config.getInt("gui.backwards-arrow.column")
-
         addPageChanger(
+            config,
+            "gui.backwards-arrow",
             PageChanger.Direction.BACKWARDS,
-            backwardsActive,
-            null,
             pageChangeSound,
-            backwardsRow,
-            backwardsColumn
+            hideInactive = true
         )
 
         // (page, row, column) -> r-slot index, scanned from every page's mask pattern.
@@ -214,20 +208,11 @@ class ShopCategory(
             val pageNumber = pageConfig.getInt("page")
 
             addPage(pageNumber) {
-                setMask(
-                    FillerMask(
-                        MaskItems.fromItemNames(pageConfig.getStrings("mask.items")),
-                        *pageConfig.getStrings("mask.pattern").toTypedArray()
-                    )
-                )
+                setMask(pageConfig)
 
-                setSlot(
-                    backwardsRow,
-                    backwardsColumn,
-                    slot(backwardsActive) {
-                        onLeftClick { player, _, _, menu ->
-                            menu.kickBack(player)
-                        }
+                addComponent(
+                    ConfigButton(config.getSubsection("gui.backwards-arrow")) { player, _, _, menu ->
+                        menu.kickBack(player)
                     }
                 )
 
@@ -252,13 +237,7 @@ class ShopCategory(
                     }
                 }
 
-                for (config in pageConfig.getSubsections("custom-slots")) {
-                    setSlot(
-                        config.getInt("row"),
-                        config.getInt("column"),
-                        ConfigSlot(config)
-                    )
-                }
+                addCustomSlots(pageConfig, "")
             }
         }
     }

@@ -49,20 +49,24 @@ buy-menu:
   item:
     row: 2
     column: 5
+    locations: [ ] # Optional list of row/column slots; if set, the button shows in each of them instead of row/column
 
   buy-more:
     row: 6
     column: 5
+    locations: [ ] # Optional list of row/column slots; if set, the button shows in each of them instead of row/column
     item: emerald 64 unbreaking:1 hide_enchants name:"&aBuy More"
 
   cancel:
     row: 5
     column: 4
+    locations: [ ] # Optional list of row/column slots; if set, the button shows in each of them instead of row/column
     item: barrier name:"&cCancel"
 
   confirm:
     row: 5
     column: 6
+    locations: [ ] # Optional list of row/column slots; if set, the button shows in each of them instead of row/column
     item: diamond unbreaking:1 hide_enchants name:"&aConfirm"
 
   add-buttons:
@@ -154,6 +158,7 @@ buy-more:
   back:
     row: 2
     column: 5
+    locations: [ ] # Optional list of row/column slots; if set, the button shows in each of them instead of row/column
     item: arrow 1 name:"&cGo Back"
 
   # Custom GUI slots; see here for a how-to: https://hub.auxilor.io/wiki/eco/pages#custom-gui-slots
@@ -179,20 +184,24 @@ sell-menu:
   item:
     row: 2
     column: 5
+    locations: [ ] # Optional list of row/column slots; if set, the button shows in each of them instead of row/column
 
   sell-more:
     row: 6
     column: 5
+    locations: [ ] # Optional list of row/column slots; if set, the button shows in each of them instead of row/column
     item: emerald 64 unbreaking:1 hide_enchants name:"&aSell More"
 
   cancel:
     row: 5
     column: 4
+    locations: [ ] # Optional list of row/column slots; if set, the button shows in each of them instead of row/column
     item: barrier name:"&cCancel"
 
   confirm:
     row: 5
     column: 6
+    locations: [ ] # Optional list of row/column slots; if set, the button shows in each of them instead of row/column
     item: diamond unbreaking:1 hide_enchants name:"&aConfirm"
 
   sell-all-button:
@@ -204,6 +213,7 @@ sell-menu:
       - "&7Price: &e%price%"
     row: 3
     column: 5
+    locations: [ ] # Optional list of row/column slots; if set, the button shows in each of them instead of row/column
 
   add-buttons:
     - add: 1
@@ -294,6 +304,7 @@ sell-more:
   back:
     row: 2
     column: 5
+    locations: [ ] # Optional list of row/column slots; if set, the button shows in each of them instead of row/column
     item: arrow 1 name:"&cGo Back"
 
   # Custom GUI slots; see here for a how-to: https://hub.auxilor.io/wiki/eco/pages#custom-gui-slots
