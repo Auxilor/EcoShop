@@ -131,8 +131,8 @@ class ShopItem(
     private val _soldOutDisplayItem = (config.getStringOrNull("gui.display.sold-out-item")
         ?: plugin.configYml.getStringOrNull("shop-items.sold-out-item"))
         ?.takeIf { it.isNotBlank() }
-        ?.let {
-            ItemStackBuilder(Items.lookup(it).item)
+        ?.let { lookup ->
+            ItemStackBuilder(Items.lookup(lookup).item)
                 .setAmount(buyAmount)
                 .addLoreLines(config.getStrings("gui.display.lore"))
                 .build()
