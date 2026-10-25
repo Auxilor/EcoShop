@@ -152,7 +152,7 @@ class ShopItemSlot(
                 .replaceIn("%price%", item.buyPrice?.getDisplay(player, item.getEffectiveBuyMultiplier(BuyType.NORMAL, player)) ?: "")
                 .replaceIn("%alt_price%", item.altBuyPrice?.getDisplay(player, item.getEffectiveBuyMultiplier(BuyType.ALT, player)) ?: "")
             val status = item.getBuyStatus(player, 1, BuyType.NORMAL)
-            val itemStack = item.displayItem.modify {
+            val itemStack = item.getDisplayItem(player).modify {
                 if (item.isBuyable) {
                     addLoreLines(
                         if (status == BuyStatus.MISSING_REQUIREMENTS || status == BuyStatus.NO_PERMISSION) {

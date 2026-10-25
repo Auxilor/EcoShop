@@ -128,6 +128,20 @@ class ShopItem(
     val displayItem: ItemStack
         get() = this._displayItem.clone()
 
+    private val _soldOutDisplayItem = (config.getStringOrNull("gui.display.sold-out-item")
+        ?: plugin.configYml.getStringOrNull("shop-items.sold-out-item"))
+        ?.takeIf { it.isNotBlank() }
+        ?.let { lookup ->
+            ItemStackBuilder(Items.lookup(lookup).item)
+                .setAmount(buyAmount)
+                .addLoreLines(config.getStrings("gui.display.lore"))
+                .build()
+        }
+
+    /** Get the icon to show [player], swapped for the sold out icon once the item is out of stock. */
+    fun getDisplayItem(player: Player): ItemStack =
+        _soldOutDisplayItem?.takeIf { isSoldOut(player) }?.clone() ?: displayItem
+
     // Formatted on render for placeholder support.
     val bottomLore = config.getStrings("gui.display.bottom-lore")
 
@@ -425,6 +439,10 @@ class ShopItem(
     fun getMaxBuysAtOnce(player: Player): Int {
         return maxAtOnce.coerceAtMost(getBuysLeft(player))
     }
+
+    /** Get if this item is out of stock for [player], from their own buy limit or the global one. */
+    fun isSoldOut(player: OfflinePlayer): Boolean =
+        isBuyable && (getBuysLeft(player) <= 0 || getTotalGlobalBuys() >= globalLimit)
 
     /** Get the max amount of times this player can buy this item again. */
     fun getBuysLeft(player: OfflinePlayer): Int {

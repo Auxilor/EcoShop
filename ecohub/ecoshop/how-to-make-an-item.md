@@ -100,6 +100,16 @@ The icon is whatever `item:` resolves to, but you can override its name and lore
         - "&7You have bought &e%playerbuys%&7 of these!"
 ```
 
+#### `sold-out-item`
+
+The icon shown in place of the normal one once the item is out of stock: the player has reached the buy `limit`, or all players together have reached the `global-limit`. The name, lore and price lines stay the same. Set `shop-items.sold-out-item` in `config.yml` to give every item the same sold out icon; an item's own `sold-out-item` takes priority. With neither set, the normal icon stays.
+
+```yaml
+gui:
+  display:
+    sold-out-item: barrier # Uses Item Lookup System syntax.
+```
+
 ### Buying
 
 The `buy` block sets the price. Only `type`, `value`, and `display` are required; everything after is an optional field you add on top.
