@@ -22,6 +22,8 @@ shop-items:
 
   full-inventory-behaviour: drop-items # What to do when a player's inventory can't fit a purchase. Options: "drop-items" (drop the excess on the ground), "reject-sale" (block the purchase entirely).
 
+  sold-out-item: "" # Optional icon shown in place of an item once it is out of stock (buy limit or global limit reached), e.g. "barrier". Shop items can override it with gui.display.sold-out-item. Leave empty to keep the normal icon.
+
   global-bottom-lore: # Options for global lore to be shown on all shop icons, disabled by default.
     buy: [ ] # Shown under buyable items.
     # - "&e&oLeft Click to buy"
