@@ -13,21 +13,17 @@ import wiki.ecohub.core.event.ShopSellEvent
 import wiki.ecohub.core.price.Price
 import wiki.ecohub.provider.economy.ShopProvider
 
-object EcoShopAdapter : ShopIntegration {
+object EcoShopAdapter : ShopProvider {
     override fun getUnitValue(itemStack: ItemStack, player: Player): Price {
         val factor = itemStack.shopItem?.getEffectiveSellMultiplier(player) ?: 1.0
         return DynamicSellPrice(itemStack.getUnitSellValue(player), factor)
     }
 
-    override fun getSellEventAdapter(): Listener {
-        return SellEventAdapter
-    }
+    override fun getListeners(): Collection<Listener> = listOf(SellEventAdapter)
 
     override fun isSellable(itemStack: ItemStack, player: Player): Boolean {
         return itemStack.isSellable(player)
     }
-
-    override fun getPluginName() = "EcoShop"
 
     private object SellEventAdapter : Listener {
         @EventHandler

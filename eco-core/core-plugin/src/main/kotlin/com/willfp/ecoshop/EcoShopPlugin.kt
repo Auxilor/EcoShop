@@ -1,8 +1,7 @@
 package com.willfp.ecoshop
 
-import com.willfp.eco.core.command.impl.PluginCommand
-import com.willfp.ecoshop.commands.CommandEcoShop
-import com.willfp.ecoshop.commands.CommandSell
+import com.willfp.ecoshop.commands.ecoShopCommand
+import com.willfp.ecoshop.commands.sellCommand
 import com.willfp.ecoshop.integrations.EcoShopAdapter
 import com.willfp.ecoshop.libreforge.EffectBuyItem
 import com.willfp.ecoshop.libreforge.EffectOpenShop
@@ -27,6 +26,7 @@ import com.willfp.ecoshop.shop.Shops
 import com.willfp.ecoshop.shop.gui.SellGUI
 import org.bukkit.event.Listener
 import wiki.ecohub.config.category.NativeConfigCategory
+import wiki.ecohub.core.command.EcoCommand
 import wiki.ecohub.core.plugin.EcoPlugin
 import wiki.ecohub.core.scheduler.EcoTask
 import wiki.ecohub.provider.ExternalProviderLoader
@@ -38,16 +38,14 @@ import wiki.ecohub.rules.trigger.Triggers
 internal lateinit var plugin: EcoShopPlugin
     private set
 
-class EcoShopPlugin : LibreforgePlugin() {
+class EcoShopPlugin : EcoPlugin() {
     private var decayTask: EcoTask? = null
 
     init {
         plugin = this
-
-        ShopManager.register(EcoShopAdapter)
     }
 
-    override fun loadConfigCategories(): List<ConfigCategory> {
+    override fun loadConfigCategories(): List<NativeConfigCategory> {
         return listOf(
             SellWands,
             SellChestTypes,
@@ -92,14 +90,20 @@ class EcoShopPlugin : LibreforgePlugin() {
         ShopCategories.values().forEach { it.stopRotation() }
     }
 
+    override fun getExternalProviderLoaders(): List<ExternalProviderLoader> {
+        return listOf(
+            ExternalProviderLoader("EcoShop") { EcoShopAdapter }
+        )
+    }
+
     override fun loadListeners(): List<Listener> {
         return listOf(ShopLogListener, SellWandListener, SellChestListener)
     }
 
-    override fun loadPluginCommands(): List<PluginCommand> {
+    override fun loadPluginCommands(): List<EcoCommand> {
         return listOf(
-            CommandEcoShop,
-            CommandSell
+            ecoShopCommand(),
+            sellCommand()
         )
     }
 

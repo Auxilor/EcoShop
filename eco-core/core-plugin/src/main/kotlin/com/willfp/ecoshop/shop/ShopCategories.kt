@@ -6,22 +6,22 @@ import wiki.ecohub.core.plugin.EcoPlugin
 
 @Suppress("UNUSED")
 object ShopCategories : RegistrableCategory<ShopCategory>("category", "categories") {
-    override fun clear(plugin: LibreforgePlugin) {
+    override fun clear(plugin: EcoPlugin) {
         registry.clear()
     }
 
-    override fun beforeReload(plugin: LibreforgePlugin) {
+    override fun beforeReload(plugin: EcoPlugin) {
         // Persist + stop schedulers on the OLD categories before they are cleared.
         // Runs before clear(), so values() still holds the previous instances.
         values().forEach { it.stopRotation() }
         ShopItems.clear()
     }
 
-    override fun afterReload(plugin: LibreforgePlugin) {
+    override fun afterReload(plugin: EcoPlugin) {
         clearShopItemCache()
     }
 
-    override fun acceptConfig(plugin: LibreforgePlugin, id: String, config: Config) {
+    override fun acceptConfig(plugin: EcoPlugin, id: String, config: Config) {
         registry.register(ShopCategory(id, config))
     }
 }
