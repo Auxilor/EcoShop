@@ -1,7 +1,7 @@
 package com.willfp.ecoshop.sell
 
-import com.willfp.eco.core.config.interfaces.Config
 import org.bukkit.inventory.ItemStack
+import wiki.ecohub.config.Config
 
 /** A single filter rule. Higher [specificity] wins when several multiplier rules match. */
 sealed interface FilterRule {

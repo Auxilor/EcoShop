@@ -1,8 +1,5 @@
 package com.willfp.ecoshop
 
-import com.willfp.eco.core.placeholder.PlayerPlaceholder
-import com.willfp.eco.core.placeholder.PlayerlessPlaceholder
-import com.willfp.eco.core.placeholder.RegistrablePlaceholder
 import com.willfp.ecoshop.sellchest.SellChestLimits
 import com.willfp.ecoshop.sellwand.SellWands
 import com.willfp.ecoshop.sellwand.WandSeller
@@ -11,6 +8,9 @@ import com.willfp.ecoshop.shop.ShopCategories
 import com.willfp.ecoshop.shop.ShopItem
 import com.willfp.ecoshop.shop.rotation.RotationPlaceholders
 import com.willfp.ecoshop.util.infiniteDisplay
+import wiki.ecohub.ui.placeholder.RegistrablePlaceholder
+import wiki.ecohub.ui.placeholder.type.PlayerPlaceholder
+import wiki.ecohub.ui.placeholder.type.PlayerlessPlaceholder
 import java.util.concurrent.CopyOnWriteArrayList
 
 private val registeredPlaceholders = CopyOnWriteArrayList<RegistrablePlaceholder>()

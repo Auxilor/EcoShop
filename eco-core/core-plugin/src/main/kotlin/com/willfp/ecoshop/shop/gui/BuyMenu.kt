@@ -1,16 +1,5 @@
 package com.willfp.ecoshop.shop.gui
 
-import com.willfp.eco.core.gui.addCustomSlots
-import com.willfp.eco.core.gui.component.ConfigButton
-import com.willfp.eco.core.gui.component.addComponent
-import com.willfp.eco.core.gui.getSlotLocations
-import com.willfp.eco.core.gui.menu
-import com.willfp.eco.core.gui.menu.Menu
-import com.willfp.eco.core.gui.onLeftClick
-import com.willfp.eco.core.gui.setMask
-import com.willfp.eco.core.gui.slot
-import com.willfp.eco.core.items.Items
-import com.willfp.eco.core.items.builder.modify
 import com.willfp.ecoshop.plugin
 import com.willfp.ecoshop.shop.BuyStatus
 import com.willfp.ecoshop.shop.BuyType
@@ -21,6 +10,17 @@ import com.willfp.ecoshop.shop.kickBack
 import com.willfp.ecoshop.shop.openAndStack
 import com.willfp.ecoshop.shop.parentShop
 import org.bukkit.entity.Player
+import wiki.ecohub.game.item.Items
+import wiki.ecohub.game.item.modify
+import wiki.ecohub.modules.menus.addCustomSlots
+import wiki.ecohub.modules.menus.component.ConfigButton
+import wiki.ecohub.modules.menus.component.addComponent
+import wiki.ecohub.modules.menus.getSlotLocations
+import wiki.ecohub.modules.menus.menu
+import wiki.ecohub.modules.menus.menu.Menu
+import wiki.ecohub.modules.menus.onLeftClick
+import wiki.ecohub.modules.menus.setMask
+import wiki.ecohub.modules.menus.slot
 import kotlin.math.min
 
 class BuyMenu(

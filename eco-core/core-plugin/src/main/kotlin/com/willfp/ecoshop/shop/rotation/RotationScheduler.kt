@@ -1,12 +1,12 @@
 package com.willfp.ecoshop.shop.rotation
 
-import com.willfp.eco.core.config.interfaces.Config
-import com.willfp.eco.core.scheduling.EcoTask
-import com.willfp.eco.util.NumberUtils
 import com.willfp.ecoshop.plugin
 import com.willfp.ecoshop.runOnGlobalRegion
 import com.willfp.ecoshop.shop.ShopItem
 import org.bukkit.Bukkit
+import wiki.ecohub.config.Config
+import wiki.ecohub.core.scheduler.EcoTask
+import wiki.ecohub.math.NumberUtils
 import java.io.File
 import java.time.LocalDate
 import java.time.LocalDateTime

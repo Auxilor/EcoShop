@@ -1,12 +1,12 @@
 package com.willfp.ecoshop.commands
 
 import com.willfp.eco.core.command.impl.Subcommand
-import com.willfp.eco.util.StringUtils
 import com.willfp.ecoshop.logging.ShopLogger
 import com.willfp.ecoshop.plugin
 import org.bukkit.Bukkit
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
+import wiki.ecohub.ui.text.StringUtils
 
 object CommandHistory : Subcommand(
     plugin,

@@ -1,13 +1,13 @@
 package com.willfp.ecoshop.sellchest
 
-import com.willfp.eco.core.integrations.hologram.Hologram
-import com.willfp.eco.core.integrations.hologram.HologramManager
-import com.willfp.eco.util.StringUtils
-import com.willfp.eco.util.savedDisplayName
 import com.willfp.ecoshop.plugin
 import com.willfp.ecoshop.sell.SellTotals
 import com.willfp.ecoshop.sell.SellValueFormat
 import org.bukkit.Bukkit
+import wiki.ecohub.game.entity.player.PlayerUtils
+import wiki.ecohub.provider.hologram.Hologram
+import wiki.ecohub.provider.hologram.HologramManager
+import wiki.ecohub.ui.text.StringUtils
 import java.util.Locale
 import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap

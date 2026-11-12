@@ -1,9 +1,9 @@
 package com.willfp.ecoshop.sellchest
 
-import com.willfp.eco.core.config.interfaces.Config
-import com.willfp.eco.core.items.Items
-import com.willfp.libreforge.loader.LibreforgePlugin
-import com.willfp.libreforge.loader.configs.RegistrableCategory
+import wiki.ecohub.config.Config
+import wiki.ecohub.config.category.RegistrableCategory
+import wiki.ecohub.core.plugin.EcoPlugin
+import wiki.ecohub.game.item.Items
 
 object SellChestTypes : RegistrableCategory<SellChestType>("sellchest", "sellchests") {
     override fun clear(plugin: LibreforgePlugin) {

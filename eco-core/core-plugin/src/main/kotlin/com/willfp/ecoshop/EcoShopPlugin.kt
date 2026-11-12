@@ -1,9 +1,6 @@
 package com.willfp.ecoshop
 
-import com.willfp.eco.core.bstats.EcoMetricsChart
 import com.willfp.eco.core.command.impl.PluginCommand
-import com.willfp.eco.core.integrations.shop.ShopManager
-import com.willfp.eco.core.scheduling.EcoTask
 import com.willfp.ecoshop.commands.CommandEcoShop
 import com.willfp.ecoshop.commands.CommandSell
 import com.willfp.ecoshop.integrations.EcoShopAdapter
@@ -28,12 +25,15 @@ import com.willfp.ecoshop.shop.ShopCategories
 import com.willfp.ecoshop.shop.ShopItems
 import com.willfp.ecoshop.shop.Shops
 import com.willfp.ecoshop.shop.gui.SellGUI
-import com.willfp.libreforge.effects.Effects
-import com.willfp.libreforge.filters.Filters
-import com.willfp.libreforge.loader.LibreforgePlugin
-import com.willfp.libreforge.loader.configs.ConfigCategory
-import com.willfp.libreforge.triggers.Triggers
 import org.bukkit.event.Listener
+import wiki.ecohub.config.category.NativeConfigCategory
+import wiki.ecohub.core.plugin.EcoPlugin
+import wiki.ecohub.core.scheduler.EcoTask
+import wiki.ecohub.provider.ExternalProviderLoader
+import wiki.ecohub.provider.metrics.EcoMetricsChart
+import wiki.ecohub.rules.effect.Effects
+import wiki.ecohub.rules.filter.Filters
+import wiki.ecohub.rules.trigger.Triggers
 
 internal lateinit var plugin: EcoShopPlugin
     private set

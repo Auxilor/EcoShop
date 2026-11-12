@@ -1,7 +1,7 @@
 package com.willfp.ecoshop.shop
 
-import com.willfp.eco.core.config.interfaces.Config
-import com.willfp.eco.util.StringUtils
+import wiki.ecohub.config.Config
+import wiki.ecohub.ui.text.StringUtils
 
 data class PriceDynamicConfig(
     val enabled: Boolean,

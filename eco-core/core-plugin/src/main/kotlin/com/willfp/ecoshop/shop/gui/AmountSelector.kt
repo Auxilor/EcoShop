@@ -1,16 +1,16 @@
 package com.willfp.ecoshop.shop.gui
 
-import com.willfp.eco.core.config.interfaces.Config
-import com.willfp.eco.core.gui.GUIComponent
-import com.willfp.eco.core.gui.menu.Menu
-import com.willfp.eco.core.gui.menuStateVar
-import com.willfp.eco.core.gui.onLeftClick
-import com.willfp.eco.core.gui.slot
-import com.willfp.eco.core.gui.slot.Slot
-import com.willfp.eco.core.items.Items
 import com.willfp.ecoshop.shop.ShopItem
 import com.willfp.ecoshop.shop.parentShop
 import org.bukkit.entity.Player
+import wiki.ecohub.config.Config
+import wiki.ecohub.game.item.Items
+import wiki.ecohub.modules.menus.component.GUIComponent
+import wiki.ecohub.modules.menus.menu.Menu
+import wiki.ecohub.modules.menus.menu.menuStateVar
+import wiki.ecohub.modules.menus.onLeftClick
+import wiki.ecohub.modules.menus.slot
+import wiki.ecohub.modules.menus.slot.Slot
 import kotlin.math.min
 
 val Menu.amountOfItem by menuStateVar(1)

@@ -1,16 +1,16 @@
 package com.willfp.ecoshop.commands
 
 import com.willfp.eco.core.command.impl.Subcommand
-import com.willfp.eco.core.data.PlayerProfile
-import com.willfp.eco.core.data.forEachSavedProfile
-import com.willfp.eco.util.StringUtils
-import com.willfp.eco.util.savedDisplayName
 import com.willfp.ecoshop.plugin
 import com.willfp.ecoshop.shop.ShopItem
 import com.willfp.ecoshop.shop.ShopItems
 import org.bukkit.Bukkit
 import org.bukkit.command.CommandSender
 import org.bukkit.util.StringUtil
+import wiki.ecohub.data.playerbase.forEachSavedProfile
+import wiki.ecohub.data.profile.PlayerProfile
+import wiki.ecohub.game.entity.player.PlayerUtils
+import wiki.ecohub.ui.text.StringUtils
 
 object CommandResetBuys : Subcommand(
     plugin,
@@ -69,7 +69,7 @@ object CommandResetBuys : Subcommand(
         if (items.size == 1) {
             sender.sendMessage(
                 plugin.langYml.getMessage("reset-buys", StringUtils.FormatOption.WITHOUT_PLACEHOLDERS)
-                    .replace("%player%", player.savedDisplayName)
+                    .replace("%player%", PlayerUtils.getSavedDisplayName(player))
                     .replace("%item%", items.first().displayName)
             )
             return

@@ -1,13 +1,13 @@
 package com.willfp.ecoshop.commands
 
 import com.willfp.eco.core.command.impl.Subcommand
-import com.willfp.eco.util.savedDisplayName
 import com.willfp.ecoshop.plugin
 import com.willfp.ecoshop.sellchest.SellChestLimits
 import com.willfp.ecoshop.util.infiniteDisplay
 import org.bukkit.Bukkit
 import org.bukkit.command.CommandSender
 import org.bukkit.util.StringUtil
+import wiki.ecohub.game.entity.player.PlayerUtils
 
 object CommandSellChestCount : Subcommand(
     plugin,
@@ -37,7 +37,7 @@ object CommandSellChestCount : Subcommand(
             SellChestLimits.setCount(player, count)
             sender.sendMessage(
                 plugin.langYml.getMessage("sellchest.count-set")
-                    .replace("%player%", player.savedDisplayName)
+                    .replace("%player%", PlayerUtils.getSavedDisplayName(player))
                     .replace("%count%", count.toString())
             )
             return
@@ -46,7 +46,7 @@ object CommandSellChestCount : Subcommand(
         val limit = player.player?.let { SellChestLimits.limitFor(it) }
         sender.sendMessage(
             plugin.langYml.getMessage("sellchest.count")
-                .replace("%player%", player.savedDisplayName)
+                .replace("%player%", PlayerUtils.getSavedDisplayName(player))
                 .replace("%count%", SellChestLimits.count(player).toString())
                 .replace("%limit%", when {
                     limit == null -> "?"

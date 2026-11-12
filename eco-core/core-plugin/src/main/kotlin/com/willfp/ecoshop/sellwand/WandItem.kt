@@ -1,6 +1,5 @@
 package com.willfp.ecoshop.sellwand
 
-import com.willfp.eco.core.fast.fast
 import com.willfp.ecoshop.plugin
 import com.willfp.ecoshop.sell.SellTotals
 import com.willfp.ecoshop.sell.SellValueFormat
@@ -8,6 +7,7 @@ import com.willfp.ecoshop.util.infiniteDisplay
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import org.bukkit.persistence.PersistentDataType
+import wiki.ecohub.game.item.fast
 import java.util.Locale
 import java.util.UUID
 

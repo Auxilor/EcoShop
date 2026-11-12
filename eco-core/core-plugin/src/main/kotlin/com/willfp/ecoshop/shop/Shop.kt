@@ -1,23 +1,23 @@
 package com.willfp.ecoshop.shop
 
-import com.willfp.eco.core.config.interfaces.Config
-import com.willfp.eco.core.gui.addCustomSlots
-import com.willfp.eco.core.gui.addPage
-import com.willfp.eco.core.gui.addPageChanger
-import com.willfp.eco.core.gui.getSlotLocations
-import com.willfp.eco.core.gui.menu
-import com.willfp.eco.core.gui.menu.Menu
-import com.willfp.eco.core.gui.page.PageChanger
-import com.willfp.eco.core.gui.setMask
-import com.willfp.eco.core.registry.KRegistrable
-import com.willfp.eco.core.sound.PlayableSound
-import com.willfp.eco.util.StringUtils
-import com.willfp.eco.util.formatEco
-import com.willfp.eco.util.savedDisplayName
 import com.willfp.ecoshop.commands.CommandShop
 import com.willfp.ecoshop.runOwned
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
+import wiki.ecohub.config.Config
+import wiki.ecohub.core.registry.KRegistrable
+import wiki.ecohub.game.entity.player.PlayerUtils
+import wiki.ecohub.game.sound.PlayableSound
+import wiki.ecohub.modules.menus.addCustomSlots
+import wiki.ecohub.modules.menus.addPage
+import wiki.ecohub.modules.menus.addPageChanger
+import wiki.ecohub.modules.menus.getSlotLocations
+import wiki.ecohub.modules.menus.menu
+import wiki.ecohub.modules.menus.menu.Menu
+import wiki.ecohub.modules.menus.page.PageChanger
+import wiki.ecohub.modules.menus.setMask
+import wiki.ecohub.ui.text.StringUtils
+import wiki.ecohub.ui.text.formatEco
 
 fun <T> Config.ifHasOrNull(key: String, block: (String) -> T): T? =
     if (this.has(key)) block(key) else null
@@ -108,7 +108,7 @@ class Shop(
         @Suppress("DEPRECATION")
         Bukkit.broadcastMessage(
             config.getString("buy-broadcasts.message")
-                .replace("%player%", player.savedDisplayName)
+                .replace("%player%", PlayerUtils.getSavedDisplayName(player))
                 .replace("%item%", item.displayName)
                 .replace("%amount%", amount.toString())
                 .formatEco(player)

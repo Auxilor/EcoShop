@@ -1,11 +1,11 @@
 package com.willfp.ecoshop.sell
 
-import com.willfp.eco.core.Eco
-import com.willfp.eco.util.NumberUtils
-import com.willfp.eco.util.StringUtils
 import com.willfp.ecoshop.shop.ShopItems
 import com.willfp.ecoshop.shop.formatMultiple
 import org.bukkit.entity.Player
+import wiki.ecohub.core.Eco
+import wiki.ecohub.math.NumberUtils
+import wiki.ecohub.ui.text.StringUtils
 
 internal fun renderValues(totals: SellTotals, formatFor: (String) -> String?): List<String> =
     totals.values.map { (type, value) ->

@@ -1,6 +1,5 @@
 package com.willfp.ecoshop.sellchest
 
-import com.willfp.eco.util.savedDisplayName
 import com.willfp.ecoshop.plugin
 import org.bukkit.Bukkit
 import org.bukkit.Material
@@ -8,15 +7,16 @@ import org.bukkit.block.Block
 import org.bukkit.block.BlockFace
 import org.bukkit.block.Container
 import org.bukkit.block.data.type.Chest
+import org.bukkit.entity.Player
+import org.bukkit.event.Event
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
+import org.bukkit.event.block.Action
 import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.event.block.BlockExplodeEvent
 import org.bukkit.event.block.BlockPlaceEvent
 import org.bukkit.event.entity.EntityExplodeEvent
-import org.bukkit.event.Event
-import org.bukkit.event.block.Action
 import org.bukkit.event.inventory.InventoryCloseEvent
 import org.bukkit.event.inventory.InventoryMoveItemEvent
 import org.bukkit.event.inventory.InventoryOpenEvent
@@ -25,7 +25,7 @@ import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.event.world.ChunkLoadEvent
 import org.bukkit.event.world.ChunkUnloadEvent
-import org.bukkit.entity.Player
+import wiki.ecohub.game.entity.player.PlayerUtils
 
 object SellChestListener : Listener {
     private val horizontal = listOf(BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST)

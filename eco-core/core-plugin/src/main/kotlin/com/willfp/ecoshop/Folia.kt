@@ -1,10 +1,10 @@
 package com.willfp.ecoshop
 
-import com.willfp.eco.core.Eco
-import com.willfp.eco.core.Prerequisite
 import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.entity.Entity
+import wiki.ecohub.core.Eco
+import wiki.ecohub.core.plugin.startup.Prerequisite
 
 internal inline fun Entity.runOwned(crossinline block: () -> Unit) {
     if (Eco.get().isOwnedByCurrentRegion(this)) {

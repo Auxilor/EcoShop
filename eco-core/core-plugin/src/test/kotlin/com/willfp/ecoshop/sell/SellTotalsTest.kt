@@ -1,12 +1,12 @@
 package com.willfp.ecoshop.sell
 
-import com.willfp.eco.core.price.ConfiguredPrice
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
+import wiki.ecohub.core.price.ConfiguredPrice
 
 class SellTotalsTest {
     private fun candidate(type: String): SellCandidate = testCandidate(type).also {

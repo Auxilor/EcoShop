@@ -1,8 +1,8 @@
 package com.willfp.ecoshop.shop.rotation
 
-import com.willfp.eco.core.placeholder.DynamicPlaceholder
 import com.willfp.ecoshop.plugin
 import com.willfp.ecoshop.shop.ShopCategories
+import wiki.ecohub.ui.placeholder.type.DynamicPlaceholder
 import java.util.regex.Pattern
 
 object RotationPlaceholders {

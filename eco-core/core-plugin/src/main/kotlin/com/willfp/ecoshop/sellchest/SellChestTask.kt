@@ -1,8 +1,5 @@
 package com.willfp.ecoshop.sellchest
 
-import com.willfp.eco.core.Eco
-import com.willfp.eco.core.scheduling.EcoTask
-import com.willfp.eco.util.StringUtils
 import com.willfp.ecoshop.plugin
 import com.willfp.ecoshop.sell.InventoryTarget
 import com.willfp.ecoshop.sell.SellRequest
@@ -13,6 +10,9 @@ import com.willfp.ecoshop.sell.Seller
 import com.willfp.ecoshop.sell.Sells
 import org.bukkit.Bukkit
 import org.bukkit.block.Container
+import wiki.ecohub.core.Eco
+import wiki.ecohub.core.scheduler.EcoTask
+import wiki.ecohub.ui.text.StringUtils
 import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
 

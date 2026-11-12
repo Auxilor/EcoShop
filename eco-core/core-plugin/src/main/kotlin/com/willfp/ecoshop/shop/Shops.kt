@@ -1,8 +1,8 @@
 package com.willfp.ecoshop.shop
 
-import com.willfp.eco.core.config.interfaces.Config
-import com.willfp.libreforge.loader.LibreforgePlugin
-import com.willfp.libreforge.loader.configs.RegistrableCategory
+import wiki.ecohub.config.Config
+import wiki.ecohub.config.category.RegistrableCategory
+import wiki.ecohub.core.plugin.EcoPlugin
 
 object Shops : RegistrableCategory<Shop>("shop", "shops") {
     override fun clear(plugin: LibreforgePlugin) {

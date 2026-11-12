@@ -1,7 +1,6 @@
 package com.willfp.ecoshop.commands
 
 import com.willfp.eco.core.command.impl.Subcommand
-import com.willfp.eco.core.drops.DropQueue
 import com.willfp.ecoshop.plugin
 import com.willfp.ecoshop.runOwned
 import com.willfp.ecoshop.sellchest.SellChestItem
@@ -9,6 +8,7 @@ import com.willfp.ecoshop.sellchest.SellChestTypes
 import org.bukkit.Bukkit
 import org.bukkit.command.CommandSender
 import org.bukkit.util.StringUtil
+import wiki.ecohub.game.drop.DropQueue
 
 object CommandGiveSellChest : Subcommand(
     plugin,

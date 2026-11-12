@@ -1,9 +1,5 @@
 package com.willfp.ecoshop.sellwand
 
-import com.willfp.eco.core.integrations.hologram.Hologram
-import com.willfp.eco.core.integrations.hologram.HologramManager
-import com.willfp.eco.core.integrations.hologram.HologramOptions
-import com.willfp.eco.util.StringUtils
 import com.willfp.ecoshop.plugin
 import com.willfp.ecoshop.sell.SellTotals
 import com.willfp.ecoshop.sell.SellValueFormat
@@ -11,6 +7,10 @@ import com.willfp.ecoshop.sell.Sells
 import org.bukkit.block.Block
 import org.bukkit.block.Container
 import org.bukkit.entity.Player
+import wiki.ecohub.provider.hologram.Hologram
+import wiki.ecohub.provider.hologram.HologramManager
+import wiki.ecohub.provider.hologram.HologramOptions
+import wiki.ecohub.ui.text.StringUtils
 import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
 

@@ -1,18 +1,18 @@
 package com.willfp.ecoshop.shop.gui
 
-import com.willfp.eco.core.gui.addCustomSlots
-import com.willfp.eco.core.gui.component.ConfigButton
-import com.willfp.eco.core.gui.component.addComponent
-import com.willfp.eco.core.gui.getSlotLocations
-import com.willfp.eco.core.gui.menu
-import com.willfp.eco.core.gui.menu.Menu
-import com.willfp.eco.core.gui.setMask
-import com.willfp.eco.core.gui.slot.Slot
 import com.willfp.ecoshop.plugin
 import com.willfp.ecoshop.shop.ShopItem
 import com.willfp.ecoshop.shop.kickBack
 import com.willfp.ecoshop.shop.openAndStack
 import org.bukkit.entity.Player
+import wiki.ecohub.modules.menus.addCustomSlots
+import wiki.ecohub.modules.menus.component.ConfigButton
+import wiki.ecohub.modules.menus.component.addComponent
+import wiki.ecohub.modules.menus.getSlotLocations
+import wiki.ecohub.modules.menus.menu
+import wiki.ecohub.modules.menus.menu.Menu
+import wiki.ecohub.modules.menus.setMask
+import wiki.ecohub.modules.menus.slot.Slot
 
 /** Key is buy or sell, slot is the actual slot given the amount of stacks. */
 class MoreMenu(

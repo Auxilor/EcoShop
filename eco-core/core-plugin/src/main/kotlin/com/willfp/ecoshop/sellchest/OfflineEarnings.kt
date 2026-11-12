@@ -1,12 +1,12 @@
 package com.willfp.ecoshop.sellchest
 
-import com.willfp.eco.core.data.keys.PersistentDataKey
-import com.willfp.eco.core.data.keys.PersistentDataKeyType
-import com.willfp.eco.core.data.profile
-import com.willfp.eco.util.NumberUtils
 import com.willfp.ecoshop.plugin
 import org.bukkit.OfflinePlayer
 import org.bukkit.entity.Player
+import wiki.ecohub.data.PersistentDataKey
+import wiki.ecohub.data.PersistentDataKeyType
+import wiki.ecohub.game.entity.player.profile
+import wiki.ecohub.math.NumberUtils
 
 /** Offline-selling permission snapshot and the earnings summary shown on join. */
 object OfflineEarnings {

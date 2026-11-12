@@ -1,13 +1,13 @@
 package com.willfp.ecoshop.sellchest
 
-import com.willfp.eco.core.config.interfaces.Config
-import com.willfp.eco.core.items.CustomItem
-import com.willfp.eco.core.items.Items
-import com.willfp.eco.core.registry.KRegistrable
 import com.willfp.ecoshop.plugin
 import com.willfp.ecoshop.sell.ItemFilter
 import com.willfp.ecoshop.sell.SellBypass
 import org.bukkit.Material
+import wiki.ecohub.config.Config
+import wiki.ecohub.core.registry.KRegistrable
+import wiki.ecohub.game.item.CustomItem
+import wiki.ecohub.game.item.Items
 
 enum class Overflow {
     KEEP,

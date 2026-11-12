@@ -1,15 +1,5 @@
 package com.willfp.ecoshop.shop.gui
 
-import com.willfp.eco.core.gui.menu.Menu
-import com.willfp.eco.core.gui.onLeftClick
-import com.willfp.eco.core.gui.onRightClick
-import com.willfp.eco.core.gui.onShiftLeftClick
-import com.willfp.eco.core.gui.onShiftRightClick
-import com.willfp.eco.core.gui.slot
-import com.willfp.eco.core.gui.slot.CustomSlot
-import com.willfp.eco.core.items.builder.modify
-import com.willfp.eco.util.formatEco
-import com.willfp.eco.util.toNiceString
 import com.willfp.ecoshop.plugin
 import com.willfp.ecoshop.sell.SellMessages
 import com.willfp.ecoshop.shop.BuyStatus
@@ -22,6 +12,16 @@ import com.willfp.ecoshop.shop.parentShop
 import com.willfp.ecoshop.util.toLimitDisplay
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
+import wiki.ecohub.core.stdlib.toNiceString
+import wiki.ecohub.game.item.modify
+import wiki.ecohub.modules.menus.menu.Menu
+import wiki.ecohub.modules.menus.onLeftClick
+import wiki.ecohub.modules.menus.onRightClick
+import wiki.ecohub.modules.menus.onShiftLeftClick
+import wiki.ecohub.modules.menus.onShiftRightClick
+import wiki.ecohub.modules.menus.slot
+import wiki.ecohub.modules.menus.slot.CustomSlot
+import wiki.ecohub.ui.text.formatEco
 
 fun Collection<String>.replaceIn(token: String, replacement: Any?) =
     this.map { it.replace(token, replacement.toNiceString()) }

@@ -1,8 +1,5 @@
 package com.willfp.ecoshop.integrations
 
-import com.willfp.eco.core.integrations.shop.ShopIntegration
-import com.willfp.eco.core.integrations.shop.ShopSellEvent
-import com.willfp.eco.core.price.Price
 import com.willfp.ecoshop.event.EcoShopSellEvent
 import com.willfp.ecoshop.shop.getUnitSellValue
 import com.willfp.ecoshop.shop.isSellable
@@ -12,6 +9,9 @@ import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.inventory.ItemStack
+import wiki.ecohub.core.event.ShopSellEvent
+import wiki.ecohub.core.price.Price
+import wiki.ecohub.provider.economy.ShopProvider
 
 object EcoShopAdapter : ShopIntegration {
     override fun getUnitValue(itemStack: ItemStack, player: Player): Price {
