@@ -1,6 +1,6 @@
 package com.willfp.ecoshop.shop
 
-import com.willfp.ecoshop.commands.CommandShop
+import com.willfp.ecoshop.commands.shopCommand
 import com.willfp.ecoshop.runOwned
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
@@ -102,7 +102,7 @@ class Shop(
         onOpen { player, menu -> menu.parentShop[player] = this@Shop }
     } else null
 
-    val command = CommandShop(this)
+    val command = shopCommand(this)
 
     fun broadcastPurchase(player: Player, item: ShopItem, amount: Int) {
         @Suppress("DEPRECATION")

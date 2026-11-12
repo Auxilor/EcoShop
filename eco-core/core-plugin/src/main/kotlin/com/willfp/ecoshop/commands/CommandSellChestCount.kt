@@ -1,69 +1,46 @@
 package com.willfp.ecoshop.commands
 
-import com.willfp.eco.core.command.impl.Subcommand
-import com.willfp.ecoshop.plugin
 import com.willfp.ecoshop.sellchest.SellChestLimits
 import com.willfp.ecoshop.util.infiniteDisplay
-import org.bukkit.Bukkit
 import org.bukkit.command.CommandSender
-import org.bukkit.util.StringUtil
+import wiki.ecohub.core.command.CommandBuilder
 import wiki.ecohub.game.entity.player.PlayerUtils
 
-object CommandSellChestCount : Subcommand(
-    plugin,
-    "sellchestcount",
-    "ecoshop.command.sellchestcount",
-    false
-) {
-    override fun onExecute(sender: CommandSender, args: List<String>) {
-        if (args.isEmpty()) {
-            sender.sendMessage(plugin.langYml.getMessage("must-specify-player"))
-            return
-        }
+private val setCompletions = listOf("set")
 
-        @Suppress("DEPRECATION")
-        val player = Bukkit.getOfflinePlayer(args[0])
-        if (!player.hasPlayedBefore() && !player.isOnline) {
-            sender.sendMessage(plugin.langYml.getMessage("invalid-player"))
-            return
-        }
+/**
+ * `sellchestcount <player>` shows the count and, for an online player, their limit;
+ * `sellchestcount <player> set <count>` sets the count.
+ */
+internal fun CommandBuilder<CommandSender>.sellChestCountCommand() = subcommand(
+    name = "sellchestcount",
+    permission = "ecoshop.command.sellchestcount"
+) {
+    executes {
+        val player = knownPlayer(0)
+        val name = PlayerUtils.getSavedDisplayName(player)
 
         if (args.getOrNull(1).equals("set", ignoreCase = true)) {
-            val count = args.getOrNull(2)?.toIntOrNull()
-            if (count == null || count < 0) {
-                sender.sendMessage(plugin.langYml.getMessage("invalid-amount"))
-                return
-            }
+            val count = args.getOrNull(2)?.toIntOrNull()?.takeIf { it >= 0 } ?: fail("invalid-amount")
             SellChestLimits.setCount(player, count)
-            sender.sendMessage(
-                plugin.langYml.getMessage("sellchest.count-set")
-                    .replace("%player%", PlayerUtils.getSavedDisplayName(player))
-                    .replace("%count%", count.toString())
-            )
-            return
-        }
+            reply("sellchest.count-set", "player" to name, "count" to count)
+        } else {
+            val limit = player.player?.let { SellChestLimits.limitFor(it) }
+            val limitText = when {
+                limit == null -> "?"
+                limit < 0 -> infiniteDisplay
+                else -> limit.toString()
+            }
 
-        val limit = player.player?.let { SellChestLimits.limitFor(it) }
-        sender.sendMessage(
-            plugin.langYml.getMessage("sellchest.count")
-                .replace("%player%", PlayerUtils.getSavedDisplayName(player))
-                .replace("%count%", SellChestLimits.count(player).toString())
-                .replace("%limit%", when {
-                    limit == null -> "?"
-                    limit < 0 -> infiniteDisplay
-                    else -> limit.toString()
-                })
-        )
+            reply("sellchest.count", "player" to name, "count" to SellChestLimits.count(player), "limit" to limitText)
+        }
     }
 
-    override fun tabComplete(sender: CommandSender, args: List<String>): List<String> {
-        val completions = mutableListOf<String>()
-
+    completes {
         when (args.size) {
-            1 -> StringUtil.copyPartialMatches(args[0], Bukkit.getOnlinePlayers().map { it.name }, completions)
-            2 -> StringUtil.copyPartialMatches(args[1], listOf("set"), completions)
+            1 -> playerNames()
+            2 -> setCompletions
+            else -> emptyList()
         }
-
-        return completions
     }
 }

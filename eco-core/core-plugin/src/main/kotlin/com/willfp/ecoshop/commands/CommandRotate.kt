@@ -1,49 +1,30 @@
 package com.willfp.ecoshop.commands
 
-import com.willfp.eco.core.command.impl.Subcommand
-import com.willfp.ecoshop.plugin
 import com.willfp.ecoshop.shop.ShopCategories
 import org.bukkit.command.CommandSender
-import org.bukkit.util.StringUtil
+import wiki.ecohub.core.command.CommandBuilder
 
-object CommandRotate : Subcommand(
-    plugin,
-    "rotate",
-    "ecoshop.command.rotate",
-    false
+internal fun CommandBuilder<CommandSender>.rotateCommand() = subcommand(
+    name = "rotate",
+    permission = "ecoshop.command.rotate"
 ) {
-    override fun onExecute(sender: CommandSender, args: List<String>) {
-        if (args.isEmpty()) {
-            sender.sendMessage(plugin.langYml.getMessage("must-specify-category"))
-            return
-        }
-
-        val category = ShopCategories.getByID(args[0])
-        val scheduler = category?.scheduler
+    executes {
+        val id = argument(0, "must-specify-category")
+        val scheduler = ShopCategories.getByID(id)?.scheduler
 
         if (scheduler == null) {
-            sender.sendMessage(
-                plugin.langYml.getMessage("invalid-category")
-                    .replace("%category%", args[0])
-            )
-            return
+            reply("invalid-category", "category" to id)
+        } else {
+            scheduler.forceRotate()
+            reply("rotate-success", "category" to id)
         }
-
-        scheduler.forceRotate()
-        sender.sendMessage(
-            plugin.langYml.getMessage("rotate-success")
-                .replace("%category%", args[0])
-        )
     }
 
-    override fun tabComplete(sender: CommandSender, args: List<String>): List<String> {
-        val completions = mutableListOf<String>()
+    completes {
         if (args.size == 1) {
-            val rotatingIds = ShopCategories.values()
-                .filter { it.scheduler != null }
-                .map { it.id }
-            StringUtil.copyPartialMatches(args[0], rotatingIds, completions)
+            ShopCategories.values().filter { it.scheduler != null }.map { it.id }
+        } else {
+            emptyList()
         }
-        return completions
     }
 }
