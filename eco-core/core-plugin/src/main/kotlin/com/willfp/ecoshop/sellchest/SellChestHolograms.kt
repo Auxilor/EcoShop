@@ -40,7 +40,7 @@ object SellChestHolograms {
         val lines = renderChestLines(
             type.hologram.lines,
             type.displayName,
-            Bukkit.getOfflinePlayer(owner).savedDisplayName,
+            PlayerUtils.getSavedDisplayName(Bukkit.getOfflinePlayer(owner)),
             totals.units,
             SellValueFormat.format(totals, null)
         ).map { StringUtils.format(it) }

@@ -22,10 +22,12 @@ object SellChestItem {
         }
         stack.itemMeta = meta
         if (type.loreTemplate.isNotEmpty()) {
-            stack.fast().lore = type.loreTemplate.map {
-                it.replace("%sold_items%", "%,d".format(Locale.ROOT, totals.units))
-                    .replace("%sold_value%", SellValueFormat.format(totals, null))
-            }
+            stack.fast().setLore(
+                type.loreTemplate.map {
+                    it.replace("%sold_items%", "%,d".format(Locale.ROOT, totals.units))
+                        .replace("%sold_value%", SellValueFormat.format(totals, null))
+                }
+            )
         }
         return stack
     }

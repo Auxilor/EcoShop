@@ -28,6 +28,7 @@ import org.bukkit.permissions.Permission
 import org.bukkit.permissions.PermissionDefault
 import wiki.ecohub.config.Config
 import wiki.ecohub.config.ViolationContext
+import wiki.ecohub.core.platform.profile
 import wiki.ecohub.core.price.ConfiguredPrice
 import wiki.ecohub.core.registry.KRegistrable
 import wiki.ecohub.core.stdlib.NamedValue
@@ -121,8 +122,8 @@ class ShopItem(
 
     private val _displayItem = ItemStackBuilder(
         if (config.has("gui.display.item")) {
-            Items.lookup(config.getString("gui.display.item")).item
-        } else item?.item?.clone() ?: ItemStack(Material.AIR)
+            Items.lookup(config.getString("gui.display.item")).getItem()
+        } else item?.run { getItem().clone() } ?: ItemStack(Material.AIR)
     )
         .setAmount(buyAmount)
         .addLoreLines(config.getStrings("gui.display.lore"))
@@ -135,7 +136,7 @@ class ShopItem(
         ?: plugin.configYml.getStringOrNull("shop-items.sold-out-item"))
         ?.takeIf { it.isNotBlank() }
         ?.let { lookup ->
-            ItemStackBuilder(Items.lookup(lookup).item)
+            ItemStackBuilder(Items.lookup(lookup).getItem())
                 .setAmount(buyAmount)
                 .addLoreLines(config.getStrings("gui.display.lore"))
                 .build()
@@ -151,7 +152,7 @@ class ShopItem(
     private val _displayName = config.getFormattedStringOrNull("name")
 
     val displayName: String
-        get() = _displayName ?: this.displayItem.fast().displayName
+        get() = _displayName ?: this.displayItem.fast().getDisplayName()
 
     val row = config.getInt("gui.row")
 
@@ -213,7 +214,7 @@ class ShopItem(
 
     override fun matchesForSale(itemStack: ItemStack): Boolean {
         val shopItem = item ?: return false
-        return if (isStrictMatch) itemStack.isSimilar(shopItem.item) else shopItem.matches(itemStack)
+        return if (isStrictMatch) itemStack.isSimilar(shopItem.getItem()) else shopItem.matches(itemStack)
     }
 
     override fun totalSells(player: OfflinePlayer): Int = getTotalSells(player)
@@ -237,7 +238,7 @@ class ShopItem(
         return NumberUtils.evaluateExpression(expression, PlaceholderContext.EMPTY)
     }
 
-    override fun isEconomyPrice(): Boolean = sellPrice?.identifier == "eco:economy"
+    override fun isEconomyPrice(): Boolean = sellPrice?.getIdentifier() == "eco:economy"
 
     override fun fireSellEvent(player: Player, stack: ItemStack, units: Int, source: SellSource): Double {
         val event = EcoShopSellEvent(player, this, sellPrice!!, stack, units, 1.0, source)
@@ -304,7 +305,7 @@ class ShopItem(
     private val sellReset = GlobalCounterReset(lock = counterLock, key = timesSoldKey)
 
     init {
-        if (this.item != null && this.item.item.amount != 1) {
+        if (this.item != null && this.item.getItem().amount != 1) {
             throw InvalidShopItemException(
                 "Item $id is buying/selling an item " +
                         "with a stack size greater than 1. If you want to sell" +
@@ -521,7 +522,7 @@ class ShopItem(
 
         if (item != null &&
             plugin.configYml.getStringOrNull("shop-items.full-inventory-behaviour") == "reject-sale" &&
-            !hasInventoryRoom(player, item.item, amount)
+            !hasInventoryRoom(player, item.getItem(), amount)
         ) {
             return BuyStatus.INVENTORY_FULL
         }
@@ -579,7 +580,7 @@ class ShopItem(
                 .forceTelekinesis()
 
             repeat(amount) {
-                queue.addItem(item.item)
+                queue.addItem(item.getItem())
             }
 
             queue.push()

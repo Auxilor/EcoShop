@@ -8,7 +8,7 @@ import wiki.ecohub.game.item.Items
 object SellChestTypes : RegistrableCategory<SellChestType>("sellchest", "sellchests") {
     override fun clear(plugin: EcoPlugin) {
         // Drop lookup ids of types removed from config since the last load.
-        registry.values().forEach { Items.removeCustomItem(it.customItem.key) }
+        registry.values().forEach { Items.removeCustom(it.customItem.getKey()) }
         registry.clear()
     }
 

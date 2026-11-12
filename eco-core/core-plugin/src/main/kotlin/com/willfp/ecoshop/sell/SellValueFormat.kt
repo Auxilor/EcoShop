@@ -26,9 +26,9 @@ object SellValueFormat {
     }
 
     private fun shopFormat(type: String): String? {
-        val item = ShopItems.values().firstOrNull { it.sellPrice?.identifier == type } ?: return null
+        val item = ShopItems.values().firstOrNull { it.sellPrice?.getIdentifier() == type } ?: return null
         val priceType = item.config.getString("sell.type")
-        return Eco.get().ecoPlugin.langYml.getSubsections("price-display")
+        return Eco.get().getEcoPlugin().langYml.getSubsections("price-display")
             .firstOrNull { it.getString("type").equals(priceType, ignoreCase = true) }
             ?.getString("display")
             ?: item.config.getStringOrNull("sell.display")

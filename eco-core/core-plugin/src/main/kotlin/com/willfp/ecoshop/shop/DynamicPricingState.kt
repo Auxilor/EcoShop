@@ -3,9 +3,9 @@ package com.willfp.ecoshop.shop
 import com.willfp.ecoshop.plugin
 import com.willfp.ecoshop.sell.DynamicPricer
 import org.bukkit.Bukkit
+import wiki.ecohub.core.platform.profile
 import wiki.ecohub.data.PersistentDataKey
 import wiki.ecohub.data.PersistentDataKeyType
-import wiki.ecohub.game.entity.player.profile
 
 /**
  * Server-wide dynamic pricing counters and decay time for one shop item.

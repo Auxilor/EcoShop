@@ -27,7 +27,7 @@ class SellChestType(
             Material.CHEST
         }
 
-    val baseItem = Items.lookup(config.getString("item")).item.let { item ->
+    val baseItem = Items.lookup(config.getString("item")).getItem().let { item ->
         if (item.type != block) {
             plugin.logger.warning("[sell chest $id] item material ${item.type} does not match block $block; using $block")
             item.withType(block)

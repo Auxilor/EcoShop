@@ -9,9 +9,9 @@ import org.junit.jupiter.api.Test
 import wiki.ecohub.core.price.ConfiguredPrice
 
 class SellTotalsTest {
-    private fun candidate(type: String): SellCandidate = testCandidate(type).also {
-        val price = mockk<ConfiguredPrice> { every { identifier } returns type }
-        every { it.sellPrice } returns price
+    private fun candidate(type: String): SellCandidate = testCandidate(type).also { candidate ->
+        val price = mockk<ConfiguredPrice> { every { getIdentifier() } returns type }
+        every { candidate.sellPrice } returns price
     }
 
     @Test

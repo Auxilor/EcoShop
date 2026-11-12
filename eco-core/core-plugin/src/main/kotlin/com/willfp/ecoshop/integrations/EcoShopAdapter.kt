@@ -53,5 +53,5 @@ private class DynamicSellPrice(
 
     override fun setMultiplier(player: Player, multiplier: Double) = price.setMultiplier(player, multiplier)
 
-    override fun getIdentifier(): String = price.identifier
+    override fun getIdentifier(): String = price.getIdentifier()
 }

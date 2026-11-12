@@ -48,7 +48,7 @@ data class SellTotals(
             quote.lines.fold(EMPTY) { acc, line -> acc + line(line.candidate, line.units, line.baseValue * line.priceMultiplier) }
 
         private fun line(candidate: SellCandidate, units: Int, value: Double): SellTotals {
-            val type = candidate.sellPrice?.identifier ?: return SellTotals(units.toLong())
+            val type = candidate.sellPrice?.getIdentifier() ?: return SellTotals(units.toLong())
             return SellTotals(units.toLong(), mapOf(type to value))
         }
     }

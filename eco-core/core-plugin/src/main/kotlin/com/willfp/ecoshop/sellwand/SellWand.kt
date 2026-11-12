@@ -23,7 +23,7 @@ class SellWand(
 ) : KRegistrable {
     private val context = ViolationContext(plugin, "sell wand $id")
 
-    val baseItem = Items.lookup(config.getString("item")).item
+    val baseItem = Items.lookup(config.getString("item")).getItem()
 
     val displayName: String = config.getFormattedStringOrNull("name") ?: id
 

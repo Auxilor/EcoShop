@@ -148,11 +148,15 @@ class RotationScheduler(
     // distinct items every draw, first pick has probability exactly weight/sum(weight).
     private fun weightedSample(items: List<ShopItem>, count: Int): List<ShopItem> {
         if (count <= 0 || items.isEmpty()) return emptyList()
-        return items
-            .map { it to Math.pow(NumberUtils.randFloat(0.0, 1.0), 1.0 / it.rotationWeight.coerceAtLeast(1)) }
+        return items.asSequence()
+            .map { item ->
+                val roll = NumberUtils.randFloat(min = 0.0, max = 1.0)
+                item to Math.pow(roll, 1.0 / item.rotationWeight.coerceAtLeast(1))
+            }
             .sortedByDescending { it.second }
             .take(count)
             .map { it.first }
+            .toList()
     }
 
     // Online players only - resetting every offline player's profile on the main

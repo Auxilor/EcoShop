@@ -1,6 +1,7 @@
 package com.willfp.ecoshop.shop
 
 import org.bukkit.Bukkit
+import wiki.ecohub.core.platform.profile
 import wiki.ecohub.data.PersistentDataKey
 import wiki.ecohub.data.profile.Profile
 import wiki.ecohub.game.entity.player.profile

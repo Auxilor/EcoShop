@@ -20,7 +20,7 @@ object Sells {
     val engine by lazy {
         SellEngine(
             callEvent = { Bukkit.getPluginManager().callEvent(it) },
-            payOffline = { player, value -> ExternalEconomyService.giveMoney(player, value) },
+            payOffline = { player, value -> ExternalEconomyService.giveMoney(player, value.toBigDecimal()) },
             log = { entry ->
                 if (plugin.configYml.getBool("logging.enabled")) {
                     ShopLogger.log(entry.playerName, "SELL", entry.itemId, entry.units, entry.value, entry.source.name)

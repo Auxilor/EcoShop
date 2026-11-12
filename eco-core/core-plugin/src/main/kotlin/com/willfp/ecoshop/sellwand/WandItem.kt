@@ -52,7 +52,7 @@ object WandItem {
         }
         meta.setMaxStackSize(1)
         stack.itemMeta = meta
-        stack.fast().lore = renderWandLore(wand.loreTemplate, wand.uses, wand.uses, wand.multiplier)
+        stack.fast().setLore(renderWandLore(wand.loreTemplate, wand.uses, wand.uses, wand.multiplier))
         return stack
     }
 
@@ -87,9 +87,11 @@ object WandItem {
             pdc.set(soldKey, PersistentDataType.STRING, totals.encode())
         }
         stack.itemMeta = meta
-        stack.fast().lore = renderWandLore(
-            wand.loreTemplate, uses, wand.uses, wand.multiplier,
-            totals.units, SellValueFormat.format(totals, player)
+        stack.fast().setLore(
+            renderWandLore(
+                wand.loreTemplate, uses, wand.uses, wand.multiplier,
+                totals.units, SellValueFormat.format(totals, player)
+            )
         )
     }
 }

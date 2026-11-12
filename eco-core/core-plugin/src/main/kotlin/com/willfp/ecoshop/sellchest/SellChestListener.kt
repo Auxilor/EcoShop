@@ -97,7 +97,7 @@ object SellChestListener : Listener {
             event.isCancelled = true
             event.player.sendMessage(
                 plugin.langYml.getMessage("sellchest.not-owner")
-                    .replace("%owner%", Bukkit.getOfflinePlayer(info.owner).savedDisplayName)
+                    .replace("%owner%", PlayerUtils.getSavedDisplayName(Bukkit.getOfflinePlayer(info.owner)))
             )
         }
     }
@@ -157,7 +157,7 @@ object SellChestListener : Listener {
             event.isCancelled = true
             player.sendMessage(
                 plugin.langYml.getMessage("sellchest.not-owner")
-                    .replace("%owner%", Bukkit.getOfflinePlayer(info.owner).savedDisplayName)
+                    .replace("%owner%", PlayerUtils.getSavedDisplayName(Bukkit.getOfflinePlayer(info.owner)))
             )
         }
     }
