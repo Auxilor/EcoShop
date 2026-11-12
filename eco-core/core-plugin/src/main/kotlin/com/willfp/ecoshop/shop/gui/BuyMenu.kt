@@ -11,6 +11,7 @@ import com.willfp.ecoshop.shop.openAndStack
 import com.willfp.ecoshop.shop.parentShop
 import org.bukkit.entity.Player
 import wiki.ecohub.game.item.Items
+import wiki.ecohub.game.item.builder.modify
 import wiki.ecohub.game.item.modify
 import wiki.ecohub.modules.menus.addCustomSlots
 import wiki.ecohub.modules.menus.component.ConfigButton
@@ -72,8 +73,10 @@ class BuyMenu(
     }
 
     private val menu = menu(plugin.configYml.getInt("buy-menu.rows")) {
-        title = plugin.configYml.getFormattedString("buy-menu.title")
-            .replace("%item%", item.displayName)
+        setTitle(
+            plugin.configYml.getFormattedString("buy-menu.title")
+                .replace("%item%", item.displayName)
+        )
 
         allowChangingHeldItem()
 
@@ -81,9 +84,9 @@ class BuyMenu(
 
         for (location in plugin.configYml.getSlotLocations("buy-menu.item")) {
             setSlot(
-                location.row,
-                location.column,
-                slot { player, menu ->
+                row = location.row,
+                column = location.column,
+                slot = slot { player, menu ->
                     item.displayItem.modify {
                         val amount = menu.amountOfItem[player]
 
@@ -111,9 +114,9 @@ class BuyMenu(
         for (config in plugin.configYml.getSubsections("buy-menu.add-buttons")) {
             for (location in config.getSlotLocations()) {
                 addComponent(
-                    location.row,
-                    location.column,
-                    AmountAdjustSelector(
+                    row = location.row,
+                    column = location.column,
+                    component = AmountAdjustSelector(
                         item,
                         config.getInt("add"),
                         config
@@ -125,14 +128,14 @@ class BuyMenu(
         for (config in plugin.configYml.getSubsections("buy-menu.set-buttons")) {
             for (location in config.getSlotLocations()) {
                 addComponent(
-                    location.row,
-                    location.column,
-                    AmountSetSelector(
+                    row = location.row,
+                    column = location.column,
+                    component = AmountSetSelector(
                         config
-                    ) {
+                    ) { player ->
                         min(
-                            item.getMaxBuysAtOnce(it),
-                            item.item?.item?.type?.maxStackSize ?: Int.MAX_VALUE
+                            item.getMaxBuysAtOnce(player),
+                            item.item?.run { getItem().type.maxStackSize } ?: Int.MAX_VALUE
                         ).coerceAtMost(
                             min(
                                 64,
@@ -152,9 +155,9 @@ class BuyMenu(
 
         for (location in plugin.configYml.getSlotLocations("buy-menu.confirm")) {
             setSlot(
-                location.row,
-                location.column,
-                slot({ player, menu ->
+                row = location.row,
+                column = location.column,
+                slot = slot({ player, menu ->
                     Items.lookup(plugin.configYml.getString("buy-menu.confirm.item")).modify {
                         addLoreLines(
                             plugin.langYml.getStrings("confirm-buy-price")

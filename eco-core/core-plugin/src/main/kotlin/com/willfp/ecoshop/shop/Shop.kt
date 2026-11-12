@@ -70,7 +70,7 @@ class Shop(
     val menu = if (config.has("pages")) menu(config.getInt("rows")) {
         val pages = config.getSubsections("pages")
 
-        title = StringUtils.format(config.getString("title"))
+        setTitle(StringUtils.format(config.getString("title")))
 
         allowChangingHeldItem()
 
@@ -91,7 +91,7 @@ class Shop(
                     val category = ShopCategories.getByID(config.getString("id")) ?: continue
 
                     for (location in config.getSlotLocations()) {
-                        setSlot(location.row, location.column, category.slot)
+                        setSlot(row = location.row, column = location.column, slot = category.slot)
                     }
                 }
 

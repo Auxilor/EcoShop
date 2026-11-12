@@ -35,7 +35,7 @@ class AmountAdjustSelector(
 
         val adjusted = currentAmount + adjust
 
-        val max = min(item.getMaxBuysAtOnce(player), item.item?.item?.type?.maxStackSize ?: Int.MAX_VALUE)
+        val max = min(item.getMaxBuysAtOnce(player), item.item?.run { getItem().type.maxStackSize } ?: Int.MAX_VALUE)
 
         return if (adjusted !in 1..max) {
             null

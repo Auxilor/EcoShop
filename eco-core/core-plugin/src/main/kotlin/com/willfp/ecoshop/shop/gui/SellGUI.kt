@@ -23,16 +23,17 @@ object SellGUI {
         val rows = plugin.configYml.getInt("sell-gui.rows")
 
         menu = menu(rows) {
-            title = plugin.configYml.getFormattedString("sell-gui.title")
+            setTitle(plugin.configYml.getFormattedString("sell-gui.title"))
 
             allowChangingHeldItem()
 
             for (i in 1..rows) {
-                for (j in 1..columns) {
+                for (j in 1..getColumns()) {
                     addComponent(
-                        MenuLayer.LOWER,
-                        i, j,
-                        slot(ItemStack(Material.AIR)) {
+                        layer = MenuLayer.LOWER,
+                        row = i,
+                        column = j,
+                        component = slot(ItemStack(Material.AIR)) {
                             setCaptive(true)
 
                             setCaptiveFilter { player, _, itemStack ->

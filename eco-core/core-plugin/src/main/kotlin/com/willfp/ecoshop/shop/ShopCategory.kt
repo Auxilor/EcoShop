@@ -9,7 +9,7 @@ import org.bukkit.entity.Player
 import wiki.ecohub.config.Config
 import wiki.ecohub.core.registry.KRegistrable
 import wiki.ecohub.game.item.Items
-import wiki.ecohub.game.item.modify
+import wiki.ecohub.game.item.builder.modify
 import wiki.ecohub.game.sound.PlayableSound
 import wiki.ecohub.modules.menus.addCustomSlots
 import wiki.ecohub.modules.menus.addPage
@@ -93,7 +93,7 @@ class ShopCategory(
     private val menu: Menu = menu(config.getInt("gui.rows")) {
         val pages = config.getSubsections("gui.pages")
 
-        title = StringUtils.format(config.getString("gui.title"))
+        setTitle(StringUtils.format(config.getString("gui.title")))
 
         allowChangingHeldItem()
 
@@ -222,9 +222,9 @@ class ShopCategory(
                     }
 
                     setSlot(
-                        item.row,
-                        item.column,
-                        item.slot
+                        row = item.row,
+                        column = item.column,
+                        slot = item.slot
                     )
                 }
 
@@ -233,7 +233,7 @@ class ShopCategory(
                         val (pg, row, col) = pos
                         if (pg != pageNumber) continue
                         val sched = scheduler!!
-                        setSlot(row, col, RotationSlot(slotIdx) { sched.state })
+                        setSlot(row = row, column = col, slot = RotationSlot(slotIdx) { sched.state })
                     }
                 }
 
