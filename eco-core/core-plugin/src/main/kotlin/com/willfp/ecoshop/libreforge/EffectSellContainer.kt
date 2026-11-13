@@ -1,5 +1,6 @@
 package com.willfp.ecoshop.libreforge
 
+import com.willfp.ecoshop.liveState
 import com.willfp.ecoshop.plugin
 import com.willfp.ecoshop.sell.ItemFilter
 import com.willfp.ecoshop.sell.SellBypass
@@ -89,7 +90,7 @@ object EffectSellContainer : Effect<NoCompileData>("sell_container") {
         val location = data.location ?: return false
         if (!Eco.get().isOwnedByCurrentRegion(location)) return false
         val block = location.block
-        val container = block.getState(false) as? Container ?: return false
+        val container = block.liveState as? Container ?: return false
 
         val wandId = config.getStringOrNull("wand")
         val profile = if (wandId != null) {

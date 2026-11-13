@@ -1,5 +1,6 @@
 package com.willfp.ecoshop.sellchest
 
+import com.willfp.ecoshop.liveState
 import com.willfp.ecoshop.plugin
 import org.bukkit.Bukkit
 import org.bukkit.Material
@@ -132,7 +133,7 @@ object SellChestListener : Listener {
     /** Drops contents and the sell chest item, updates count and index. Caller removes the block. */
     private fun removeChest(block: Block, info: SellChestInfo) {
         val location = block.location.add(0.5, 0.5, 0.5)
-        val container = block.getState(false) as? Container
+        val container = block.liveState as? Container
         if (container != null) {
             for (stack in container.inventory.contents.filterNotNull()) {
                 if (!stack.type.isAir) block.world.dropItemNaturally(location, stack)

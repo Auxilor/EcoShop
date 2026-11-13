@@ -1,5 +1,6 @@
 package com.willfp.ecoshop.sellchest
 
+import com.willfp.ecoshop.liveTileEntities
 import com.willfp.ecoshop.plugin
 import org.bukkit.Bukkit
 import org.bukkit.Chunk
@@ -86,7 +87,7 @@ object SellChestIndex {
     fun dirty(): List<IndexedChest> = chests.values.filter { it.dirty }
 
     fun scanChunk(chunk: Chunk) {
-        for (state in chunk.getTileEntities(false)) {
+        for (state in chunk.liveTileEntities) {
             val info = SellChestData.read(state) ?: continue
             add(state.block, info)
         }
