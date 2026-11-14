@@ -40,7 +40,7 @@ class CommandShop(
             return sender as? Player
         }
 
-        val target = Bukkit.getPlayer(args[0])
+        val target = Bukkit.getPlayerExact(args[0])
         if (target == null) {
             sender.sendMessage(plugin.langYml.getMessage("invalid-player"))
         }
