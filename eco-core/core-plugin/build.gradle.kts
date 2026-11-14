@@ -8,9 +8,9 @@ dependencies {
 
     testImplementation("io.papermc.paper:paper-api:1.21.8-R0.1-SNAPSHOT")
     testImplementation("com.willfp:eco:$ecoVersion")
-    testImplementation("org.junit.jupiter:junit-jupiter:5.11.4")
-    testImplementation("io.mockk:mockk:1.14.11")
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher:1.11.4")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.14.4")
+    testImplementation("io.mockk:mockk:1.14.12")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher:1.14.4")
 }
 
 // Mirror compileOnly (eco, libreforge injected by the libreforge gradle plugin) onto tests.
