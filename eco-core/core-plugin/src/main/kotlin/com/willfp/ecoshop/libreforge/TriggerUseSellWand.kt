@@ -1,11 +1,11 @@
 package com.willfp.ecoshop.libreforge
 
-import com.willfp.libreforge.toDispatcher
-import com.willfp.libreforge.triggers.Trigger
-import com.willfp.libreforge.triggers.TriggerData
-import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.Location
 import org.bukkit.entity.Player
+import wiki.ecohub.game.entity.toDispatcher
+import wiki.ecohub.rules.trigger.Trigger
+import wiki.ecohub.rules.trigger.TriggerData
+import wiki.ecohub.rules.trigger.TriggerParameter
 
 object TriggerUseSellWand : Trigger("use_sell_wand") {
     override val description = "Fires when the player sells a container's contents with a sell wand or the sell_container effect."

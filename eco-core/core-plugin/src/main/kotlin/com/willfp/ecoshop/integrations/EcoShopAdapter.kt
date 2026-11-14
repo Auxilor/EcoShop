@@ -1,8 +1,5 @@
 package com.willfp.ecoshop.integrations
 
-import com.willfp.eco.core.integrations.shop.ShopIntegration
-import com.willfp.eco.core.integrations.shop.ShopSellEvent
-import com.willfp.eco.core.price.Price
 import com.willfp.ecoshop.event.EcoShopSellEvent
 import com.willfp.ecoshop.shop.getUnitSellValue
 import com.willfp.ecoshop.shop.isSellable
@@ -12,22 +9,21 @@ import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.inventory.ItemStack
+import wiki.ecohub.core.event.ShopSellEvent
+import wiki.ecohub.core.price.Price
+import wiki.ecohub.provider.economy.ShopProvider
 
-object EcoShopAdapter : ShopIntegration {
+object EcoShopAdapter : ShopProvider {
     override fun getUnitValue(itemStack: ItemStack, player: Player): Price {
         val factor = itemStack.shopItem?.getEffectiveSellMultiplier(player) ?: 1.0
         return DynamicSellPrice(itemStack.getUnitSellValue(player), factor)
     }
 
-    override fun getSellEventAdapter(): Listener {
-        return SellEventAdapter
-    }
+    override fun getListeners(): Collection<Listener> = listOf(SellEventAdapter)
 
     override fun isSellable(itemStack: ItemStack, player: Player): Boolean {
         return itemStack.isSellable(player)
     }
-
-    override fun getPluginName() = "EcoShop"
 
     private object SellEventAdapter : Listener {
         @EventHandler
@@ -57,5 +53,5 @@ private class DynamicSellPrice(
 
     override fun setMultiplier(player: Player, multiplier: Double) = price.setMultiplier(player, multiplier)
 
-    override fun getIdentifier(): String = price.identifier
+    override fun getIdentifier(): String = price.getIdentifier()
 }

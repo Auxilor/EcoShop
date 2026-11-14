@@ -1,5 +1,7 @@
 package com.willfp.ecoshop.sellchest
 
+import com.willfp.ecoshop.editTileState
+import com.willfp.ecoshop.liveState
 import com.willfp.ecoshop.plugin
 import com.willfp.ecoshop.sell.SellTotals
 import org.bukkit.block.Block
@@ -16,7 +18,7 @@ object SellChestData {
     private val ownerKey = plugin.createNamespacedKey("sellchest_owner")
     private val soldKey = plugin.createNamespacedKey("sellchest_sold")
 
-    fun read(block: Block): SellChestInfo? = read(block.getState(false))
+    fun read(block: Block): SellChestInfo? = read(block.liveState)
 
     fun read(state: BlockState): SellChestInfo? {
         val pdc = (state as? TileState)?.persistentDataContainer ?: return null
@@ -26,22 +28,24 @@ object SellChestData {
     }
 
     fun write(block: Block, typeId: String, owner: UUID) {
-        val state = block.getState(false) as? TileState ?: return
-        state.persistentDataContainer.set(typeKey, PersistentDataType.STRING, typeId)
-        state.persistentDataContainer.set(ownerKey, PersistentDataType.STRING, owner.toString())
+        block.editTileState { state ->
+            state.persistentDataContainer.set(typeKey, PersistentDataType.STRING, typeId)
+            state.persistentDataContainer.set(ownerKey, PersistentDataType.STRING, owner.toString())
+        }
     }
 
     fun readTotals(block: Block): SellTotals {
-        val pdc = (block.getState(false) as? TileState)?.persistentDataContainer ?: return SellTotals.EMPTY
+        val pdc = (block.liveState as? TileState)?.persistentDataContainer ?: return SellTotals.EMPTY
         return SellTotals.decode(pdc.get(soldKey, PersistentDataType.STRING))
     }
 
     fun writeTotals(block: Block, totals: SellTotals) {
-        val state = block.getState(false) as? TileState ?: return
-        if (totals.isEmpty) {
-            state.persistentDataContainer.remove(soldKey)
-        } else {
-            state.persistentDataContainer.set(soldKey, PersistentDataType.STRING, totals.encode())
+        block.editTileState { state ->
+            if (totals.isEmpty) {
+                state.persistentDataContainer.remove(soldKey)
+            } else {
+                state.persistentDataContainer.set(soldKey, PersistentDataType.STRING, totals.encode())
+            }
         }
     }
 }

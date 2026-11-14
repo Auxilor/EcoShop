@@ -2,25 +2,10 @@
 
 package com.willfp.ecoshop.shop
 
-import com.willfp.eco.core.cache.EcoCache
-import com.willfp.eco.core.config.interfaces.Config
-import com.willfp.eco.core.data.Profile
-import com.willfp.eco.core.data.keys.PersistentDataKey
-import com.willfp.eco.core.data.keys.PersistentDataKeyType
-import com.willfp.eco.core.data.profile
-import com.willfp.eco.core.drops.DropQueue
-import com.willfp.eco.core.fast.fast
-import com.willfp.eco.core.items.HashedItem
-import com.willfp.eco.core.items.Items
-import com.willfp.eco.core.items.builder.ItemStackBuilder
-import com.willfp.eco.core.placeholder.context.PlaceholderContext
-import com.willfp.eco.core.price.ConfiguredPrice
-import com.willfp.eco.core.registry.KRegistrable
-import com.willfp.eco.util.NumberUtils
-import com.willfp.eco.util.StringUtils
 import com.willfp.ecoshop.event.EcoShopBuyEvent
 import com.willfp.ecoshop.event.EcoShopSellEvent
 import com.willfp.ecoshop.plugin
+import com.willfp.ecoshop.sell.DynamicPricer
 import com.willfp.ecoshop.sell.ListTarget
 import com.willfp.ecoshop.sell.SellBypass
 import com.willfp.ecoshop.sell.SellCandidate
@@ -31,19 +16,9 @@ import com.willfp.ecoshop.sell.SellSource
 import com.willfp.ecoshop.sell.Seller
 import com.willfp.ecoshop.sell.Sells
 import com.willfp.ecoshop.sell.playerStorageTarget
-import com.willfp.ecoshop.sell.DynamicPricer
 import com.willfp.ecoshop.shop.gui.BuyMenu
 import com.willfp.ecoshop.shop.gui.SellMenu
 import com.willfp.ecoshop.shop.gui.ShopItemSlot
-import com.willfp.libreforge.EmptyProvidedHolder
-import com.willfp.libreforge.NamedValue
-import com.willfp.libreforge.ViolationContext
-import com.willfp.libreforge.conditions.Conditions
-import com.willfp.libreforge.effects.Effects
-import com.willfp.libreforge.toDispatcher
-import com.willfp.libreforge.triggers.DispatchedTrigger
-import com.willfp.libreforge.triggers.TriggerData
-import com.willfp.libreforge.triggers.impl.TriggerBlank
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.OfflinePlayer
@@ -51,8 +26,34 @@ import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import org.bukkit.permissions.Permission
 import org.bukkit.permissions.PermissionDefault
-import java.util.Optional
+import wiki.ecohub.config.Config
+import wiki.ecohub.config.ViolationContext
+import wiki.ecohub.core.platform.profile
+import wiki.ecohub.core.price.ConfiguredPrice
+import wiki.ecohub.core.registry.KRegistrable
+import wiki.ecohub.core.stdlib.NamedValue
+import wiki.ecohub.data.PersistentDataKey
+import wiki.ecohub.data.PersistentDataKeyType
+import wiki.ecohub.data.cache.EcoCache
+import wiki.ecohub.data.profile.Profile
+import wiki.ecohub.game.drop.DropQueue
+import wiki.ecohub.game.entity.player.profile
+import wiki.ecohub.game.entity.toDispatcher
+import wiki.ecohub.game.item.HashedItem
+import wiki.ecohub.game.item.Items
+import wiki.ecohub.game.item.builder.ItemStackBuilder
+import wiki.ecohub.game.item.fast
+import wiki.ecohub.math.NumberUtils
+import wiki.ecohub.rules.condition.Conditions
+import wiki.ecohub.rules.effect.Effects
+import wiki.ecohub.rules.holder.EmptyProvidedHolder
+import wiki.ecohub.rules.trigger.DispatchedTrigger
+import wiki.ecohub.rules.trigger.TriggerBlank
+import wiki.ecohub.rules.trigger.TriggerData
+import wiki.ecohub.ui.placeholder.PlaceholderContext
+import wiki.ecohub.ui.text.StringUtils
 import java.time.Duration
+import java.util.Optional
 import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
 
@@ -121,8 +122,8 @@ class ShopItem(
 
     private val _displayItem = ItemStackBuilder(
         if (config.has("gui.display.item")) {
-            Items.lookup(config.getString("gui.display.item")).item
-        } else item?.item?.clone() ?: ItemStack(Material.AIR)
+            Items.lookup(config.getString("gui.display.item")).getItem()
+        } else item?.run { getItem().clone() } ?: ItemStack(Material.AIR)
     )
         .setAmount(buyAmount)
         .addLoreLines(config.getStrings("gui.display.lore"))
@@ -135,7 +136,7 @@ class ShopItem(
         ?: plugin.configYml.getStringOrNull("shop-items.sold-out-item"))
         ?.takeIf { it.isNotBlank() }
         ?.let { lookup ->
-            ItemStackBuilder(Items.lookup(lookup).item)
+            ItemStackBuilder(Items.lookup(lookup).getItem())
                 .setAmount(buyAmount)
                 .addLoreLines(config.getStrings("gui.display.lore"))
                 .build()
@@ -151,7 +152,7 @@ class ShopItem(
     private val _displayName = config.getFormattedStringOrNull("name")
 
     val displayName: String
-        get() = _displayName ?: this.displayItem.fast().displayName
+        get() = _displayName ?: this.displayItem.fast().getDisplayName()
 
     val row = config.getInt("gui.row")
 
@@ -213,7 +214,7 @@ class ShopItem(
 
     override fun matchesForSale(itemStack: ItemStack): Boolean {
         val shopItem = item ?: return false
-        return if (isStrictMatch) itemStack.isSimilar(shopItem.item) else shopItem.matches(itemStack)
+        return if (isStrictMatch) itemStack.isSimilar(shopItem.getItem()) else shopItem.matches(itemStack)
     }
 
     override fun totalSells(player: OfflinePlayer): Int = getTotalSells(player)
@@ -237,7 +238,7 @@ class ShopItem(
         return NumberUtils.evaluateExpression(expression, PlaceholderContext.EMPTY)
     }
 
-    override fun isEconomyPrice(): Boolean = sellPrice?.identifier == "eco:economy"
+    override fun isEconomyPrice(): Boolean = sellPrice?.getIdentifier() == "eco:economy"
 
     override fun fireSellEvent(player: Player, stack: ItemStack, units: Int, source: SellSource): Double {
         val event = EcoShopSellEvent(player, this, sellPrice!!, stack, units, 1.0, source)
@@ -304,7 +305,7 @@ class ShopItem(
     private val sellReset = GlobalCounterReset(lock = counterLock, key = timesSoldKey)
 
     init {
-        if (this.item != null && this.item.item.amount != 1) {
+        if (this.item != null && this.item.getItem().amount != 1) {
             throw InvalidShopItemException(
                 "Item $id is buying/selling an item " +
                         "with a stack size greater than 1. If you want to sell" +
@@ -521,7 +522,7 @@ class ShopItem(
 
         if (item != null &&
             plugin.configYml.getStringOrNull("shop-items.full-inventory-behaviour") == "reject-sale" &&
-            !hasInventoryRoom(player, item.item, amount)
+            !hasInventoryRoom(player, item.getItem(), amount)
         ) {
             return BuyStatus.INVENTORY_FULL
         }
@@ -579,7 +580,7 @@ class ShopItem(
                 .forceTelekinesis()
 
             repeat(amount) {
-                queue.addItem(item.item)
+                queue.addItem(item.getItem())
             }
 
             queue.push()

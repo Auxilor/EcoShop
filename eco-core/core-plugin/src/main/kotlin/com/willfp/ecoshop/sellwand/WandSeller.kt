@@ -1,6 +1,5 @@
 package com.willfp.ecoshop.sellwand
 
-import com.willfp.eco.core.sound.PlayableSound
 import com.willfp.ecoshop.libreforge.TriggerUseSellWand
 import com.willfp.ecoshop.plugin
 import com.willfp.ecoshop.sell.InventoryTarget
@@ -11,12 +10,13 @@ import com.willfp.ecoshop.sell.Seller
 import com.willfp.ecoshop.sell.Sells
 import com.willfp.ecoshop.util.formatDuration
 import com.willfp.ecoshop.util.infiniteDisplay
-import com.willfp.libreforge.EmptyProvidedHolder
-import com.willfp.libreforge.toDispatcher
-import com.willfp.libreforge.triggers.TriggerData
 import org.bukkit.block.Block
 import org.bukkit.block.Container
 import org.bukkit.entity.Player
+import wiki.ecohub.game.entity.toDispatcher
+import wiki.ecohub.game.sound.PlayableSound
+import wiki.ecohub.rules.holder.EmptyProvidedHolder
+import wiki.ecohub.rules.trigger.TriggerData
 
 /** Runs one wand use: checks, sale, and use/limit bookkeeping. Shared by the listener and the effect. */
 object WandSeller {

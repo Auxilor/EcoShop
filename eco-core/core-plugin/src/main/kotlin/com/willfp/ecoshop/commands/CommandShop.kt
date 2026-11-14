@@ -1,28 +1,24 @@
 package com.willfp.ecoshop.commands
 
-import com.willfp.eco.core.command.impl.PluginCommand
 import com.willfp.ecoshop.plugin
 import com.willfp.ecoshop.shop.Shop
-import org.bukkit.entity.Player
+import wiki.ecohub.core.command.EcoCommand
+import wiki.ecohub.core.command.playerCommand
 
-class CommandShop(
-    private val shop: Shop
-) : PluginCommand(
-    plugin,
-    shop.commandName,
-    "ecoshop.open.${shop.id}",
-    true
-) {
-    override fun onExecute(player: Player, args: List<String>) {
-        if (shop.menu != null) {
-            shop.menu.open(player)
-        } else {
-            if (shop.directCategory == null) {
-                player.sendMessage(plugin.langYml.getMessage("invalid-shop-config").replace("%shop%", shop.id))
-                return
+/**
+ * The command that opens [shop]: its menu, or its single category directly.
+ */
+internal fun shopCommand(shop: Shop): EcoCommand =
+    plugin.playerCommand(name = shop.commandName, permission = "ecoshop.open.${shop.id}") {
+        executes {
+            val menu = shop.menu
+
+            val category = shop.directCategory
+
+            when {
+                menu != null -> menu.open(sender)
+                category != null -> category.openDirect(sender, shop)
+                else -> reply("invalid-shop-config", "shop" to shop.id)
             }
-
-            shop.directCategory?.openDirect(player, shop)
         }
     }
-}

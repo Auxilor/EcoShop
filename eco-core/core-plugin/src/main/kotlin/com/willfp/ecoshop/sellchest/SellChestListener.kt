@@ -1,6 +1,6 @@
 package com.willfp.ecoshop.sellchest
 
-import com.willfp.eco.util.savedDisplayName
+import com.willfp.ecoshop.liveState
 import com.willfp.ecoshop.plugin
 import org.bukkit.Bukkit
 import org.bukkit.Material
@@ -8,15 +8,16 @@ import org.bukkit.block.Block
 import org.bukkit.block.BlockFace
 import org.bukkit.block.Container
 import org.bukkit.block.data.type.Chest
+import org.bukkit.entity.Player
+import org.bukkit.event.Event
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
+import org.bukkit.event.block.Action
 import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.event.block.BlockExplodeEvent
 import org.bukkit.event.block.BlockPlaceEvent
 import org.bukkit.event.entity.EntityExplodeEvent
-import org.bukkit.event.Event
-import org.bukkit.event.block.Action
 import org.bukkit.event.inventory.InventoryCloseEvent
 import org.bukkit.event.inventory.InventoryMoveItemEvent
 import org.bukkit.event.inventory.InventoryOpenEvent
@@ -25,7 +26,7 @@ import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.event.world.ChunkLoadEvent
 import org.bukkit.event.world.ChunkUnloadEvent
-import org.bukkit.entity.Player
+import wiki.ecohub.game.entity.player.PlayerUtils
 
 object SellChestListener : Listener {
     private val horizontal = listOf(BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST)
@@ -97,7 +98,7 @@ object SellChestListener : Listener {
             event.isCancelled = true
             event.player.sendMessage(
                 plugin.langYml.getMessage("sellchest.not-owner")
-                    .replace("%owner%", Bukkit.getOfflinePlayer(info.owner).savedDisplayName)
+                    .replace("%owner%", PlayerUtils.getSavedDisplayName(Bukkit.getOfflinePlayer(info.owner)))
             )
         }
     }
@@ -132,7 +133,7 @@ object SellChestListener : Listener {
     /** Drops contents and the sell chest item, updates count and index. Caller removes the block. */
     private fun removeChest(block: Block, info: SellChestInfo) {
         val location = block.location.add(0.5, 0.5, 0.5)
-        val container = block.getState(false) as? Container
+        val container = block.liveState as? Container
         if (container != null) {
             for (stack in container.inventory.contents.filterNotNull()) {
                 if (!stack.type.isAir) block.world.dropItemNaturally(location, stack)
@@ -157,7 +158,7 @@ object SellChestListener : Listener {
             event.isCancelled = true
             player.sendMessage(
                 plugin.langYml.getMessage("sellchest.not-owner")
-                    .replace("%owner%", Bukkit.getOfflinePlayer(info.owner).savedDisplayName)
+                    .replace("%owner%", PlayerUtils.getSavedDisplayName(Bukkit.getOfflinePlayer(info.owner)))
             )
         }
     }

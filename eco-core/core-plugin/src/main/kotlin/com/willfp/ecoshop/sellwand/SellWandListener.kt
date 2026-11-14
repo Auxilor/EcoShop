@@ -1,5 +1,6 @@
 package com.willfp.ecoshop.sellwand
 
+import com.willfp.ecoshop.liveState
 import com.willfp.ecoshop.plugin
 import org.bukkit.block.Container
 import org.bukkit.event.Event
@@ -24,7 +25,7 @@ object SellWandListener : Listener {
         if (!WandItem.isWand(stack)) return
 
         val block = event.clickedBlock ?: return
-        val container = block.getState(false) as? Container ?: return
+        val container = block.liveState as? Container ?: return
 
         val wand = WandItem.wandOf(stack)
         if (wand == null) {

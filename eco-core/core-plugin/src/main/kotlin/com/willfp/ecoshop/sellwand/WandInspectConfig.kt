@@ -1,6 +1,6 @@
 package com.willfp.ecoshop.sellwand
 
-import com.willfp.eco.core.config.interfaces.Config
+import wiki.ecohub.config.Config
 
 enum class InspectDisplay { MESSAGE, HOLOGRAM, BOTH }
 

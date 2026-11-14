@@ -1,6 +1,5 @@
 package com.willfp.ecoshop.sellwand
 
-import com.willfp.eco.core.fast.fast
 import com.willfp.ecoshop.plugin
 import com.willfp.ecoshop.sell.SellTotals
 import com.willfp.ecoshop.sell.SellValueFormat
@@ -8,6 +7,7 @@ import com.willfp.ecoshop.util.infiniteDisplay
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import org.bukkit.persistence.PersistentDataType
+import wiki.ecohub.game.item.fast
 import java.util.Locale
 import java.util.UUID
 
@@ -52,7 +52,7 @@ object WandItem {
         }
         meta.setMaxStackSize(1)
         stack.itemMeta = meta
-        stack.fast().lore = renderWandLore(wand.loreTemplate, wand.uses, wand.uses, wand.multiplier)
+        stack.fast().setLore(renderWandLore(wand.loreTemplate, wand.uses, wand.uses, wand.multiplier))
         return stack
     }
 
@@ -87,9 +87,11 @@ object WandItem {
             pdc.set(soldKey, PersistentDataType.STRING, totals.encode())
         }
         stack.itemMeta = meta
-        stack.fast().lore = renderWandLore(
-            wand.loreTemplate, uses, wand.uses, wand.multiplier,
-            totals.units, SellValueFormat.format(totals, player)
+        stack.fast().setLore(
+            renderWandLore(
+                wand.loreTemplate, uses, wand.uses, wand.multiplier,
+                totals.units, SellValueFormat.format(totals, player)
+            )
         )
     }
 }

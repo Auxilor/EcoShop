@@ -1,9 +1,10 @@
 package com.willfp.ecoshop.shop
 
-import com.willfp.eco.core.data.Profile
-import com.willfp.eco.core.data.keys.PersistentDataKey
-import com.willfp.eco.core.data.profile
 import org.bukkit.Bukkit
+import wiki.ecohub.core.platform.profile
+import wiki.ecohub.data.PersistentDataKey
+import wiki.ecohub.data.profile.Profile
+import wiki.ecohub.game.entity.player.profile
 import java.util.UUID
 import java.util.concurrent.atomic.AtomicReference
 

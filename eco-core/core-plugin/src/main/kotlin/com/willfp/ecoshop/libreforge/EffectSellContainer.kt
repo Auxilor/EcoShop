@@ -1,7 +1,6 @@
 package com.willfp.ecoshop.libreforge
 
-import com.willfp.eco.core.Eco
-import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.ecoshop.liveState
 import com.willfp.ecoshop.plugin
 import com.willfp.ecoshop.sell.ItemFilter
 import com.willfp.ecoshop.sell.SellBypass
@@ -10,16 +9,18 @@ import com.willfp.ecoshop.sellwand.ContainerTypes
 import com.willfp.ecoshop.sellwand.SellWands
 import com.willfp.ecoshop.sellwand.WandProfile
 import com.willfp.ecoshop.sellwand.WandSeller
-import com.willfp.libreforge.ArgType
-import com.willfp.libreforge.NoCompileData
-import com.willfp.libreforge.arguments
-import com.willfp.libreforge.effects.Effect
-import com.willfp.libreforge.getDoubleFromExpression
-import com.willfp.libreforge.getIntFromExpression
-import com.willfp.libreforge.triggers.TriggerData
-import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.Material
 import org.bukkit.block.Container
+import wiki.ecohub.config.ArgType
+import wiki.ecohub.config.Config
+import wiki.ecohub.config.arguments
+import wiki.ecohub.config.section.getDoubleFromExpression
+import wiki.ecohub.config.section.getIntFromExpression
+import wiki.ecohub.core.Eco
+import wiki.ecohub.core.registry.NoCompileData
+import wiki.ecohub.rules.effect.Effect
+import wiki.ecohub.rules.trigger.TriggerData
+import wiki.ecohub.rules.trigger.TriggerParameter
 
 object EffectSellContainer : Effect<NoCompileData>("sell_container") {
     override val description = "Sells the sellable contents of the container at the trigger location, like a sell wand."
@@ -89,7 +90,7 @@ object EffectSellContainer : Effect<NoCompileData>("sell_container") {
         val location = data.location ?: return false
         if (!Eco.get().isOwnedByCurrentRegion(location)) return false
         val block = location.block
-        val container = block.getState(false) as? Container ?: return false
+        val container = block.liveState as? Container ?: return false
 
         val wandId = config.getStringOrNull("wand")
         val profile = if (wandId != null) {

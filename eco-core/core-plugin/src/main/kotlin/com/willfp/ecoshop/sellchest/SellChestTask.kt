@@ -1,8 +1,6 @@
 package com.willfp.ecoshop.sellchest
 
-import com.willfp.eco.core.Eco
-import com.willfp.eco.core.scheduling.EcoTask
-import com.willfp.eco.util.StringUtils
+import com.willfp.ecoshop.liveState
 import com.willfp.ecoshop.plugin
 import com.willfp.ecoshop.sell.InventoryTarget
 import com.willfp.ecoshop.sell.SellRequest
@@ -13,6 +11,10 @@ import com.willfp.ecoshop.sell.Seller
 import com.willfp.ecoshop.sell.Sells
 import org.bukkit.Bukkit
 import org.bukkit.block.Container
+import wiki.ecohub.core.Eco
+import wiki.ecohub.core.scheduler.EcoTask
+import wiki.ecohub.game.entity.player.asAudience
+import wiki.ecohub.ui.text.StringUtils
 import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
 
@@ -78,7 +80,7 @@ object SellChestTask {
 
     private fun sellChest(chest: IndexedChest, type: SellChestType, nowTick: Long): Boolean {
         val block = chest.key.block()
-        val container = block?.getState(false) as? Container
+        val container = block?.liveState as? Container
         if (block == null || container == null || SellChestData.read(container) == null) {
             SellChestIndex.remove(chest.key)
             return false
@@ -155,7 +157,7 @@ object SellChestTask {
         if (chest.sellsSinceNotify < every) return
         chest.sellsSinceNotify = 0
 
-        player.sendActionBar(
+        player.asAudience().sendActionBar(
             StringUtils.toComponent(
                 plugin.langYml.getFormattedString("messages.sellchest.sold")
                     .replace("%amount%", result.soldUnits.toString())

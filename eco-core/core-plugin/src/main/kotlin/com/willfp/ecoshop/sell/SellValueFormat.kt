@@ -1,11 +1,11 @@
 package com.willfp.ecoshop.sell
 
-import com.willfp.eco.core.Eco
-import com.willfp.eco.util.NumberUtils
-import com.willfp.eco.util.StringUtils
 import com.willfp.ecoshop.shop.ShopItems
 import com.willfp.ecoshop.shop.formatMultiple
 import org.bukkit.entity.Player
+import wiki.ecohub.core.Eco
+import wiki.ecohub.math.NumberUtils
+import wiki.ecohub.ui.text.StringUtils
 
 internal fun renderValues(totals: SellTotals, formatFor: (String) -> String?): List<String> =
     totals.values.map { (type, value) ->
@@ -26,9 +26,9 @@ object SellValueFormat {
     }
 
     private fun shopFormat(type: String): String? {
-        val item = ShopItems.values().firstOrNull { it.sellPrice?.identifier == type } ?: return null
+        val item = ShopItems.values().firstOrNull { it.sellPrice?.getIdentifier() == type } ?: return null
         val priceType = item.config.getString("sell.type")
-        return Eco.get().ecoPlugin.langYml.getSubsections("price-display")
+        return Eco.get().getEcoPlugin().langYml.getSubsections("price-display")
             .firstOrNull { it.getString("type").equals(priceType, ignoreCase = true) }
             ?.getString("display")
             ?: item.config.getStringOrNull("sell.display")

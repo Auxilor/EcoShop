@@ -1,8 +1,8 @@
 package com.willfp.ecoshop.sell
 
-import com.willfp.eco.util.NumberUtils
 import com.willfp.ecoshop.plugin
 import com.willfp.ecoshop.shop.PriceDynamicConfig
+import wiki.ecohub.math.NumberUtils
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.math.pow
 
