@@ -56,7 +56,7 @@ object SellGUI {
 
                 DropQueue(player)
                     .addItems(unsold)
-                    .forceTelekinesis()
+                    .giveDirectly()
                     .push()
             }
 

@@ -37,7 +37,7 @@ object CommandGiveSellChest : Subcommand(
         val amount = args.getOrNull(2)?.toIntOrNull()?.coerceAtLeast(1) ?: 1
 
         player.runOwned {
-            val queue = DropQueue(player).forceTelekinesis()
+            val queue = DropQueue(player).giveDirectly()
             var left = amount
             while (left > 0) {
                 val stack = SellChestItem.create(type)
