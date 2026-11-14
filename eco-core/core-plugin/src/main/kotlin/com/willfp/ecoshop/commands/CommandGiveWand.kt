@@ -37,7 +37,7 @@ object CommandGiveWand : Subcommand(
         val amount = args.getOrNull(2)?.toIntOrNull()?.coerceAtLeast(1) ?: 1
 
         player.runOwned {
-            val queue = DropQueue(player).forceTelekinesis()
+            val queue = DropQueue(player).giveDirectly()
             repeat(amount) {
                 queue.addItem(WandItem.create(wand))
             }
