@@ -46,6 +46,7 @@ permissions:
       ecoshop.command.givewand: true
       ecoshop.command.givesellchest: true
       ecoshop.command.sellchestcount: true
+      ecoshop.command.open.others: true
       ecoshop.sellchest.bypass-owner: true
       ecoshop.command.sell.*: true
 
@@ -69,6 +70,9 @@ permissions:
     default: op
   ecoshop.command.givewand:
     description: Allows giving sell wands
+    default: op
+  ecoshop.command.open.others:
+    description: Allows opening a shop for another player with /<shop> <player>
     default: op
   ecoshop.sellwand.use:
     description: Allows using sell wands

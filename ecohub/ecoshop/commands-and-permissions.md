@@ -22,6 +22,7 @@ This page lists every EcoShop command, the permission it needs, and the extra pe
 | `/sell hand` | Sells the items in the player's hand | `ecoshop.command.sell.hand` |
 | `/sell all` | Sells all sellable items in the player's inventory | `ecoshop.command.sell.all` |
 | `/sell handall` | Sells the items in hand and all sellable items at once | `ecoshop.command.sell.handall` |
+| `/<shop command> <player>` | Opens that shop for another player; the console can run it too, and the player does not need `ecoshop.open.<id>` | `ecoshop.command.open.others` |
 
 ## Additional permissions
 
