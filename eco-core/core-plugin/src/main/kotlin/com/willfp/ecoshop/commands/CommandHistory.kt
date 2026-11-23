@@ -1,111 +1,80 @@
 package com.willfp.ecoshop.commands
 
-import com.willfp.eco.core.command.impl.Subcommand
-import com.willfp.eco.util.StringUtils
 import com.willfp.ecoshop.logging.ShopLogger
-import com.willfp.ecoshop.plugin
-import org.bukkit.Bukkit
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
+import wiki.ecohub.core.command.CommandBuilder
+import wiki.ecohub.core.command.CommandContext
+import java.io.File
 
-object CommandHistory : Subcommand(
-    plugin,
-    "history",
-    "ecoshop.command.history",
-    false
+private val validTypes = listOf("buy", "sell", "all")
+
+private val amountCompletions = listOf("1", "5", "10", "25", "50")
+
+private const val TYPE_ARGS = 3
+
+/**
+ * `history <player> <amount> [buy|sell|all]`. The logs are read async, newest day and line
+ * first; the reply goes back to the sender's region.
+ */
+internal fun CommandBuilder<CommandSender>.historyCommand() = subcommand(
+    name = "history",
+    permission = "ecoshop.command.history"
 ) {
-    private val validTypes = setOf("buy", "sell", "all")
-
-    override fun onExecute(sender: CommandSender, args: List<String>) {
-        if (args.isEmpty()) {
-            sender.sendMessage(plugin.langYml.getMessage("must-specify-player"))
-            return
-        }
-
-        val playerName = args[0]
-
-        val amount = args.getOrNull(1)?.toIntOrNull()
-        if (amount == null || amount <= 0) {
-            sender.sendMessage(plugin.langYml.getMessage("invalid-amount"))
-            return
-        }
-
-        val type = (args.getOrNull(2) ?: "all").lowercase()
-        if (type !in validTypes) {
-            sender.sendMessage(plugin.langYml.getMessage("invalid-history-type"))
-            return
-        }
-
+    executes {
+        val playerName = argument(0, "must-specify-player")
+        val amount = args.getOrNull(1)?.toIntOrNull()?.takeIf { it > 0 } ?: fail("invalid-amount")
+        val type = (args.getOrNull(2) ?: "all").lowercase().takeIf { it in validTypes } ?: fail("invalid-history-type")
         val maxDays = plugin.configYml.getInt("logging.max-history-days")
 
         plugin.scheduler.async().run {
             val matches = scanHistory(playerName, amount, type, maxDays)
-
             val replyContext = (sender as? Player)?.let { plugin.scheduler.on(it) } ?: plugin.scheduler.global()
-            replyContext.run {
-                if (matches.isEmpty()) {
-                    sender.sendMessage(
-                        plugin.langYml.getMessage("no-history-found", StringUtils.FormatOption.WITHOUT_PLACEHOLDERS)
-                            .replace("%player%", playerName)
-                    )
-                    return@run
-                }
 
-                sender.sendMessage(
-                    plugin.langYml.getMessage("history-header", StringUtils.FormatOption.WITHOUT_PLACEHOLDERS)
-                        .replace("%amount%", matches.size.toString())
-                        .replace("%player%", playerName)
-                )
-                for (line in matches) {
-                    sender.sendMessage(line)
-                }
-            }
+            replyContext.run { sendHistory(playerName, matches) }
         }
     }
 
-    /** Scans log files newest-day-first, returns up to [amount] matching lines. */
-    private fun scanHistory(playerName: String, amount: Int, type: String, maxDays: Int): List<String> {
-        val results = mutableListOf<String>()
-
-        if (!ShopLogger.logDirectory.exists()) {
-            return results
-        }
-
-        val files = ShopLogger.logDirectory.listFiles { f -> f.extension == "log" }
-            ?.sortedByDescending { it.name }
-            ?.take(maxDays)
-            ?: return results
-
-        for (file in files) {
-            file.bufferedReader().useLines { lines ->
-                for (line in lines.asIterable().reversed()) {
-                    if (results.size >= amount) return results
-
-                    val parts = line.substringAfter("] ").split(" ")
-                    if (parts.size < 2) continue
-
-                    val linePlayer = parts[0]
-                    val lineType = parts[1]
-
-                    if (!linePlayer.equals(playerName, ignoreCase = true)) continue
-                    if (type != "all" && !lineType.equals(type, ignoreCase = true)) continue
-
-                    results.add(line)
-                }
-            }
-
-            if (results.size >= amount) break
-        }
-
-        return results
-    }
-
-    override fun tabComplete(sender: CommandSender, args: List<String>): List<String> {
-        return when (args.size) {
-            1 -> Bukkit.getOnlinePlayers().map { it.name }
-            2 -> listOf("1", "5", "10", "25", "50")
-            3 -> validTypes.toList()
+    completes {
+        when (args.size) {
+            1 -> playerNames()
+            2 -> amountCompletions
+            TYPE_ARGS -> validTypes
             else -> emptyList()
         }
     }
+}
+
+private fun CommandContext<CommandSender>.sendHistory(playerName: String, matches: List<String>) {
+    if (matches.isEmpty()) {
+        replyWithoutPlaceholders("no-history-found", "player" to playerName)
+    } else {
+        replyWithoutPlaceholders("history-header", "amount" to matches.size.toString(), "player" to playerName)
+        matches.forEach { sender.sendMessage(it) }
+    }
+}
+
+private fun scanHistory(playerName: String, amount: Int, type: String, maxDays: Int): List<String> {
+    val files = ShopLogger.logDirectory.takeIf { it.exists() }
+        ?.run { listFiles { file -> file.extension == "log" } }
+        .orEmpty()
+        .asSequence()
+        .sortedByDescending { it.name }
+        .take(maxDays)
+
+    return files
+        .flatMap { readNewestFirst(it) }
+        .filter { matches(it, playerName, type) }
+        .take(amount)
+        .toList()
+}
+
+private fun readNewestFirst(file: File): Sequence<String> = file.readLines().asReversed().asSequence()
+
+private fun matches(line: String, playerName: String, type: String): Boolean {
+    val parts = line.substringAfter("] ").split(" ")
+
+    return parts.size >= 2 &&
+        parts[0].equals(playerName, ignoreCase = true) &&
+        (type == "all" || parts[1].equals(type, ignoreCase = true))
 }

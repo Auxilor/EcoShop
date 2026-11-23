@@ -1,14 +1,14 @@
 package com.willfp.ecoshop.sellwand
 
-import com.willfp.eco.core.config.interfaces.Config
-import com.willfp.eco.core.items.CustomItem
-import com.willfp.eco.core.items.Items
-import com.willfp.eco.core.registry.KRegistrable
 import com.willfp.ecoshop.plugin
 import com.willfp.ecoshop.sell.ItemFilter
 import com.willfp.ecoshop.sell.SellBypass
-import com.willfp.libreforge.ViolationContext
-import com.willfp.libreforge.conditions.Conditions
+import wiki.ecohub.config.Config
+import wiki.ecohub.config.ViolationContext
+import wiki.ecohub.core.registry.KRegistrable
+import wiki.ecohub.game.item.CustomItem
+import wiki.ecohub.game.item.Items
+import wiki.ecohub.rules.condition.Conditions
 
 data class WandLimits(
     val id: String,
@@ -23,7 +23,7 @@ class SellWand(
 ) : KRegistrable {
     private val context = ViolationContext(plugin, "sell wand $id")
 
-    val baseItem = Items.lookup(config.getString("item")).item
+    val baseItem = Items.lookup(config.getString("item")).getItem()
 
     val displayName: String = config.getFormattedStringOrNull("name") ?: id
 

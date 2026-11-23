@@ -1,69 +1,49 @@
 package com.willfp.ecoshop.commands
 
-import com.willfp.eco.core.command.impl.PluginCommand
 import com.willfp.ecoshop.plugin
-import com.willfp.ecoshop.runOwned
 import com.willfp.ecoshop.shop.Shop
 import org.bukkit.Bukkit
-import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
-import org.bukkit.util.StringUtil
+import wiki.ecohub.core.command.CommandContext
+import wiki.ecohub.core.command.EcoCommand
+import wiki.ecohub.core.command.command
+import wiki.ecohub.game.entity.runOwned
 
-class CommandShop(
-    private val shop: Shop
-) : PluginCommand(
-    plugin,
-    shop.commandName,
-    "ecoshop.open.${shop.id}",
-    false
-) {
-    override fun onExecute(sender: CommandSender, args: List<String>) {
-        val target = findTarget(sender, args) ?: return
+private const val OTHERS_PERMISSION = "ecoshop.command.open.others"
 
-        target.runOwned { openShop(target, sender) }
-    }
-
-    override fun tabComplete(sender: CommandSender, args: List<String>): List<String> {
-        if (args.size != 1 || !sender.hasPermission(OTHERS_PERMISSION)) {
-            return emptyList()
-        }
-
-        return StringUtil.copyPartialMatches(args[0], Bukkit.getOnlinePlayers().map { it.name }, mutableListOf())
-    }
-
-    private fun findTarget(sender: CommandSender, args: List<String>): Player? {
-        if (args.isEmpty() || !sender.hasPermission(OTHERS_PERMISSION)) {
-            if (sender !is Player) {
-                sender.sendMessage(plugin.langYml.getMessage("not-player"))
+/**
+ * The command that opens [shop]: its menu, or its single category directly.
+ * With [OTHERS_PERMISSION], the first argument opens it for that player instead.
+ */
+internal fun shopCommand(shop: Shop): EcoCommand =
+    plugin.command(name = shop.commandName, permission = "ecoshop.open.${shop.id}") {
+        executes {
+            val target = if (args.isEmpty() || !sender.hasPermission(OTHERS_PERMISSION)) {
+                sender as? Player ?: fail("not-player")
+            } else {
+                Bukkit.getPlayerExact(args[0]) ?: fail("invalid-player")
             }
 
-            return sender as? Player
+            target.runOwned { openShop(shop, target) }
         }
 
-        val target = Bukkit.getPlayerExact(args[0])
-        if (target == null) {
-            sender.sendMessage(plugin.langYml.getMessage("invalid-player"))
+        completes {
+            if (args.size != 1 || !sender.hasPermission(OTHERS_PERMISSION)) {
+                emptyList()
+            } else {
+                playerNames()
+            }
         }
-
-        return target
     }
 
-    private fun openShop(player: Player, sender: CommandSender) {
-        if (shop.menu != null) {
-            shop.menu.open(player)
-            return
-        }
+private fun CommandContext<*>.openShop(shop: Shop, player: Player) {
+    val menu = shop.menu
 
-        val category = shop.directCategory
-        if (category == null) {
-            sender.sendMessage(plugin.langYml.getMessage("invalid-shop-config").replace("%shop%", shop.id))
-            return
-        }
+    val category = shop.directCategory
 
-        category.openDirect(player, shop)
-    }
-
-    private companion object {
-        const val OTHERS_PERMISSION = "ecoshop.command.open.others"
+    when {
+        menu != null -> menu.open(player)
+        category != null -> category.openDirect(player, shop)
+        else -> reply("invalid-shop-config", "shop" to shop.id)
     }
 }

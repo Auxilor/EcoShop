@@ -1,12 +1,12 @@
 package com.willfp.ecoshop.shop.rotation
 
-import com.willfp.eco.core.config.interfaces.Config
-import com.willfp.eco.core.scheduling.EcoTask
-import com.willfp.eco.util.NumberUtils
 import com.willfp.ecoshop.plugin
 import com.willfp.ecoshop.runOnGlobalRegion
 import com.willfp.ecoshop.shop.ShopItem
 import org.bukkit.Bukkit
+import wiki.ecohub.config.Config
+import wiki.ecohub.core.scheduler.EcoTask
+import wiki.ecohub.math.NumberUtils
 import java.io.File
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -148,11 +148,15 @@ class RotationScheduler(
     // distinct items every draw, first pick has probability exactly weight/sum(weight).
     private fun weightedSample(items: List<ShopItem>, count: Int): List<ShopItem> {
         if (count <= 0 || items.isEmpty()) return emptyList()
-        return items
-            .map { it to Math.pow(NumberUtils.randFloat(0.0, 1.0), 1.0 / it.rotationWeight.coerceAtLeast(1)) }
+        return items.asSequence()
+            .map { item ->
+                val roll = NumberUtils.randFloat(min = 0.0, max = 1.0)
+                item to Math.pow(roll, 1.0 / item.rotationWeight.coerceAtLeast(1))
+            }
             .sortedByDescending { it.second }
             .take(count)
             .map { it.first }
+            .toList()
     }
 
     // Online players only - resetting every offline player's profile on the main

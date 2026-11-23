@@ -4,6 +4,7 @@ import com.willfp.ecoshop.shop.PriceDynamicConfig
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import kotlin.math.floor
+import wiki.ecohub.game.item.isEmptyStack
 
 /** Computes what a sell request would pay, without side effects. */
 class SellQuoter(
@@ -22,7 +23,7 @@ class SellQuoter(
 
         for (index in request.target.indices) {
             val stack = request.target.get(index) ?: continue
-            if (stack.isEmpty || stack.amount <= 0) continue
+            if (stack.isEmptyStack) continue
 
             val candidate = lookup(stack)
             val rejection = rejection(candidate, stack, request, player)

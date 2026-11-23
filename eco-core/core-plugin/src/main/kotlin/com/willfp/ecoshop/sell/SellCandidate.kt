@@ -1,10 +1,10 @@
 package com.willfp.ecoshop.sell
 
-import com.willfp.eco.core.price.ConfiguredPrice
 import com.willfp.ecoshop.shop.PriceDynamicConfig
 import org.bukkit.OfflinePlayer
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
+import wiki.ecohub.core.price.ConfiguredPrice
 
 /** Everything the sell core needs from a shop item. Implemented by ShopItem. */
 interface SellCandidate {

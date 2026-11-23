@@ -1,10 +1,10 @@
 package com.willfp.ecoshop.sell
 
-import com.willfp.eco.core.price.ConfiguredPrice
 import com.willfp.ecoshop.shop.PriceDynamicConfig
 import io.mockk.every
 import io.mockk.mockk
 import org.bukkit.inventory.ItemStack
+import wiki.ecohub.core.price.ConfiguredPrice
 
 /** Builds a mocked SellCandidate with sensible defaults. */
 fun testCandidate(

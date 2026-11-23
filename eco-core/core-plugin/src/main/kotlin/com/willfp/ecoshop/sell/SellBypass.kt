@@ -1,6 +1,6 @@
 package com.willfp.ecoshop.sell
 
-import com.willfp.eco.core.config.interfaces.Config
+import wiki.ecohub.config.Config
 
 /**
  * Checks a sell skips. A bypassed check is skipped entirely: the sale ignores it

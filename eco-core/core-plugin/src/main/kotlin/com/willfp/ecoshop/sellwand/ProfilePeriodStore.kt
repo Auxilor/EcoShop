@@ -1,10 +1,10 @@
 package com.willfp.ecoshop.sellwand
 
-import com.willfp.eco.core.data.keys.PersistentDataKey
-import com.willfp.eco.core.data.keys.PersistentDataKeyType
-import com.willfp.eco.core.data.profile
 import com.willfp.ecoshop.plugin
 import org.bukkit.OfflinePlayer
+import wiki.ecohub.data.PersistentDataKey
+import wiki.ecohub.data.PersistentDataKeyType
+import wiki.ecohub.game.entity.player.profile
 import java.util.concurrent.ConcurrentHashMap
 
 /** Stores wand period state in the player profile, so it survives restarts and syncs across servers. */

@@ -1,28 +1,16 @@
 package com.willfp.ecoshop.commands
 
-import com.willfp.eco.core.command.impl.PluginCommand
-import com.willfp.ecoshop.plugin
-import org.bukkit.command.CommandSender
+import com.willfp.ecoshop.EcoShopPlugin
+import wiki.ecohub.core.command.command
 
-object CommandEcoShop : PluginCommand(
-    plugin,
-    "ecoshop",
-    "ecoshop.command.ecoshop",
-    false
-) {
-    init {
-        this.addSubcommand(CommandReload)
-            .addSubcommand(CommandResetBuys)
-            .addSubcommand(CommandResetSells)
-            .addSubcommand(CommandResetDynamicPricing)
-            .addSubcommand(CommandRotate)
-            .addSubcommand(CommandHistory)
-            .addSubcommand(CommandGiveWand)
-            .addSubcommand(CommandGiveSellChest)
-            .addSubcommand(CommandSellChestCount)
-    }
-
-    override fun onExecute(sender: CommandSender, args: List<String>) {
-        sender.sendMessage(plugin.langYml.getMessage("invalid-command"))
-    }
+internal fun EcoShopPlugin.ecoShopCommand() = command(name = "ecoshop", permission = "ecoshop.command.ecoshop") {
+    reloadCommand()
+    resetCountsCommand(ResetKind.BUYS)
+    resetCountsCommand(ResetKind.SELLS)
+    resetDynamicPricingCommand()
+    rotateCommand()
+    historyCommand()
+    giveWandCommand()
+    giveSellChestCommand()
+    sellChestCountCommand()
 }

@@ -1,11 +1,11 @@
 package com.willfp.ecoshop.sellchest
 
-import com.willfp.eco.core.data.keys.PersistentDataKey
-import com.willfp.eco.core.data.keys.PersistentDataKeyType
-import com.willfp.eco.core.data.profile
 import com.willfp.ecoshop.plugin
 import org.bukkit.OfflinePlayer
 import org.bukkit.entity.Player
+import wiki.ecohub.data.PersistentDataKey
+import wiki.ecohub.data.PersistentDataKeyType
+import wiki.ecohub.game.entity.player.profile
 
 private const val LIMIT_PREFIX = "ecoshop.sellchest.limit."
 

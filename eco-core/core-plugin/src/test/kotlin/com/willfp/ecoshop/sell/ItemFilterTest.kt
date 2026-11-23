@@ -1,6 +1,5 @@
 package com.willfp.ecoshop.sell
 
-import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.ecoshop.fakeStack
 import io.mockk.every
 import io.mockk.mockk
@@ -9,6 +8,7 @@ import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
+import wiki.ecohub.config.Config
 
 class ItemFilterTest {
     private fun candidate(id: String, vararg categories: String): SellCandidate = mockk {

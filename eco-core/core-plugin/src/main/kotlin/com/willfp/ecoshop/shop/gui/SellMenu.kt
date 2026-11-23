@@ -1,16 +1,5 @@
 package com.willfp.ecoshop.shop.gui
 
-import com.willfp.eco.core.gui.addCustomSlots
-import com.willfp.eco.core.gui.component.ConfigButton
-import com.willfp.eco.core.gui.component.addComponent
-import com.willfp.eco.core.gui.getSlotLocations
-import com.willfp.eco.core.gui.menu
-import com.willfp.eco.core.gui.menu.Menu
-import com.willfp.eco.core.gui.onLeftClick
-import com.willfp.eco.core.gui.setMask
-import com.willfp.eco.core.gui.slot
-import com.willfp.eco.core.items.Items
-import com.willfp.eco.core.items.builder.modify
 import com.willfp.ecoshop.plugin
 import com.willfp.ecoshop.sell.SellMessages
 import com.willfp.ecoshop.shop.SellStatus
@@ -21,6 +10,18 @@ import com.willfp.ecoshop.shop.kickBack
 import com.willfp.ecoshop.shop.openAndStack
 import com.willfp.ecoshop.shop.parentShop
 import org.bukkit.entity.Player
+import wiki.ecohub.game.item.Items
+import wiki.ecohub.game.item.builder.modify
+import wiki.ecohub.game.item.modify
+import wiki.ecohub.modules.menus.addCustomSlots
+import wiki.ecohub.modules.menus.component.ConfigButton
+import wiki.ecohub.modules.menus.component.addComponent
+import wiki.ecohub.modules.menus.getSlotLocations
+import wiki.ecohub.modules.menus.menu
+import wiki.ecohub.modules.menus.menu.Menu
+import wiki.ecohub.modules.menus.onLeftClick
+import wiki.ecohub.modules.menus.setMask
+import wiki.ecohub.modules.menus.slot
 import kotlin.math.min
 
 class SellMenu(
@@ -63,8 +64,10 @@ class SellMenu(
     }
 
     private val menu = menu(plugin.configYml.getInt("sell-menu.rows")) {
-        title = plugin.configYml.getFormattedString("sell-menu.title")
-            .replace("%item%", item.displayName)
+        setTitle(
+            plugin.configYml.getFormattedString("sell-menu.title")
+                .replace("%item%", item.displayName)
+        )
 
         allowChangingHeldItem()
 
@@ -72,9 +75,9 @@ class SellMenu(
 
         for (location in plugin.configYml.getSlotLocations("sell-menu.item")) {
             setSlot(
-                location.row,
-                location.column,
-                slot { player, menu ->
+                row = location.row,
+                column = location.column,
+                slot = slot { player, menu ->
                     item.displayItem.modify {
                         val amount = menu.amountOfItem[player]
 
@@ -102,9 +105,9 @@ class SellMenu(
         for (config in plugin.configYml.getSubsections("sell-menu.add-buttons")) {
             for (location in config.getSlotLocations()) {
                 addComponent(
-                    location.row,
-                    location.column,
-                    AmountAdjustSelector(
+                    row = location.row,
+                    column = location.column,
+                    component = AmountAdjustSelector(
                         item,
                         config.getInt("add"),
                         config
@@ -116,22 +119,22 @@ class SellMenu(
         for (config in plugin.configYml.getSubsections("sell-menu.set-buttons")) {
             for (location in config.getSlotLocations()) {
                 addComponent(
-                    location.row,
-                    location.column,
-                    AmountSetSelector(
+                    row = location.row,
+                    column = location.column,
+                    component = AmountSetSelector(
                         config
-                    ) {
+                    ) { player ->
                         val maxSellable = min(
-                            item.getAmountInPlayerInventory(it),
+                            item.getAmountInPlayerInventory(player),
                             min(
-                                item.getSellsLeft(it),
+                                item.getSellsLeft(player),
                                 item.globalSellLimit - item.getTotalGlobalSells()
                             )
                         )
 
                         min(
                             maxSellable,
-                            item.item?.item?.type?.maxStackSize ?: Int.MAX_VALUE
+                            item.item?.run { getItem().type.maxStackSize } ?: Int.MAX_VALUE
                         ).coerceAtMost(
                             min(
                                 64,
@@ -151,9 +154,9 @@ class SellMenu(
 
         for (location in plugin.configYml.getSlotLocations("sell-menu.confirm")) {
             setSlot(
-                location.row,
-                location.column,
-                slot({ player, menu ->
+                row = location.row,
+                column = location.column,
+                slot = slot({ player, menu ->
                     Items.lookup(plugin.configYml.getString("sell-menu.confirm.item")).modify {
                         addLoreLines(
                             plugin.langYml.getStrings("confirm-sell-price")
@@ -191,9 +194,9 @@ class SellMenu(
         if (sellAllConfig.getBool("enabled")) {
             for (location in sellAllConfig.getSlotLocations()) {
                 setSlot(
-                    location.row,
-                    location.column,
-                    slot({ player, _ ->
+                    row = location.row,
+                    column = location.column,
+                    slot = slot({ player, _ ->
                         val maxAmount = item.getAmountInPlayerInventory(player)
                         val priceDisplay = item.sellPrice?.getDisplay(player, maxAmount * item.getEffectiveSellMultiplier(player)) ?: "0"
 

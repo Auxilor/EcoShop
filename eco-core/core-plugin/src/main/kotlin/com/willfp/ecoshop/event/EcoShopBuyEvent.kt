@@ -1,11 +1,11 @@
 package com.willfp.ecoshop.event
 
-import com.willfp.eco.core.price.Price
 import com.willfp.ecoshop.shop.BuyType
 import com.willfp.ecoshop.shop.ShopItem
 import org.bukkit.entity.Player
 import org.bukkit.event.HandlerList
 import org.bukkit.event.player.PlayerEvent
+import wiki.ecohub.core.price.Price
 
 class EcoShopBuyEvent(
     who: Player,

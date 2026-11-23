@@ -1,13 +1,14 @@
 package com.willfp.ecoshop.sellchest
 
-import com.willfp.eco.core.config.interfaces.Config
-import com.willfp.eco.core.items.CustomItem
-import com.willfp.eco.core.items.Items
-import com.willfp.eco.core.registry.KRegistrable
 import com.willfp.ecoshop.plugin
 import com.willfp.ecoshop.sell.ItemFilter
 import com.willfp.ecoshop.sell.SellBypass
 import org.bukkit.Material
+import wiki.ecohub.config.Config
+import wiki.ecohub.core.plugin.startup.Prerequisite
+import wiki.ecohub.core.registry.KRegistrable
+import wiki.ecohub.game.item.CustomItem
+import wiki.ecohub.game.item.Items
 
 enum class Overflow {
     KEEP,
@@ -27,10 +28,10 @@ class SellChestType(
             Material.CHEST
         }
 
-    val baseItem = Items.lookup(config.getString("item")).item.let { item ->
+    val baseItem = Items.lookup(config.getString("item")).getItem().let { item ->
         if (item.type != block) {
             plugin.logger.warning("[sell chest $id] item material ${item.type} does not match block $block; using $block")
-            item.withType(block)
+            if (Prerequisite.HAS_PAPER.isMet) item.withType(block) else item.clone().apply { type = block }
         } else item
     }
 

@@ -1,11 +1,11 @@
 package com.willfp.ecoshop.sellchest
 
-import com.willfp.eco.core.fast.fast
 import com.willfp.ecoshop.plugin
 import com.willfp.ecoshop.sell.SellTotals
 import com.willfp.ecoshop.sell.SellValueFormat
 import org.bukkit.inventory.ItemStack
 import org.bukkit.persistence.PersistentDataType
+import wiki.ecohub.game.item.fast
 import java.util.Locale
 
 object SellChestItem {
@@ -22,10 +22,12 @@ object SellChestItem {
         }
         stack.itemMeta = meta
         if (type.loreTemplate.isNotEmpty()) {
-            stack.fast().lore = type.loreTemplate.map {
-                it.replace("%sold_items%", "%,d".format(Locale.ROOT, totals.units))
-                    .replace("%sold_value%", SellValueFormat.format(totals, null))
-            }
+            stack.fast().setLore(
+                type.loreTemplate.map {
+                    it.replace("%sold_items%", "%,d".format(Locale.ROOT, totals.units))
+                        .replace("%sold_value%", SellValueFormat.format(totals, null))
+                }
+            )
         }
         return stack
     }

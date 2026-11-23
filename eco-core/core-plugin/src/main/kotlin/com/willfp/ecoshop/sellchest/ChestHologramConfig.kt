@@ -1,6 +1,6 @@
 package com.willfp.ecoshop.sellchest
 
-import com.willfp.eco.core.config.interfaces.Config
+import wiki.ecohub.config.Config
 
 data class ChestHologramConfig(
     val enabled: Boolean,

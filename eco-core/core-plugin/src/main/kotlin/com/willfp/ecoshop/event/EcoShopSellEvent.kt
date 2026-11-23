@@ -1,12 +1,12 @@
 package com.willfp.ecoshop.event
 
-import com.willfp.eco.core.price.Price
 import com.willfp.ecoshop.sell.SellSource
 import com.willfp.ecoshop.shop.ShopItem
 import org.bukkit.entity.Player
 import org.bukkit.event.HandlerList
 import org.bukkit.event.player.PlayerEvent
 import org.bukkit.inventory.ItemStack
+import wiki.ecohub.core.price.Price
 
 class EcoShopSellEvent @JvmOverloads constructor(
     who: Player,

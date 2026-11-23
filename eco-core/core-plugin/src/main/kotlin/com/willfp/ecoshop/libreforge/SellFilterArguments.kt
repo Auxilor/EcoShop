@@ -1,9 +1,9 @@
 package com.willfp.ecoshop.libreforge
 
-import com.willfp.libreforge.ArgType
-import com.willfp.libreforge.Compilable
-import com.willfp.libreforge.NoCompileData
-import com.willfp.libreforge.arguments
+import wiki.ecohub.config.ArgType
+import wiki.ecohub.config.arguments
+import wiki.ecohub.core.registry.Compilable
+import wiki.ecohub.core.registry.NoCompileData
 
 object SellFilterArguments : Compilable<NoCompileData>() {
     override val id = "sell_filters"

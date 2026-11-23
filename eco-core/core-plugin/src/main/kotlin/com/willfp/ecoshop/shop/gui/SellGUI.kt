@@ -1,11 +1,5 @@
 package com.willfp.ecoshop.shop.gui
 
-import com.willfp.eco.core.drops.DropQueue
-import com.willfp.eco.core.gui.addCustomSlots
-import com.willfp.eco.core.gui.menu
-import com.willfp.eco.core.gui.menu.Menu
-import com.willfp.eco.core.gui.menu.MenuLayer
-import com.willfp.eco.core.gui.slot
 import com.willfp.ecoshop.plugin
 import com.willfp.ecoshop.sell.SellSource
 import com.willfp.ecoshop.shop.ShopItems
@@ -13,6 +7,12 @@ import com.willfp.ecoshop.shop.sell
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
+import wiki.ecohub.game.drop.DropQueue
+import wiki.ecohub.modules.menus.addCustomSlots
+import wiki.ecohub.modules.menus.menu
+import wiki.ecohub.modules.menus.menu.Menu
+import wiki.ecohub.modules.menus.menu.MenuLayer
+import wiki.ecohub.modules.menus.slot
 
 object SellGUI {
     @Volatile
@@ -23,16 +23,17 @@ object SellGUI {
         val rows = plugin.configYml.getInt("sell-gui.rows")
 
         menu = menu(rows) {
-            title = plugin.configYml.getFormattedString("sell-gui.title")
+            setTitle(plugin.configYml.getFormattedString("sell-gui.title"))
 
             allowChangingHeldItem()
 
             for (i in 1..rows) {
-                for (j in 1..columns) {
+                for (j in 1..getColumns()) {
                     addComponent(
-                        MenuLayer.LOWER,
-                        i, j,
-                        slot(ItemStack(Material.AIR)) {
+                        layer = MenuLayer.LOWER,
+                        row = i,
+                        column = j,
+                        component = slot(ItemStack(Material.AIR)) {
                             setCaptive(true)
 
                             setCaptiveFilter { player, _, itemStack ->

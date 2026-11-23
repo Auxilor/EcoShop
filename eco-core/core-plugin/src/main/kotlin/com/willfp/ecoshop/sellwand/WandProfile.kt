@@ -2,7 +2,7 @@ package com.willfp.ecoshop.sellwand
 
 import com.willfp.ecoshop.sell.ItemFilter
 import com.willfp.ecoshop.sell.SellBypass
-import com.willfp.libreforge.conditions.ConditionList
+import wiki.ecohub.rules.condition.ConditionList
 
 /** The settings one wand use runs with: from a wand type, or inline effect args. */
 data class WandProfile(

@@ -1,32 +1,32 @@
 package com.willfp.ecoshop.shop
 
-import com.willfp.eco.core.config.interfaces.Config
-import com.willfp.eco.core.gui.addCustomSlots
-import com.willfp.eco.core.gui.addPage
-import com.willfp.eco.core.gui.addPageChanger
-import com.willfp.eco.core.gui.component.ConfigButton
-import com.willfp.eco.core.gui.component.addComponent
-import com.willfp.eco.core.gui.menu
-import com.willfp.eco.core.gui.menu.Menu
-import com.willfp.eco.core.gui.menuStateVar
-import com.willfp.eco.core.gui.onLeftClick
-import com.willfp.eco.core.gui.page.PageChanger
-import com.willfp.eco.core.gui.setMask
-import com.willfp.eco.core.gui.slot
-import com.willfp.eco.core.gui.slot.Slot
-import com.willfp.eco.core.items.Items
-import com.willfp.eco.core.items.builder.modify
-import com.willfp.eco.core.registry.KRegistrable
-import com.willfp.eco.core.sound.PlayableSound
-import com.willfp.eco.util.StringUtils
-import com.willfp.eco.util.formatEco
-import com.willfp.eco.util.openMenu
 import com.willfp.ecoshop.plugin
 import com.willfp.ecoshop.runOwned
 import com.willfp.ecoshop.shop.gui.RotationSlot
 import com.willfp.ecoshop.shop.rotation.RotationScheduler
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
+import wiki.ecohub.config.Config
+import wiki.ecohub.core.registry.KRegistrable
+import wiki.ecohub.game.item.Items
+import wiki.ecohub.game.item.builder.modify
+import wiki.ecohub.game.sound.PlayableSound
+import wiki.ecohub.modules.menus.addCustomSlots
+import wiki.ecohub.modules.menus.addPage
+import wiki.ecohub.modules.menus.addPageChanger
+import wiki.ecohub.modules.menus.component.ConfigButton
+import wiki.ecohub.modules.menus.component.addComponent
+import wiki.ecohub.modules.menus.menu
+import wiki.ecohub.modules.menus.menu.Menu
+import wiki.ecohub.modules.menus.menu.menuStateVar
+import wiki.ecohub.modules.menus.onLeftClick
+import wiki.ecohub.modules.menus.openMenu
+import wiki.ecohub.modules.menus.page.PageChanger
+import wiki.ecohub.modules.menus.setMask
+import wiki.ecohub.modules.menus.slot
+import wiki.ecohub.modules.menus.slot.Slot
+import wiki.ecohub.ui.text.StringUtils
+import wiki.ecohub.ui.text.formatEco
 import java.util.Stack
 
 // Menu state keys
@@ -93,7 +93,7 @@ class ShopCategory(
     private val menu: Menu = menu(config.getInt("gui.rows")) {
         val pages = config.getSubsections("gui.pages")
 
-        title = StringUtils.format(config.getString("gui.title"))
+        setTitle(StringUtils.format(config.getString("gui.title")))
 
         allowChangingHeldItem()
 
@@ -222,9 +222,9 @@ class ShopCategory(
                     }
 
                     setSlot(
-                        item.row,
-                        item.column,
-                        item.slot
+                        row = item.row,
+                        column = item.column,
+                        slot = item.slot
                     )
                 }
 
@@ -233,7 +233,7 @@ class ShopCategory(
                         val (pg, row, col) = pos
                         if (pg != pageNumber) continue
                         val sched = scheduler!!
-                        setSlot(row, col, RotationSlot(slotIdx) { sched.state })
+                        setSlot(row = row, column = col, slot = RotationSlot(slotIdx) { sched.state })
                     }
                 }
 

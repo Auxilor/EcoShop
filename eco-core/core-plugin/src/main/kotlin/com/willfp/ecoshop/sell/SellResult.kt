@@ -1,9 +1,9 @@
 package com.willfp.ecoshop.sell
 
-import com.willfp.eco.core.price.CombinedDisplayPrice
-import com.willfp.eco.util.formatEco
 import com.willfp.ecoshop.shop.formatMultiple
 import org.bukkit.entity.Player
+import wiki.ecohub.core.price.CombinedDisplayPrice
+import wiki.ecohub.ui.text.formatEco
 
 data class PaidLine(
     val candidate: SellCandidate,
