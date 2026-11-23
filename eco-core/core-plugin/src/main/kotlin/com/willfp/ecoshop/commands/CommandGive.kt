@@ -24,7 +24,7 @@ internal fun CommandBuilder<CommandSender>.giveWandCommand() = subcommand(
         val amount = giveAmount()
 
         player.runOwned {
-            DropQueue(player).forceTelekinesis()
+            DropQueue(player).giveDirectly()
                 .addItems(List(amount) { WandItem.create(wand) })
                 .push()
 
@@ -47,7 +47,7 @@ internal fun CommandBuilder<CommandSender>.giveSellChestCommand() = subcommand(
         val amount = giveAmount()
 
         player.runOwned {
-            DropQueue(player).forceTelekinesis()
+            DropQueue(player).giveDirectly()
                 .addItems(stacksOf(amount) { SellChestItem.create(type) })
                 .push()
 
